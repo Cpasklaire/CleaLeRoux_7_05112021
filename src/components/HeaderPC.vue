@@ -41,7 +41,7 @@ d = select imgMess
 */
 </script>
 
-<style >
+<style lang="scss">
 header 
 {
   background-color: #091F43;

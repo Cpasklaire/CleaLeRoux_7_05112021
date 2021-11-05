@@ -44,7 +44,7 @@ d = select imgMess
 */
 </script>
 
-<style>
+<style lang="scss">
 .mobil
 {
 /*couleur*/
