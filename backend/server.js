@@ -1,34 +1,47 @@
-const express = require("express");
-const cors = require("cors");
-const app = express();
+/*créer un serveur Node*/
+const http = require('http'); //package HTTP natif de Node
+const app = require('./app');
 
-var corsOptions = {
-  origin: "http://localhost:8080"
+const normalizePort = val => { //normalizePort : renvoie un port valide
+  const port = parseInt(val, 10);
+  if (isNaN(port)) {return val;}
+  if (port >= 0) {return port;}
+  return false;
 };
 
-app.use(cors(corsOptions));
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
-// parse requests of content-type - application/json
-app.use(express.json());
+const errorHandler = error => { //errorHandler : recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur 
+  if (error.syscall !== 'listen') {throw error;}
+  const address = server.address();
+  const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges.');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use.');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+};
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
-/*
-db.sequelize.sync({ force: false }).then(() => {
-  console.log("Synchronise la base de donnée.");
+const server = http.createServer(app);
+
+server.on('error', errorHandler);
+server.on('listening', () => {
+  const address = server.address();
+  const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
+  console.log('Listening on ' + bind);
 });
-*/
 
+/*création docier images*/
+const mkdirp = require('mkdirp');
+mkdirp('./images').then(made =>
+console.log(`création du dossier images`));
 
-app.get("/", (req, res) => {
-  res.json({ message: "Bienvenue sur Groupomania." });
-});
-
-//require("./routes/posts")(app);
-//require("./routes/user")(app);
-
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`le serveur est démarré sur le port ${PORT}.`);
-});
+server.listen(port); //ce démarre avec 'node server' ou 'nodemon server' 

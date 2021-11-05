@@ -1,28 +1,63 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+<div id="app">
+    <HeaderMobile />
+    <HeaderPC />
+    <Writing />
+    <Wall />
+</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HeaderMobile from './components/HeaderMobil.vue'
+import HeaderPC from './components/HeaderPC.vue'
+import Writing from './components/Writing.vue'
+import Wall from './components/Wall.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HeaderMobile,
+    HeaderPC,
+    Writing,
+    Wall
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+
+<style lang="scss">
+
+/*Police*/
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url(assets/opendyslexic/OpenDyslexic-Regular.otf);}
+
+/*Général*/
+*
+{
+    font-family: 'OpenDyslexic', Arial, serif;
+    text-decoration: none;
+    color: black;
+}
+body
+{
+  background-color: #D1515A;
+}
+
+/*Responsive*/
+@media (min-width: 992px)
+{
+    .mobil
+    {
+        display: none;
+    }
+
+}
+@media (max-width: 992px)
+{
+    .pc
+    {
+        display: none;
+    }
 }
 </style>
