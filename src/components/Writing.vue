@@ -19,7 +19,7 @@
   }
 </script>
 
-<style lang="scss">
+<style >
 section
 {
   display: flex;

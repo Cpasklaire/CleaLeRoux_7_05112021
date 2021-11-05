@@ -42,7 +42,7 @@
     })*/
 </script>
 
-<style lang="scss">
+<style >
 .wall
 {
   div

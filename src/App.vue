@@ -25,7 +25,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style>
 
 /*Police*/
 @font-face {
