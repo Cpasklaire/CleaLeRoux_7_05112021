@@ -29,7 +29,10 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "nodemon": "^2.0.14",
-    "vue-template-compiler": "^2.6.11"
+    "sass": "^1.43.4",
+    "sass-loader": "^12.3.0",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^5.62.1"
   },
   "eslintConfig": {
     "root": true,

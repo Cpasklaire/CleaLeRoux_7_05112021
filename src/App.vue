@@ -3,7 +3,7 @@
     <HeaderMobile />
     <HeaderPC />
     <Writing />
-    <Wall />
+    <Wall />  
 </div>
 </template>
 

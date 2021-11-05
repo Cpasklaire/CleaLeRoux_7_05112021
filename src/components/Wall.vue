@@ -1,6 +1,6 @@
 <template>
-  <section class="wall" v-for="item in publicationList">
-    <!-- tous les messages -->
+  <!--<section class="wall" v-for="item in publicationList">
+     tous les messages 
     <article v-if="selected === 'a'">
     <div class="messagetext">
       <h2>{{ Username }}</h2>
@@ -9,23 +9,26 @@
       <span>{{ date }}</span>
     </div>      
     </article>
-        <!-- non lu -->
+        non lu 
     <article v-if="selected === 'b'">
-      <!-- afficher les message avec une date suppérieur au dernier token donner -->
+      afficher les message avec une date suppérieur au dernier token donner 
     </article>
-        <!-- textuel -->
+        textuel 
     <article v-if="selected === 'c'">
-      <!-- publication.image == null -->
+      publication.image == null
     </article>
-        <!-- tous avec image -->
+        tous avec image
     <article v-if="selected === 'd'">
-      <!-- publication.image == !null -->
+      publication.image == !null
     </article>
+  </section>-->
+  <section>
+  coucou
   </section>
 </template>
 
 <script>
-    const wall = new Vue({
+/*    const wall = new Vue({
         el: '#wall',
         data: {
             publicationList: [
@@ -36,7 +39,7 @@
                 },
             ]
         }
-    })
+    })*/
 </script>
 
 <style lang="scss">
