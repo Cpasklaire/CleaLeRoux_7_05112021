@@ -3,8 +3,9 @@ const bcrypt = require('bcrypt'); //application bcrypt
 
 const User = require('../models/user');
 
+/*POST*/
 
-
+/* Créé un user '/signup' */
 exports.signup = async (req, res, next) => {
     let usermail = await User.findOne({email: req.body.email});
         if(!usermail)
@@ -25,6 +26,7 @@ exports.signup = async (req, res, next) => {
             return res.status(422).json({ message : "Adresse mail déja utilisée" })
         }};
 
+/* Connection d'un user '/login' */
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
     .then(user => {
@@ -49,3 +51,14 @@ exports.login = (req, res, next) => {
         })
     .catch(error => res.status(500).json({ error }));
   };
+
+/*GET*/
+/* Voir tous les users '/' */
+/* Voir son profil '/:id' */
+/* Voir les modérateurs,RH '/:role' */
+
+/*PUT*/
+/* Modifier un profil '/:id' */
+
+/*DELECTE*/
+/* Supprimer un profil '/:id' */

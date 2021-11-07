@@ -5,7 +5,7 @@ require('dotenv').config(); //application .env
 const Sequelize = require('sequelize');
 
 /*Connection à la databaser*/
-const sequelize = new Sequelize('NOM_DE_LA_BD', 'USERNAME', 'PASSWORD', {
+const sequelize = new Sequelize(process.env.CONNECT_DB, {
     host: 'localhost',
     dialect: 'mysql'
 });
