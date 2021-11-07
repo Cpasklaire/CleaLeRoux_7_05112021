@@ -54,11 +54,54 @@ exports.login = (req, res, next) => {
 
 /*GET*/
 /* Voir tous les users '/' */
+exports.getAllUsers = (req, res, next) => {
+    User.find()
+        .then((posts) => {res.status(200).json(posts);})
+        .catch((error) => {res.status(400).json({error: error});});
+};
 /* Voir son profil '/:id' */
+exports.getOneUser = (req, res, next) => {
+    User.findOne({ 
+        _id: req.params.id
+    })
+        .then((post) => {res.status(200).json(post);})
+        .catch((error) => {res.status(404).json({error: error});});
+};
 /* Voir les modérateurs,RH '/:role' */
-
+exports.getOneUser = (req, res, next) => {
+    User.findOne({ 
+        role: req.params.role,
+        role = modo
+    })
+        .then((post) => {res.status(200).json(post);})
+        .catch((error) => {res.status(404).json({error: error});});
+};
 /*PUT*/
 /* Modifier un profil '/:id' */
+exports.modifyUser = (req, res, next) => {
+    const userObject = req.file ?
+    {
+        ...JSON.parse(req.body.user),
+        avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
+    Post.updateOne({ _id: req.params.id }, { ...userObject, _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'User modifié !'}))
+        .catch(error => res.status(400).json({ error }));
+};
 
 /*DELECTE*/
 /* Supprimer un profil '/:id' */
+exports.deleteUser = (req, res, next) => {
+    User.findOne({ _id: req.params.id })
+        .then(post => 
+        {
+            const filename = post.imageUrl.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => //fonction unlink du package fs pour supprimer
+            { 
+                User.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'User supprimé'}))           
+                    .catch(error => res.status(400).json({ error }));
+            });
+        })
+            .catch(error => res.status(500).json({ error }));
+};

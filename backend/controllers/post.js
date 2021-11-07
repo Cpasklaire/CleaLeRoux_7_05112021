@@ -8,8 +8,8 @@ exports.createPost = (req, res, next) => {
     const postObject = JSON.parse(req.body.post);
     delete postObject._id;
     const post = new Post({
-        ...postObject, //L'opérateur spread ... est utilisé pour faire une copie de tous les éléments de req.body
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, //http://host/chemin l'image
+        ...postObject,
+        imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, //http://host/chemin l'image
     });
     post.save()
         .then(() => res.status(201).json({ message: 'Post créé'}))
@@ -25,16 +25,48 @@ exports.getAllPosts = (req, res, next) => {
 };
 /* Voir une publication '/:id' */
 exports.getOnePost = (req, res, next) => {
-    Post.findOne({ //recherche dans le modéle post
+    Post.findOne({ 
         _id: req.params.id
     })
         .then((post) => {res.status(200).json(post);})
         .catch((error) => {res.status(404).json({error: error});});
 };
 /* Voir les publications non lu '/:createDate' */
+exports.getOnePost = (req, res, next) => {
+        const createDate = req.params.createDate;
+        const lastRefreshDate = req.params.user.lastRefreshDate;    
+    Post.findOne({ 
+        //createDate =< lastRefreshDate;
+    })
+        .then((post) => {res.status(200).json(post);})
+        .catch((error) => {res.status(404).json({error: error});});
+};
 /* Voir les publications sans images'/:message' */
+exports.getOnePost = (req, res, next) => {
+    Post.findOne({ 
+        imageURL: req.params.imageURL,
+        imageURL = null
+    })
+        .then((post) => {res.status(200).json(post);})
+        .catch((error) => {res.status(404).json({error: error});});
+};
 /* Voir les publications avec images '/:imageURL' */
+exports.getOnePost = (req, res, next) => {
+    Post.findOne({ 
+        imageURL: req.params.imageURL,
+        imageURL = !null
+    })
+        .then((post) => {res.status(200).json(post);})
+        .catch((error) => {res.status(404).json({error: error});});
+};
 /* Voir les publications d'un user '/:userId' */
+exports.getOnePost = (req, res, next) => {
+    Post.findOne({ 
+        userId: req.params.user.id
+    })
+        .then((post) => {res.status(200).json(post);})
+        .catch((error) => {res.status(404).json({error: error});});
+};
 
 /*PUT*/
 /* Modifier une publication /:id' */

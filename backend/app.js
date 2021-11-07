@@ -34,11 +34,11 @@ app.use(express.json());
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-const publicationsRoutes = require('./routes/post');
-app.use('/api/publications', publicationsRoutes);
+const postRoutes = require('./routes/post');
+app.use('/api/post', postRoutes);
 
 const userRoutes = require('./routes/user');
-app.use('/api/publications', publicationsRoutes);
+app.use('/api/post', postRoutes);
 app.use('/api/auth', userRoutes);
 
 module.exports = app;
