@@ -2,18 +2,22 @@
 const express = require('express');
 const app = express(); /*application Express*/
 require('dotenv').config(); //application .env
-const { Sequelize } = require('sequelize');
+const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize("groupomania", "root", "Javaaimel0", {
-  dialect: "mysql",
-  host: "localhost"
+/*Connection à la databaser*/
+const sequelize = new Sequelize('NOM_DE_LA_BD', 'USERNAME', 'PASSWORD', {
+    host: 'localhost',
+    dialect: 'mysql'
 });
-try {
-  sequelize.authenticate();
-  console.log('Connecté à la base de données MySQL!');
-} catch (error) {
-  console.error('Impossible de se connecter, erreur suivante :', error);
+const dbConnection = async () => {
+    try {
+        await sequelize.authenticate()
+        console.log('Connection à la database réussie')
+    } catch (err) {
+        throw new Error('Connection à la database échouée')
+    }
 }
+module.exports = { sequelize, dbConnection }
 
 /*middleware communication des différent port(localhost) possible*/
 app.use((req, res, next) => {
@@ -30,7 +34,7 @@ app.use(express.json());
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-const publicationsRoutes = require('./routes/publications');
+const publicationsRoutes = require('./routes/post');
 app.use('/api/publications', publicationsRoutes);
 
 const userRoutes = require('./routes/user');

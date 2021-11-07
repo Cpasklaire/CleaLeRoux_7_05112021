@@ -1,8 +1,7 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 
-/* Model utilisateur */
-class User extends Model{}
-User.init({
+/* Model de publication */
+class Post extends Model{} Post.init({
   id: { 
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -10,42 +9,25 @@ User.init({
     unique: true,
     allowNull: false
   },
-  lastName: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  firstName: { 
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  email: { 
-    type: Sequelize.STRING,
+  userId: {
+    type: Sequelize.INTEGER,
     unique: true,
     allowNull: false
-  },
-  password: { 
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  role: { 
-    type: Sequelize.STRING,
-    defaultValue: user,    
-    allowNull: false,
   },
   createDate: { 
     type: Sequelize.DATE,
     allowNull: false,
   },
 /*Champs optionnel*/
-  avatar: { 
+  imageURL: { 
     type: Sequelize.STRING,
     allowNull: true,
   }, 
-  description: { 
+  message: { 
     type: Sequelize.STRING,
     allowNull: true,
   }, 
-  updateDate: { 
+  moderatedDate: { 
     type: Sequelize.DATE,
     allowNull: true,
   },
@@ -53,18 +35,22 @@ User.init({
     type: Sequelize.DATE,
     allowNull: true,
   },
-  deleteBy: { 
+  moderatedBy: { 
     type: Sequelize.INTEGER,
     allowNull: true,
   }, 
-  lastRefreshDate: { 
+  parentId: { 
+    type: Sequelize.INTEGER,
+    allowNull: true,
+  }, 
+  updateDate: { 
     type: Sequelize.DATE,
     allowNull: true,
   },
 
-  modelName: 'users',
+  modelName: 'posts',
   sequelize
 });
 
-User.sync()
-module.exports = User
+Post.sync()
+module.exports = Post
