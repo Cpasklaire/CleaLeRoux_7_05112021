@@ -1,7 +1,6 @@
 <template>
 <div id="app">
     <HeaderMobile />
-    <HeaderPC />
     <Writing />
     <Wall />  
 </div>
@@ -9,7 +8,6 @@
 
 <script>
 import HeaderMobile from './components/HeaderMobil.vue'
-import HeaderPC from './components/HeaderPC.vue'
 import Writing from './components/Writing.vue'
 import Wall from './components/Wall.vue'
 
@@ -17,7 +15,6 @@ export default {
   name: 'App',
   components: {
     HeaderMobile,
-    HeaderPC,
     Writing,
     Wall
   }
@@ -29,13 +26,13 @@ export default {
 
 /*Police*/
 @font-face {
-    font-family: 'OpenDyslexic';
-    src: url(assets/opendyslexic/OpenDyslexic-Regular.otf);}
+    font-family: 'modern';
+    src: url(assets/modern/ModernSans-Light.otf);}
 
 /*Général*/
 *
 {
-    font-family: 'OpenDyslexic', Arial, serif;
+    font-family: 'modern', Arial, serif;
     text-decoration: none;
     color: black;
 }
