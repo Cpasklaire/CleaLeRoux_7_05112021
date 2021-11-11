@@ -1,47 +1,73 @@
 <template>
-<div id="app">
-    <HeaderMobile />
-    <Writing />
-    <Wall />  
-</div>
+    <div id="app">
+        <h1>Groupomania</h1>
+        <Header @filterMessages="filterMessage" />        
+        <Wall :filter="filter"/>
+    </div>
 </template>
 
-<script>
-import HeaderMobile from './components/HeaderMobil.vue'
-import Writing from './components/Writing.vue'
-import Wall from './components/Wall.vue'
 
-export default {
-  name: 'App',
-  components: {
-    HeaderMobile,
-    Writing,
-    Wall
-  }
-}
+<script>
+    import Header from './components/Header.vue'    
+    import Wall from './components/Wall.vue'
+
+    export default {
+        name: 'App',
+        components: {
+            Header,            
+            Wall
+        },
+        data() {
+            return {
+                filter: 'all'
+            }
+        },
+        methods: {
+            filterMessage: function(filter) {
+                this.filter = filter
+            }
+        }
+    }
 </script>
 
 
 <style lang='scss'>
 
-/*Police*/
-@font-face {
-    font-family: 'modern';
-    src: url(assets/modern/ModernSans-Light.otf);}
+    html, 
+    body {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0
+    }
 
-/*Général*/
-*
-{
-    font-family: 'modern', Arial, serif;
-    text-decoration: none;
-    color: black;
-}
+    #app {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0
+    }
+
+    /* Police */
+    @font-face {
+        font-family: 'modern';
+        src: url(assets/modern/ModernSans-Light.otf);
+    }
+
+    /* Général */
+    *
+    {
+        font-family: 'modern', Arial, serif;
+        text-decoration: none;
+        color: black;
+    }
+
 body
 {
   background-color: #D1515A;
 }
 
-/*Responsive*/
+/* Responsive */
 @media (min-width: 992px)
 {
     .mobil
@@ -50,6 +76,7 @@ body
     }
 
 }
+
 @media (max-width: 992px)
 {
     .pc
