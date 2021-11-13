@@ -137,6 +137,19 @@
 </script>
 
 <style lang="scss" scoped>
+@keyframes apparition
+{
+    from
+    {
+        opacity: 50%;
+        margin-top: 40%;
+    }
+    to
+    {
+        opacity: 100%;
+        margin-top: 0%;
+    }
+}
 .wall
 {
     margin-top: 25%;
@@ -152,6 +165,10 @@
         padding-left: 5%;
         padding-right: 5%;
         background-color: rgba(9, 31, 67, 0.1);
+                animation-delay: 500ms;
+        animation-timing-function: ease-in;    
+        animation-name: apparition;
+        animation-duration: 2s;
         .avatar
         {
             width: 70px;
