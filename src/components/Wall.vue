@@ -148,7 +148,10 @@
         border: #D1515A 5px solid;
         border-radius: 30px;
         margin-bottom: 5%;
-        padding: 5%;
+        padding-top: 5%;
+        padding-left: 5%;
+        padding-right: 5%;
+        background-color: rgba(9, 31, 67, 0.1);
         .avatar
         {
             width: 70px;
@@ -176,17 +179,32 @@
         {
             display: flex;
             justify-content: space-between;
-            width: 80%;
+            width: 100%;
             align-items: center;
+            margin-bottom: 10%;
+            margin-top: 10%;
             button 
             {
                 margin: 0;
                 padding: 0;
                 font-size: 1em;
+                border: none;
+                color: #D1515A;
+                font-weight: bold;
             }
         }
     }
-
+.commentaire
+{
+    background-color: rgba(9, 31, 67, 0.1);
+    width: 110%;
+    margin: -5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 5%;
+    padding-bottom: 0%;
+    border-radius: 30px;
+}
     .heart-container 
 {
    position: relative;
@@ -199,7 +217,8 @@
    width: 40px;
    height: 40px;
    position: absolute;
-  fill: black;
+   fill: black;
+   left: 0px;
 }
 
 .heart-clip /*couleur*/
