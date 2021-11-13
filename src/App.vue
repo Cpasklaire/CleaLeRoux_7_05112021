@@ -1,6 +1,5 @@
 <template>
     <div id="app">
-        <h1>Groupomania</h1>
         <Header @filterMessages="filterMessage" />        
         <Wall :filter="filter"/>
     </div>
@@ -32,22 +31,6 @@
 
 
 <style lang='scss'>
-
-    html, 
-    body {
-        height: 100%;
-        width: 100%;
-        padding: 0;
-        margin: 0
-    }
-
-    #app {
-        height: 100%;
-        width: 100%;
-        padding: 0;
-        margin: 0
-    }
-
     /* Police */
     @font-face {
         font-family: 'modern';
@@ -55,17 +38,17 @@
     }
 
     /* Général */
-    *
-    {
-        font-family: 'modern', Arial, serif;
-        text-decoration: none;
-        color: black;
-    }
-
-body
+*
 {
-  background-color: #D1515A;
+    font-family: 'modern', Arial, serif; 
+    color: black;   
+    text-decoration: none;
+    background-color: transparent;
+    margin: 0;
+    border: none;
 }
+
+
 
 /* Responsive */
 @media (min-width: 992px)
