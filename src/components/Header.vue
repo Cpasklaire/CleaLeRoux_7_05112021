@@ -13,7 +13,7 @@
     <label id="burger" for="menu-toggle"></label>
     <ul id="menu">
         <li>
-            <Profil/>
+            <router-link to="/profil">Profil</router-link>            
         </li> 
     </ul> 
     <button v-on:click="togglewWriteElement"><i class="fas fa-edit noprofil"></i></button>
@@ -22,12 +22,10 @@
 </template>
 
 <script>
-    import Writing from './Writing.vue'
-    import Profil from './Profil.vue'       
+    import Writing from './Writing.vue'         
     export default {name: 'Header',
         components: {
-            Writing,
-            Profil
+            Writing,            
         },
     data() {
         return {

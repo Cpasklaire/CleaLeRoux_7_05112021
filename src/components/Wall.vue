@@ -28,9 +28,8 @@
                     </button>
                 </div>
             </article>
-
         </article>
-
+        
         <article class="post">
             <img src="../../backend/images/avatars/athena.jpg" alt="avatar de Saori Kido" class="avatar">
             <span class="nom">Saori Kido</span>

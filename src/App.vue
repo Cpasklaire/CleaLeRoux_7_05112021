@@ -1,31 +1,13 @@
 <template>
-    <div id="app">
-        <Header @filterMessages="filterMessage" />        
-        <Wall :filter="filter"/>
+    <div id="app">              
+        <router-view />    
     </div>
 </template>
 
 
-<script>
-    import Header from './components/Header.vue'    
-    import Wall from './components/Wall.vue'
-
+<script>    
     export default {
-        name: 'App',
-        components: {
-            Header,            
-            Wall
-        },
-        data() {
-            return {
-                filter: 'all'
-            }
-        },
-        methods: {
-            filterMessage: function(filter) {
-                this.filter = filter
-            }
-        }
+        name: 'App'        
     }
 </script>
 
@@ -47,8 +29,6 @@
     margin: 0;
     border: none;
 }
-
-
 
 /* Responsive */
 @media (min-width: 992px)

@@ -23,7 +23,10 @@
 </template>
 
 <script>
- 
+    export default {
+        name: 'Profil',
+        components: {}
+    }
 </script>
 
 <style lang="scss" scoped>
