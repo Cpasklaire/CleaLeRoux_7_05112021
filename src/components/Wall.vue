@@ -1,27 +1,17 @@
 <template>
-    <section class="wall" v-for="item in publicationList" :key="item.id">
-    <!-- tous les message -->
-        <article class="post" v-if="filter == 'all' || (filter == 'mine' && item.authorId == currentAuthorId) || (filter == 'messages' && item.type == 'message')">
-            <img src="../../backend/images/avatars/{{item.avatar}}" alt="avatar de {{item.userName}}" class="avatar">
-            <span class="nom">{{item.userName}}</span>
-            <p class="story" (v-if="filter == 'text' post.message==!null) >{{item.text}}</p>
-            <img (v-if="filter == 'image' post.imageURL==!null) src="../../backend/images/{{item.imageUrl}}" alt="image partagée par {{item.userName}}" class="imgPost">
-            <p (v-if="filter == 'new' post.createDate<=user.lastRefreshDate)> {{item.createDate}} </p>
-            <div class="answer">
-                <button class="heart-container">
-                    <svg class='heart-stroke'>
-                        <path d="M20,35.07,4.55,19.62a8.5,8.5,0,0,1-.12-12l.12-.12a8.72,8.72,0,0,1,12.14,0L20,10.77l3.3-3.3A8.09,8.09,0,0,1,29.13,4.9a8.89,8.89,0,0,1,6.31,2.58,8.5,8.5,0,0,1,.12,12l-.12.12ZM10.64,7.13A6.44,6.44,0,0,0,6.07,18.19L20,32.06,33.94,18.12A6.44,6.44,0,0,0,34,9l0,0a6.44,6.44,0,0,0-4.77-1.85A6,6,0,0,0,24.83,9L20,13.78,15.21,9A6.44,6.44,0,0,0,10.64,7.13Z"/>
-                    </svg>
-                    <span v-on:click="like" class='heart-clip'></span>
-                </button>
-                <button>Répondre</button>
-                <button>Voir les commentaires</button>
-            </div>
-            <article class="commentaire" v-if="post.parentId == post.id" >
-                <img src="../../backend/images/avatars/{{item.avatar}}" alt="avatar de {{item.userName}}" class="avatar">
+    <div>    
+        <section class="wall" v-for="item in publicationList" :key="item.id">
+            <!-- tous les message -->
+            <article class="post" v-if="!item.parentId && filter == 'all' || (filter == 'image' && item.type == 'image') || (filter == 'messages' && item.type == 'message') || (filter == 'new' && post.createDate <= user.lastRefreshDate)">                
+                <img :src="'../../backend/images/avatars/' + item.avatar" :alt="'avatar de' + item.userName" class="avatar">
                 <span class="nom">{{item.userName}}</span>
-                <p class="story">{{item.text}}</p>
-                <img src="../../backend/images/{{item.imageUrl}}" alt="image partagée par {{item.userName}}" class="imgPost">
+                <p class="story" v-if="item.text">
+                    {{item.text}}
+                </p>
+                <img v-if="post.imageURL" :src="'../../backend/images/' + item.imageUrl" :alt="'image partagée par ' + item.userName" class="imgPost">
+                <p>
+                    {{item.createDate}}
+                </p>
                 <div class="answer">
                     <button class="heart-container">
                         <svg class='heart-stroke'>
@@ -29,11 +19,28 @@
                         </svg>
                         <span v-on:click="like" class='heart-clip'></span>
                     </button>
+                    <button>Répondre</button>
+                    <button>Voir les commentaires</button>
+                </div>
+                <div v-for="childItem in publicationList" :key="childItem.id">
+                    <article class="commentaire" v-if="childItem.parentId == item.id" >
+                        <img :src="'../../backend/images/avatars/' + childItem.avatar" :alt="'avatar de ' + childItem.userName" class="avatar">
+                        <span class="nom">{{childItem.userName}}</span>
+                        <p class="story">{{childItem.text}}</p>
+                        <img src="'../../backend/images/' + childItem.imageUrl" :alt="'image partagée par ' + childItem.userName" class="imgPost">
+                        <div class="answer">
+                            <button class="heart-container">
+                                <svg class='heart-stroke'>
+                                    <path d="M20,35.07,4.55,19.62a8.5,8.5,0,0,1-.12-12l.12-.12a8.72,8.72,0,0,1,12.14,0L20,10.77l3.3-3.3A8.09,8.09,0,0,1,29.13,4.9a8.89,8.89,0,0,1,6.31,2.58,8.5,8.5,0,0,1,.12,12l-.12.12ZM10.64,7.13A6.44,6.44,0,0,0,6.07,18.19L20,32.06,33.94,18.12A6.44,6.44,0,0,0,34,9l0,0a6.44,6.44,0,0,0-4.77-1.85A6,6,0,0,0,24.83,9L20,13.78,15.21,9A6.44,6.44,0,0,0,10.64,7.13Z"/>
+                                </svg>
+                                <span v-on:click="like" class='heart-clip'></span>
+                            </button>
+                        </div>
+                    </article>
                 </div>
             </article>
-        </article>
-    <!-- nouveau message -->
-    
+        </section>
+    </div>
 </template>
 
 <script>
@@ -52,10 +59,41 @@
                 publicationList: [
                     { 
                         id: 123,
+                        parentId: null,
                         userId: 'user.id',
                         avatar: 'user.avatar',
-                        userName: 'user.lastName + user.firstName', 
-                        text: 'post.message',
+                        userName: 'user.firstname + user.lastname',
+                        text: 'post.message CECI EST LE PARENT 123',
+                        imageUrl: 'post.imageURL',
+                        createDate: 'post.createDate',
+                    },
+                    { 
+                        id: 124,
+                        parentId: 123,
+                        userId: 'user.id',
+                        avatar: 'user.avatar',
+                        userName: 'user.firstname + user.lastname',
+                        text: 'post.message ENFANT DU 123, JE SUIS le 124',
+                        imageUrl: 'post.imageURL',
+                        createDate: 'post.createDate',
+                    },
+                    { 
+                        id: 125,
+                        parentId: 122,
+                        userId: 'user.id',
+                        avatar: 'user.avatar',
+                        userName: 'user.firstname + user.lastname',
+                        text: 'post.message JE DOIS AS APPARAITRE',
+                        imageUrl: 'post.imageURL',
+                        createDate: 'post.createDate',
+                    },
+                    { 
+                        id: 126,
+                        parentId:  123,
+                        userId: 'user.id',
+                        avatar: 'user.avatar',
+                        userName: 'user.firstname + user.lastname',
+                        text: 'post.message JE SUI SLe 126 et mon pere est darth vador',
                         imageUrl: 'post.imageURL',
                         createDate: 'post.createDate',
                     },
@@ -68,6 +106,12 @@
             // fetch() 
         },
         methods: {
+            post: function() {
+                // todo
+            },
+            like: function() {
+                // todo
+            }
         }
     }    
 </script>

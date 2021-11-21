@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-        <Header @filterMessages="filterMessage" />        
-        <Wall :filter="filter"/>
+        <Header @filterMessages="filterMessage" />                
+        <Wall :filter="filter" />
     </div>
 </template>
 
