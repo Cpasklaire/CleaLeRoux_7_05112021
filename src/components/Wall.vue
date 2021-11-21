@@ -53,7 +53,7 @@
         props: ['filter'],
         data: function () {
             return {
-                lastUpdateDate: user.lastRefreshDate,
+                lastUpdateDate: 0, //user.lastRefreshDate
                 publicationList: [
                     { 
                         id: 123,
