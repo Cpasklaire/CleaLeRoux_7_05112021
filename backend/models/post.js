@@ -1,7 +1,8 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+module.exports = (sequelizee, Sequelize) => {
+  const Post = sequelizee.define("post", {
+    updatedAt: false,
+    createdAt: false,
 
-/* Model de publication */
-class Post extends Model{} Post.init({
   id: { 
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -11,7 +12,6 @@ class Post extends Model{} Post.init({
   },
   userId: {
     type: Sequelize.INTEGER,
-    unique: true,
     allowNull: false
   },
   createDate: { 
@@ -46,11 +46,8 @@ class Post extends Model{} Post.init({
   updateDate: { 
     type: Sequelize.DATE,
     allowNull: true,
-  },
-
-  modelName: 'posts',
-  sequelize
+  }
 });
 
-Post.sync()
-module.exports = Post
+return Post;
+};

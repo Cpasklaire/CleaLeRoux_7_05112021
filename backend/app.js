@@ -1,20 +1,40 @@
 /*communication avec le serveur*/
 const express = require('express');
 const app = express(); /*application Express*/
-require('dotenv').config(); //application .env
+const dbConfig = require('../Backend/config/db.config');
 const Sequelize = require('sequelize');
+const db = require('./models');
 
-/*Connection à la databaser*/
-const sequelize = new Sequelize(process.env.CONNECT_DB, {
-    host: 'localhost',
-    dialect: 'mysql'
+
+
+/*Connection à la database*/
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+  host: dbConfig.HOST,
+  dialect: dbConfig.dialect,
+  operatorsAliases: 0,
+  pool: {
+    max: dbConfig.pool.max,
+    min: dbConfig.pool.min,
+    acquire: dbConfig.pool.acquire,
+    idle: dbConfig.pool.idle
+  }
 });
+
+
+db.Sequelize = Sequelize;
+
+db.post = require('./models/post')(sequelize, Sequelize);
+db.user = require('./models/user')(sequelize, Sequelize);
+db.like = require('./models/like')(sequelize, Sequelize);
+
+module.exports = db;
+
 const dbConnection = async () => {
     try {
         await sequelize.authenticate()
-        console.log('Connection à la database réussie')
+        console.log('Connection à la base de données réussie')
     } catch (err) {
-        throw new Error('Connection à la database échouée')
+        throw new Error('Connection à la base de données échouée')
     }
 }
 module.exports = { sequelize, dbConnection }
@@ -28,17 +48,19 @@ app.use((req, res, next) => {
 });
 
 /*parle en json*/
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+
 const postRoutes = require('./routes/post');
 app.use('/api/post', postRoutes);
-
+/*
 const userRoutes = require('./routes/user');
-app.use('/api/post', postRoutes);
 app.use('/api/auth', userRoutes);
-
+*/
 module.exports = app;

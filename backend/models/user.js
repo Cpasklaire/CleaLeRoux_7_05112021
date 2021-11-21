@@ -1,8 +1,5 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-
-/* Model utilisateur */
-class User extends Model{}
-User.init({
+module.exports = (sequelizee, Sequelize) => {
+  const User = sequelizee.define('user', {
   id: { 
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -29,7 +26,7 @@ User.init({
   },
   role: { 
     type: Sequelize.STRING,
-    defaultValue: user,    
+    defaultValue: 'user',    
     allowNull: false,
   },
   createDate: { 
@@ -60,11 +57,7 @@ User.init({
   lastRefreshDate: { 
     type: Sequelize.DATE,
     allowNull: true,
-  },
-
-  modelName: 'users',
-  sequelize
+  }
 });
-
-User.sync()
-module.exports = User
+return User;
+};
