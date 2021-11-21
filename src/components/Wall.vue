@@ -1,9 +1,12 @@
 <template>
-    <section class="wall">
-        <article class="post">
-            <img src="../../backend/images/avatars/seiya.jpg" alt="avatar de Seiya Pégase" class="avatar">
-            <span class="nom">Seiya Pégase</span>
-            <p class="story">Ici votre RH préféré, n'hésitez pas à compléter votre profil !</p>
+    <section class="wall" v-for="item in publicationList" :key="item.id">
+    <!-- tous les message -->
+        <article class="post" v-if="filter == 'all' || (filter == 'mine' && item.authorId == currentAuthorId) || (filter == 'messages' && item.type == 'message')">
+            <img src="../../backend/images/avatars/{{item.avatar}}" alt="avatar de {{item.userName}}" class="avatar">
+            <span class="nom">{{item.userName}}</span>
+            <p class="story" (v-if="filter == 'text' post.message==!null) >{{item.text}}</p>
+            <img (v-if="filter == 'image' post.imageURL==!null) src="../../backend/images/{{item.imageUrl}}" alt="image partagée par {{item.userName}}" class="imgPost">
+            <p (v-if="filter == 'new' post.createDate<=user.lastRefreshDate)> {{item.createDate}} </p>
             <div class="answer">
                 <button class="heart-container">
                     <svg class='heart-stroke'>
@@ -14,11 +17,11 @@
                 <button>Répondre</button>
                 <button>Voir les commentaires</button>
             </div>
-            <article class="commentaire">
-                <img src="../../backend/images/avatars/Ikki.png" alt="avatar de Ikki Phénix" class="avatar">
-                <span class="nom">Ikki Phénix</span>
-                <p class="story">Profil complet ;)</p>
-                <img src="../../backend/images/1.png" alt="image partagée par Ikki Phénix" class="imgPost">
+            <article class="commentaire" v-if="post.parentId == post.id" >
+                <img src="../../backend/images/avatars/{{item.avatar}}" alt="avatar de {{item.userName}}" class="avatar">
+                <span class="nom">{{item.userName}}</span>
+                <p class="story">{{item.text}}</p>
+                <img src="../../backend/images/{{item.imageUrl}}" alt="image partagée par {{item.userName}}" class="imgPost">
                 <div class="answer">
                     <button class="heart-container">
                         <svg class='heart-stroke'>
@@ -29,40 +32,8 @@
                 </div>
             </article>
         </article>
-        
-        <article class="post">
-            <img src="../../backend/images/avatars/athena.jpg" alt="avatar de Saori Kido" class="avatar">
-            <span class="nom">Saori Kido</span>
-            <p class="story">Bienvenue sur votre raisseau d'entreprise ! Tenez vous au courant et partagez.</p>
-            <img src="../../backend/images/2.jpg" alt="image partagée par Saori Kido" class="imgPost">
-            <div class="answer">
-                <button class="heart-container">
-                    <svg class='heart-stroke'>
-                        <path d="M20,35.07,4.55,19.62a8.5,8.5,0,0,1-.12-12l.12-.12a8.72,8.72,0,0,1,12.14,0L20,10.77l3.3-3.3A8.09,8.09,0,0,1,29.13,4.9a8.89,8.89,0,0,1,6.31,2.58,8.5,8.5,0,0,1,.12,12l-.12.12ZM10.64,7.13A6.44,6.44,0,0,0,6.07,18.19L20,32.06,33.94,18.12A6.44,6.44,0,0,0,34,9l0,0a6.44,6.44,0,0,0-4.77-1.85A6,6,0,0,0,24.83,9L20,13.78,15.21,9A6.44,6.44,0,0,0,10.64,7.13Z"/>
-                    </svg>
-                    <span v-on:click="like" class='heart-clip'></span>
-                </button>
-                <button>Répondre</button>
-            </div>
-        </article>
-    </section>
-
-        <!--<h2>Tous les messages</h2>
-        {{ date }}
-        Tous les messages 
-        <article v-for="item in publicationList" :key="item.id" class="messagetext">     
-            <div v-if="filter == 'all' || (filter == 'mine' && item.authorId == currentAuthorId) || (filter == 'messages' && item.type == 'message')" >
-                <h2>{{ item.username }}</h2>        
-                <p>{{ item.message }}</p>
-                <img>
-                <span>{{ item.date }}</span>            
-            </div>
-        </article>
-        
-        
-      
-        <button v-on:click="loadNewMessages">Charger les nouveaux messages</button>
-    </section>-->
+    <!-- nouveau message -->
+    
 </template>
 
 <script>
@@ -75,29 +46,19 @@
         props: ['filter'],
         data: function () {
             return {
-                showWriteElement: false,
                 date: 'Jeudi 11 9:00',
                 currentAuthorId: 2,
                 lastUpdateDate: 0,
                 publicationList: [
                     { 
-                        id: 1234,
-                        type: 'message',
-                        authorId: 1,
-                        username: 'Jean Jacques', 
-                        message: 'il fait beau',
-                        imageUrl: '42.png',
-                        date: 123456789
+                        id: 123,
+                        userId: 'user.id',
+                        avatar: 'user.avatar',
+                        userName: 'user.lastName + user.firstName', 
+                        text: 'post.message',
+                        imageUrl: 'post.imageURL',
+                        createDate: 'post.createDate',
                     },
-                    { 
-                        id: 1235,
-                        type: 'message',
-                        authorId: 2,
-                        username: 'Jean Michel', 
-                        message: 'chez moi il pleut',
-                        imageUrl: '42.png',
-                        date: 123456789
-                    }
                 ]        
             }
         },
@@ -107,30 +68,6 @@
             // fetch() 
         },
         methods: {
-            togglewWriteElement: function() {
-                this.showWriteElement = !this.showWriteElement
-            },
-            loadNewMessages: function() {
-                // let headers = {
-                    // Authorization: 'token'
-                // }
-                // let newMessages = await this.$http.get('/posts?date=' + this.lastUpdateDate, {headers: headers})
-                // boucler sur les messages qui arrivent
-                // messages.forEach(element => {
-                    // ajouter le message dans publicationList
-                    // this.lastUpdateDate = message.date
-                // } )
-                // ajouter les messages dans publicationList ... 
-                this.publicationList.push({
-                    id: 1236,
-                    type: 'message',
-                    authorId: 2,
-                    username: 'Cléa', 
-                    message: 'Mon chien a faim',
-                    imageUrl: '42.png',
-                    date: 123456789
-                })
-            }
         }
     }    
 </script>
