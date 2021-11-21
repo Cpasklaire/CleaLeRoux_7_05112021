@@ -2,7 +2,7 @@
     <div>    
         <section class="wall" v-for="item in publicationList" :key="item.id">
             <!-- tous les message -->
-            <article class="post" v-if="!item.parentId && filter == 'all' || (filter == 'image' && item.type == 'image') || (filter == 'messages' && item.type == 'message') || (filter == 'new' && post.createDate <= user.lastRefreshDate)">                
+            <article class="post" v-if="!item.parentId && filter == 'all' || (filter == 'image' && item.type == 'image') || (filter == 'messages' && item.type == 'message') || (filter == 'new' && post.createDate <= lastUpdateDate)">                
                 <img :src="'../../backend/images/avatars/' + item.avatar" :alt="'avatar de' + item.userName" class="avatar">
                 <span class="nom">{{item.userName}}</span>
                 <p class="story" v-if="item.text">
@@ -53,9 +53,7 @@
         props: ['filter'],
         data: function () {
             return {
-                date: 'Jeudi 11 9:00',
-                currentAuthorId: 2,
-                lastUpdateDate: 0,
+                lastUpdateDate: user.lastRefreshDate,
                 publicationList: [
                     { 
                         id: 123,
