@@ -1,31 +1,47 @@
 <template>
-    <section class="profil">
-        <div class="entete">
-            <img src="../../backend/images/avatars/seiya.jpg" alt="avatar de Seiya Pégase" class="avatar">
-            <h2>Seiya Pégase</h2>
-        </div>
-        <p>description : je suis super !!</p>
-        <div class="infoUser">
-            <span>Mes infos personnelles</span> <br>
-            <span>Courriel : *****@groupomania.fr</span><br>
-            <span>Mot de passe : **********</span><br>
-            <span>Statut : Ressource humaine</span><br>
-        </div>
-        <div class="bouton">
-            <button>Modifier</button>
-            <button>Supprimer</button>
-        </div>
-        <div class="date">
-            <span>Création du compte : 11/11/1111</span><br>
-            <span>Derniére connection : 22/22/222</span>
-        </div>
-    </section>
+    <div>
+        <section class="profil" v-for="item in userInfo" :key="item.id">
+            <div class="entete">
+                <img :src="'../../backend/images/avatars/' + item.avatar" :alt="'avatar de' + item.userName" class="avatar">
+                <h2>{{item.userName}}</h2>
+            </div>
+            <p>{{item.description}}</p>
+            <div class="infoUser">
+                <span>Mes infos personnelles</span> <br>
+                <span>Courriel : {{item.mail}}</span><br>
+                <span>Mot de passe : **********</span><br>
+                <span>Statut : Ressource humaine</span><br>
+            </div>
+            <div class="bouton">
+                <button>Modifier</button>
+                <button>Supprimer</button>
+            </div>
+            <div class="date">
+                <span>Création du compte : {{item.createDate}}</span><br>
+                <span>Derniére connection : {{item.lastRefreshDate}}</span>
+            </div>
+        </section>
+    </div>
 </template>
 
 <script>
     export default {
         name: 'Profil',
-        components: {}
+        components: {},
+        data:function(){
+            return{
+                userInfo: [
+                    { 
+                        userId: 'user.id',
+                        avatar: 'user.avatar',
+                        userName: 'user.firstname + user.lastname',
+                        mail: 'user.mail',
+                        createDate: 'user.createDate',
+                        lastRefreshDate: 'user.lastRefreshDate', 
+                    },
+                ]
+            }
+        }
     }
 </script>
 
