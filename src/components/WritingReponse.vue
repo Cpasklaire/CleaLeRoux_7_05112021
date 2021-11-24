@@ -2,7 +2,8 @@
   <section class="whiting">
     <div class="interraction">
       <textarea placeholder="Exprimez vous"></textarea>
-      <b-form-file v-model="file2" class="mt-3" accept=".jpg, .png, .gif" plain></b-form-file>
+      <label for="file">Une image ?</label>
+      <input type="file" id="file" name="file" multiple accept=".png, .jpg, .jpeg, .gif">
     </div>
     <button>Envoyer</button>
   </section>
