@@ -2,7 +2,7 @@
     <div>    
         <section class="wall" v-for="item in publicationList" :key="item.id">
             <!-- tous les message -->
-            <article class="post" v-if="!item.parentId && filter == 'all' || (filter == 'image' && item.type == 'image') || (filter == 'messages' && item.type == 'message') || (filter == 'new' && post.createDate <= lastUpdateDate)">                
+            <article class="post" v-if="!item.parentId && filter == 'all' || (filter == 'image' && item.imageUrl) || (filter == 'messages' && !item.imageUrl) || (filter == 'new' && post.createDate <= lastUpdateDate)">                
                 <img :src="'../../backend/images/avatars/' + item.avatar" :alt="'avatar de' + item.userName" class="avatar">
                 <span class="nom">{{item.userName}}</span>
                 <p class="story" v-if="item.text">
@@ -19,9 +19,10 @@
                         </svg>
                         <span v-on:click="like" class='heart-clip'></span>
                     </button>
-                    <button>Répondre</button>
-                    <button>Voir les commentaires</button>
+                    <button v-on:click="togglewRepElement">Répondre</button>
+                    <button>Voir les commentaires</button>   
                 </div>
+                <WritingReponse v-if="showRepElement" />
                 <div v-for="childItem in publicationList" :key="childItem.id">
                     <article class="commentaire" v-if="childItem.parentId == item.id" >
                         <img :src="'../../backend/images/avatars/' + childItem.avatar" :alt="'avatar de ' + childItem.userName" class="avatar">
@@ -44,15 +45,16 @@
 </template>
 
 <script>
-
+import WritingReponse from './WritingReponse.vue'
     export default {
         name: 'Wall',
         components: {
-            
+            WritingReponse,
         },
         props: ['filter'],
         data: function () {
             return {
+                showRepElement: false,
                 lastUpdateDate: 0, //user.lastRefreshDate
                 publicationList: [
                     { 
@@ -104,6 +106,9 @@
             // fetch() 
         },
         methods: {
+            togglewRepElement: function() {
+                this.showRepElement = !this.showRepElement
+            },
             post: function() {
                 // todo
             },

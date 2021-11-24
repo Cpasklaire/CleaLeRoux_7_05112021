@@ -1,6 +1,7 @@
 <template>
     <div>
         <section class="profil" v-for="item in userInfo" :key="item.id">
+        <router-link to="/"><i class="fas fa-arrow-circle-left"></i></router-link>
             <div class="entete">
                 <img :src="'../../backend/images/avatars/' + item.avatar" :alt="'avatar de' + item.userName" class="avatar">
                 <h2>{{item.userName}}</h2>
