@@ -3,13 +3,14 @@ const multer = require('multer');
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
-  'image/png': 'png'
+  'image/png': 'png',
+  'image/gif': 'gif'
 };
 
 /*enregistrer les images*/
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'images'); /*enregistrer les fichiers dans le dossier images*/
+        callback(null, 'images/postIMG'); /*enregistrer les fichiers dans le dossier images*/
     },
     filename: (req, file, callback) => { 
         const extension = MIME_TYPES[file.mimetype];

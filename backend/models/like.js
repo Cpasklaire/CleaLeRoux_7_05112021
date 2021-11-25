@@ -1,11 +1,7 @@
-const { Sequelize, Model } = require('sequelize');
-
-/* Model like */
-class Like extends Model {}
-Like.init({
+module.exports = (sequelize, Sequelize) => {
+  const Like = sequelize.define("like", {
   userId: {
     type: Sequelize.INTEGER,
-    unique: true,
     allowNull: false,
   },
   like: {
@@ -15,17 +11,12 @@ Like.init({
   },
   likeDate: { 
     type: Sequelize.DATE,
-    allowNull: true,
+    allowNull: false,
   },
   postId: {
       type: Sequelize.INTEGER,
-      unique: true,
       allowNull: false
-  }
-}, {
-    modelName: 'likes',
-    sequelize
-})
+  }});
 
-Like.sync()
-module.exports = Like;
+return Like;
+};

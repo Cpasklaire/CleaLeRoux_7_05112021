@@ -5,10 +5,16 @@ const auth = require('../middleware/auth');
 const likeController = require('../controllers/like');
 
 /*POST*/
-router.post('/', auth, likeController.createLike);
+//router.post('/', likeController.createLike);
+
 /*GET*/
-router.get('/:postId', auth, likeController.getPostLikes);
-/*DELECTE*/
-router.delete('/:id', auth, likeController.deleteLike);
+router.get('/', likeController.getAllLikes);
+router.get('/:postId', likeController.getOneLikePost);
+router.get('/user/:userId', likeController.getOneLikeUser);
+
+
+
+/*DELETE*/
+//router.delete('/:id', likeController.deleteLike);
 
 module.exports = router;

@@ -1,8 +1,10 @@
-const Like = require('../models/like');
+const db = require('../models');
+const post = require('../models/post');
+const Like = db.like;
 
 /*POST*/
 /* Faire un like '/' */
-exports.createLike = (req, res, next) => {
+exports.createLike = (req, res) => {
     const likeObject = JSON.parse(req.body.like);
     delete likeObject._id;
     const like = new Like({
@@ -13,18 +15,65 @@ exports.createLike = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-/*GET*/
-/* Voir les likes d'un post '/:likeId'*/
-exports.getAllLikes = (req, res, next) => {
-    Like.find()
-        .then((likes) => {res.status(200).json(likes);})
-        .catch((error) => {res.status(400).json({error: error});});
+/*DELETE*/
+/* Supprimer un like '/:id' */
+exports.deleteLike = (req, res) => {
+  Like.deleteOne({ _id: req.params.id })
+      .then(() => res.status(200).json({ message: 'Like supprimé'}))           
+      .catch(error => res.status(400).json({ error }));
 };
 
-/*DELECTE*/
-/* Supprimer un like '/:id' */
-exports.deleteLike = (req, res, next) => {
-    Like.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Like supprimé'}))           
-        .catch(error => res.status(400).json({ error }));
+
+/*GET*/
+/* Voir les likes */
+exports.getAllLikes = (req, res) => {
+    Like.findAll({
+        attributes: ['userId', 'postId', 'like', 'likeDate']
+      })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Une erreure est intervenue."
+        });
+      });
+  };
+
+  /* Voir les likes d'un post */
+exports.getOneLikePost = (req, res) => {
+  const postId = req.params.postId;
+  Like.findAll({
+      where: {postId : postId},
+      attributes: ['userId', 'postId', 'like', 'likeDate']
+    })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Une erreure est intervenue."
+      });
+    });
 };
+
+  /* Voir les likes d'un user */
+  exports.getOneLikeUser = (req, res) => {
+    const userId = req.params.userId;
+    Like.findAll({
+        where: {userId : userId},
+        attributes: ['userId', 'postId', 'like', 'likeDate']
+      })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Une erreure est intervenue."
+        });
+      });
+  };
+

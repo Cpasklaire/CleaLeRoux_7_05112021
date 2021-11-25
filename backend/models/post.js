@@ -1,8 +1,5 @@
-module.exports = (sequelizee, Sequelize) => {
-  const Post = sequelizee.define("post", {
-    updatedAt: false,
-    createdAt: false,
-
+module.exports = (sequelize, Sequelize) => {
+  const Post = sequelize.define("post", {
   id: { 
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -14,7 +11,7 @@ module.exports = (sequelizee, Sequelize) => {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  createDate: { 
+  createdAt: { 
     type: Sequelize.DATE,
     allowNull: false,
   },
@@ -43,7 +40,7 @@ module.exports = (sequelizee, Sequelize) => {
     type: Sequelize.INTEGER,
     allowNull: true,
   }, 
-  updateDate: { 
+  updatedAt: { 
     type: Sequelize.DATE,
     allowNull: true,
   }

@@ -59,8 +59,12 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 const postRoutes = require('./routes/post');
 app.use('/api/post', postRoutes);
-/*
+
 const userRoutes = require('./routes/user');
 app.use('/api/auth', userRoutes);
-*/
+
+const likeRoutes = require('./routes/like');
+app.use('/api/like', likeRoutes);
+
+
 module.exports = app;

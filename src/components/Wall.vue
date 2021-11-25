@@ -1,7 +1,6 @@
 <template>
     <div>    
         <section class="wall" v-for="item in publicationList" :key="item.id">
-            <!-- tous les message -->
             <article class="post" v-if="!item.parentId && filter == 'all' || (filter == 'image' && item.imageUrl) || (filter == 'messages' && !item.imageUrl) || (filter == 'new' && post.createDate <= lastUpdateDate)">                
                 <img :src="'../../backend/images/avatars/' + item.avatar" :alt="'avatar de' + item.userName" class="avatar">
                 <span class="nom">{{item.userName}}</span>
@@ -135,7 +134,6 @@ import WritingReponse from './WritingReponse.vue'
 }
 .wall
 {
-    margin-top: 25%;
     margin-right: 3%;
     margin-left: 3%;
 

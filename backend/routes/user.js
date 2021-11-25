@@ -1,20 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('../middleware/multer-config');
-const auth = require('../middleware/auth');
+//const multer = require('../middleware/multer-config');
+//const auth = require('../middleware/auth');
 
 const userController = require('../controllers/user');
 
 /*POST*/
-router.post('/signup', multer, userController.signup); //créé
+router.post('/signup', userController.signup); //créé
 router.post('/login', userController.login); //se connecter
+
 /*GET*/
-router.get('/', auth, userController.getProfile); // voir tout les users
-router.get('/:id', auth, userController.getProfile); // se voir
-router.get('/:role', auth, userController.getProfile); // voir les modo
+router.get('/', userController.getAllUsers); // voir tout les users ?role=
+router.get('/:id',  userController.getOneUser); // se voir
+
 /*PUT*/
-router.put('/:id', auth, multer,  userController.updateProfile); //modifier
-/*DELECTE*/
-router.delete('/:id', auth, multer, userController.deleteProfile); //supprimer
+router.put('/:id',  userController.modifyUser); //modifier
+
+/*DELETE*/
+router.delete('/:id', userController.deleteUser); //supprimer
 
 module.exports = router;

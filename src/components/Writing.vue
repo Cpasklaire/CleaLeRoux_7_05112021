@@ -27,7 +27,7 @@ section
   justify-content: space-between;
   align-items: center;
   margin: 2%;
-  margin-top: 30%;
+
   flex-direction: column;
   .interraction
   {

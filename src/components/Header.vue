@@ -65,7 +65,6 @@
 <style lang="scss">
 header 
 {
-    height: 15px;
     .top
     {
     display: flex;

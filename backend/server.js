@@ -10,7 +10,7 @@ const normalizePort = val => { //normalizePort : renvoie un port valide
 };
 
 const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+//app.set('port', port);
 
 const errorHandler = error => { //errorHandler : recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur 
   if (error.syscall !== 'listen') {throw error;}
@@ -30,18 +30,25 @@ const errorHandler = error => { //errorHandler : recherche les différentes erre
   }
 };
 
+app.get("/", (req, res) => {
+  res.json({ message: "Bienvenue sur Groupomania." });
+});
+
+
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log('Listening on ' + bind);
+  console.log('Ecoute sur le ' + bind);
 });
 
-/*création docier images*/
+/*création des dossiers images*/
 const mkdirp = require('mkdirp');
-mkdirp('./images').then(made =>
-console.log(`création du dossier images`));
+mkdirp('./images/avatar').then(made =>
+console.log(`création du dossier images des avatars`));
+mkdirp('./images/postIMG').then(made =>
+console.log(`création du dossier images des messages`));
 
 server.listen(port); //ce démarre avec 'node server' ou 'nodemon server' 

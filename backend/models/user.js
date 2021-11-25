@@ -1,5 +1,5 @@
-module.exports = (sequelizee, Sequelize) => {
-  const User = sequelizee.define('user', {
+module.exports = (sequelize, Sequelize) => {
+  const User = sequelize.define('user', {
   id: { 
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -26,10 +26,10 @@ module.exports = (sequelizee, Sequelize) => {
   },
   role: { 
     type: Sequelize.STRING,
-    defaultValue: 'user',    
+    defaultValue: "user",    
     allowNull: false,
   },
-  createDate: { 
+  createdAt: { 
     type: Sequelize.DATE,
     allowNull: false,
   },
@@ -42,7 +42,7 @@ module.exports = (sequelizee, Sequelize) => {
     type: Sequelize.STRING,
     allowNull: true,
   }, 
-  updateDate: { 
+  updatedAt: { 
     type: Sequelize.DATE,
     allowNull: true,
   },

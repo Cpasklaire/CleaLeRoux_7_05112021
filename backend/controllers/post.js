@@ -16,17 +16,17 @@ exports.createPost = (req, res) => {
 
   // Création du message
   const post = {
-    id: req.body.id,
+    id: req.params.id,
     userId: req.body.userId,
-    createDate: req.body.createDate,
+    createdAt: req.params.createdAt,
     
     imageURL: req.body.imageURL,
     message: req.body.message,
-    moderatedDate: req.body.moderatedDate,
-    deleteDate: req.body.deleteDate,
-    moderatedBy: req.body.moderatedBy,
-    parentId: req.body.parentId,
-    updateDate: req.body.updateDate
+    moderatedDate: req.params.moderatedDate,
+    deleteDate: req.params.deleteDate,
+    moderatedBy: req.params.moderatedBy,
+    parentId: req.params.parentId,
+    updatedAt: req.params.updatedAt
   };
 
 // Sauvegarde message base de donnée
@@ -46,7 +46,7 @@ exports.createPost = (req, res) => {
 /* Voir toutes les publications '/' */
 exports.getAllPosts = (req, res) => {
     Post.findAll({
-        attributes: ['userId', 'message', 'imageURL', 'createDate']
+        attributes: ['id','userId', 'message', 'imageURL', 'createdAt']
       })
         .then(data => {
           res.send(data);
@@ -65,7 +65,7 @@ exports.getOnePost = (req, res) => {
     const id = req.params.id;
     Post.findOne({
       where: {id: id},
-      attributes: ['userId', 'message', 'imageURL', 'createDate']
+      attributes: ['userId', 'message', 'imageURL', 'createdAt']
   })
       .then(data => {
         if (data) {
