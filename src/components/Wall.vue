@@ -4,8 +4,8 @@
             <article class="post" v-if="!item.parentId && filter == 'all' || (filter == 'image' && item.imageUrl) || (filter == 'messages' && !item.imageUrl) || (filter == 'new' && post.createDate <= lastUpdateDate)">                
                 <img :src="'../../backend/images/avatars/' + item.avatar" :alt="'avatar de' + item.userName" class="avatar">
                 <span class="nom">{{item.userName}}</span>
-                <p class="story" v-if="item.text">
-                    {{item.text}}
+                <p class="story" v-if="item.message">
+                    {{item.message}}
                 </p>
                 <img v-if="post.imageURL" :src="'../../backend/images/' + item.imageUrl" :alt="'image partagée par ' + item.userName" class="imgPost">
                 <p>
@@ -26,7 +26,7 @@
                     <article class="commentaire" v-if="childItem.parentId == item.id" >
                         <img :src="'../../backend/images/avatars/' + childItem.avatar" :alt="'avatar de ' + childItem.userName" class="avatar">
                         <span class="nom">{{childItem.userName}}</span>
-                        <p class="story">{{childItem.text}}</p>
+                        <p class="story">{{childItem.message}}</p>
                         <img src="'../../backend/images/' + childItem.imageUrl" :alt="'image partagée par ' + childItem.userName" class="imgPost">
                         <div class="answer">
                             <button class="heart-container">
@@ -57,62 +57,43 @@ import WritingReponse from './WritingReponse.vue'
                 lastUpdateDate: 0, //user.lastRefreshDate
                 publicationList: [
                     { 
-                        id: 123,
-                        parentId: null,
-                        userId: 'user.id',
-                        avatar: 'user.avatar',
-                        userName: 'user.firstname + user.lastname',
-                        text: 'post.message CECI EST LE PARENT 123',
-                        imageUrl: 'post.imageURL',
-                        createDate: 'post.createDate',
-                    },
-                    { 
-                        id: 124,
-                        parentId: 123,
-                        userId: 'user.id',
-                        avatar: 'user.avatar',
-                        userName: 'user.firstname + user.lastname',
-                        text: 'post.message ENFANT DU 123, JE SUIS le 124',
-                        imageUrl: 'post.imageURL',
-                        createDate: 'post.createDate',
-                    },
-                    { 
-                        id: 125,
-                        parentId: 122,
-                        userId: 'user.id',
-                        avatar: 'user.avatar',
-                        userName: 'user.firstname + user.lastname',
-                        text: 'post.message JE DOIS AS APPARAITRE',
-                        imageUrl: 'post.imageURL',
-                        createDate: 'post.createDate',
-                    },
-                    { 
-                        id: 126,
-                        parentId:  123,
-                        userId: 'user.id',
-                        avatar: 'user.avatar',
-                        userName: 'user.firstname + user.lastname',
-                        text: 'post.message JE SUI SLe 126 et mon pere est darth vador',
-                        imageUrl: 'post.imageURL',
-                        createDate: 'post.createDate',
                     },
                 ]        
             }
         },
         mounted: function() {
-            // alert('C\'est ici qu\'on charge les messages à l\'init');
-            // this.publicationList = await this.$http.get('/posts');  ($http est un wrapper vueJS autour de axios) 
-            // fetch() 
+            //appeler tous les messages
+            this.publicationList = this.$http.get('/post');
+            fetch()
+                .then(response => response.publicationList);
         },
         methods: {
+            //activer la réponse au message
             togglewRepElement: function() {
                 this.showRepElement = !this.showRepElement
             },
+            //pusher les messages
             post: function() {
-                // todo
+            let headers = {Authorization: 'token'}
+            let post = this.$http.get('/post', {headers: headers})
+            let user = this.$http.get('/user', {headers: headers})
+                this.publicationList.push({
+                    id: post.id,
+                    userId: user.id,
+                    createDate: post.createDate,
+                    imageURL: post.imageURL,
+                    message: post.message,
+                    parentId: post.parentId,
+                    userName: user.lastName + user.firstName,
+                    avatar: user.avatar
+                })
             },
+            //liker un message
             like: function() {
-                // todo
+               /*let like = this.$http.post('/like')
+               this.sql.push({
+                })
+                Pourquoi ne pas l'integrer un post ? */
             }
         }
     }    

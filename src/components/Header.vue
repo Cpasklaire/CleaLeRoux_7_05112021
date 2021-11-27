@@ -36,27 +36,6 @@
         togglewWriteElement: function() {
             this.showWriteElement = !this.showWriteElement
         },
-                    loadNewMessages: function() {
-                // let headers = {
-                    // Authorization: 'token'
-                // }
-                // let newMessages = await this.$http.get('/posts?date=' + this.lastUpdateDate, {headers: headers})
-                // boucler sur les messages qui arrivent
-                // messages.forEach(element => {
-                    // ajouter le message dans publicationList
-                    // this.lastUpdateDate = message.date
-                // } )
-                // ajouter les messages dans publicationList ... 
-                this.publicationList.push({
-                    id: 1236,
-                    type: 'message',
-                    authorId: 2,
-                    username: 'Cléa', 
-                    message: 'Mon chien a faim',
-                    imageUrl: '42.png',
-                    date: 123456789
-                })
-                    }
     }
 }
 

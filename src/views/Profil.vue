@@ -42,7 +42,21 @@
                     },
                 ]
             }
-        }
+        },
+        mounted: {
+            appelProfil: function() {
+                const userId = localStorage.getItem('userId');
+				this.$http.get('http://localhost:3000/api/user/' + userId, {
+					headers: {
+						//Authorization: 'Bearer ' + localStorage.getItem('token')
+					}
+				})
+				.then(response => {response.userInfo, console.log(response.data.user)})
+			},
+        },
+        methods: {
+            
+        },
     }
 </script>
 

@@ -29,7 +29,7 @@ module.exports = (sequelize, Sequelize) => {
     defaultValue: "user",    
     allowNull: false,
   },
-  createdAt: { 
+  createDate: { 
     type: Sequelize.DATE,
     allowNull: false,
   },
@@ -42,7 +42,7 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.STRING,
     allowNull: true,
   }, 
-  updatedAt: { 
+  updateDate: { 
     type: Sequelize.DATE,
     allowNull: true,
   },
