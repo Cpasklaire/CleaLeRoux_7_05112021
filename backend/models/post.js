@@ -24,18 +24,6 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.STRING,
     allowNull: true,
   }, 
-  moderatedDate: { 
-    type: Sequelize.DATE,
-    allowNull: true,
-  },
-  deleteDate: { 
-    type: Sequelize.DATE,
-    allowNull: true,
-  },
-  moderatedBy: { 
-    type: Sequelize.INTEGER,
-    allowNull: true,
-  }, 
   parentId: { 
     type: Sequelize.INTEGER,
     allowNull: true,

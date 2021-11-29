@@ -24,11 +24,6 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.STRING,
     allowNull: false
   },
-  role: { 
-    type: Sequelize.STRING,
-    defaultValue: "user",    
-    allowNull: false,
-  },
   createDate: { 
     type: Sequelize.DATE,
     allowNull: false,
@@ -46,14 +41,6 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.DATE,
     allowNull: true,
   },
-  deleteDate: { 
-    type: Sequelize.DATE,
-    allowNull: true,
-  },
-  deleteBy: { 
-    type: Sequelize.INTEGER,
-    allowNull: true,
-  }, 
   lastRefreshDate: { 
     type: Sequelize.DATE,
     allowNull: true,
