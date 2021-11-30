@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!showModifierElement">
         <section class="profil" v-for="item in userInfo" :key="item.id">
         <router-link to="/"><i class="fas fa-arrow-circle-left"></i></router-link>
             <div class="entete">
@@ -11,10 +11,9 @@
                 <span>Mes infos personnelles</span> <br>
                 <span>Courriel : {{item.mail}}</span><br>
                 <span>Mot de passe : **********</span><br>
-                <span>Statut : Ressource humaine</span><br>
             </div>
             <div class="bouton">
-                <button>Modifier</button>
+                <button v-on:click="togglewModifierElement">Modifier</button>
                 <button>Supprimer</button>
             </div>
             <div class="date">
@@ -22,6 +21,15 @@
                 <span>Derniére connection : {{item.lastRefreshDate}}</span>
             </div>
         </section>
+        <form v-if="showModifierElement">
+            <label>Avatar</label>
+            <input @change="processFile($telechargement)" type="file" id="file" name="file" multiple accept=".png, .jpg, .jpeg, .gif">
+            <label>Description</label>
+            <input type="text"/>
+            <label>Mot de passe</label>
+            <input type="password"/>
+            <button type="submit">Valider</button>
+        </form>
     </div>
 </template>
 
@@ -31,6 +39,7 @@
         components: {},
         data:function(){
             return{
+                showModifierElement: false,
                 userInfo: [
                     { 
                         userId: 'user.id',

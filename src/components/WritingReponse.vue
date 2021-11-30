@@ -3,7 +3,7 @@
     <div class="interraction">
       <textarea placeholder="Exprimez vous"></textarea>
       <label for="file">Une image ?</label>
-      <input type="file" id="file" name="file" multiple accept=".png, .jpg, .jpeg, .gif">
+      <input @change="processFile($telechargement)" type="file" id="file" name="file" multiple accept=".png, .jpg, .jpeg, .gif">
     </div>
     <button>Envoyer</button>
   </section>
@@ -15,6 +15,16 @@
       return {
         file1: null,
         file2: null
+      }
+    },
+    methods:{
+      processFile(telechargement) {
+        this.image = telechargement.target.files[0]
+      },
+      validation: function (){
+        if (this.text || this.image) {
+          return true
+        }
       }
     }
   }

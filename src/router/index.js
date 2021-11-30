@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Profil from '../views/Profil.vue'
+//import Connect from '../views/Connect.vue'
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,12 @@ const routes = [
     path: '/profil',
     name: 'Profil',  
     component: Profil
-  }
+  },
+  //{
+  //  path: '/Connect',
+  //  name: 'Connect',  
+  //  component: Connect
+  //},
 ]
 
 const router = new VueRouter({
@@ -23,5 +29,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+// ??
 
 export default router
