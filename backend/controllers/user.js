@@ -22,12 +22,10 @@ exports.signup = (req, res) => {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           role: req.params.role,
-          deleteBy: req.params.deleteBy,
           avatar: req.body.avatar,
           description: req.body.description,
           createdAd: req.params.createdAt,
           updatedAt: req.params.updatedAt,
-          deleteDate: req.params.deleteDate,
           lastRefreshDate: req.params.lastRefreshDate
          };
            User.create(user)
@@ -49,12 +47,15 @@ exports.signup = (req, res) => {
 
 /* Connection d'un user '/login' */
 exports.login = (req, res) => {
-    User.findOne({ email: req.params.email })
+    User.findOne({ 
+      where:{ email: req.body.email },
+      attributes: ['email'],
+    })
     .then(user => {
         if (!user) {
             return res.status(401).json({ error: 'Utilisateur non trouvé' });
         }
-        bcrypt.compare(req.body.password, user.password)
+        compare(req.body.password, user.password)
             .then(valid => {
                 if (!valid) {
                     return res.status(401).json({ error: 'Mot de passe incorrect' });

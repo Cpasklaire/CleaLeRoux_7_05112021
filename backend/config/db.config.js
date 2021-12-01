@@ -1,8 +1,8 @@
 //connexion à la base de données
 module.exports = {
     DB: 'groupomania',
-    USER: 'process.env.DB_CONFIG_username',
-    PASSWORD: 'process.env.DB_CONFIG_password',
+    USER: 'root',
+    PASSWORD: 'Javaaimel0',
     HOST: 'localhost',
     dialect: 'mysql',
     pool: {

@@ -19,24 +19,26 @@
                         <span v-on:click="like" class='heart-clip'></span>
                     </button>
                     <button v-on:click="togglewRepElement">Répondre</button>
-                    <button>Voir les commentaires</button>   
+                    <button v-on:click="togglewComElement">Voir les commentaires</button>   
                 </div>
                 <WritingReponse v-if="showRepElement" />
-                <div v-for="childItem in publicationList" :key="childItem.id">
-                    <article class="commentaire" v-if="childItem.parentId == item.id" >
-                        <img :src="'../../backend/images/avatars/' + childItem.avatar" :alt="'avatar de ' + childItem.userName" class="avatar">
-                        <span class="nom">{{childItem.userName}}</span>
-                        <p class="story">{{childItem.message}}</p>
-                        <img src="'../../backend/images/' + childItem.imageUrl" :alt="'image partagée par ' + childItem.userName" class="imgPost">
-                        <div class="answer">
-                            <button class="heart-container">
-                                <svg class='heart-stroke'>
-                                    <path d="M20,35.07,4.55,19.62a8.5,8.5,0,0,1-.12-12l.12-.12a8.72,8.72,0,0,1,12.14,0L20,10.77l3.3-3.3A8.09,8.09,0,0,1,29.13,4.9a8.89,8.89,0,0,1,6.31,2.58,8.5,8.5,0,0,1,.12,12l-.12.12ZM10.64,7.13A6.44,6.44,0,0,0,6.07,18.19L20,32.06,33.94,18.12A6.44,6.44,0,0,0,34,9l0,0a6.44,6.44,0,0,0-4.77-1.85A6,6,0,0,0,24.83,9L20,13.78,15.21,9A6.44,6.44,0,0,0,10.64,7.13Z"/>
-                                </svg>
-                                <span v-on:click="like" class='heart-clip'></span>
-                            </button>
-                        </div>
-                    </article>
+                <div v-if="showComElement">
+                    <div v-for="childItem in publicationList" :key="childItem.id">
+                        <article class="commentaire" v-if="childItem.parentId == item.id" >
+                            <img :src="'../../backend/images/avatars/' + childItem.avatar" :alt="'avatar de ' + childItem.userName" class="avatar">
+                            <span class="nom">{{childItem.userName}}</span>
+                            <p class="story">{{childItem.message}}</p>
+                            <img src="'../../backend/images/' + childItem.imageUrl" :alt="'image partagée par ' + childItem.userName" class="imgPost">
+                            <div class="answer">
+                                <button class="heart-container">
+                                    <svg class='heart-stroke'>
+                                        <path d="M20,35.07,4.55,19.62a8.5,8.5,0,0,1-.12-12l.12-.12a8.72,8.72,0,0,1,12.14,0L20,10.77l3.3-3.3A8.09,8.09,0,0,1,29.13,4.9a8.89,8.89,0,0,1,6.31,2.58,8.5,8.5,0,0,1,.12,12l-.12.12ZM10.64,7.13A6.44,6.44,0,0,0,6.07,18.19L20,32.06,33.94,18.12A6.44,6.44,0,0,0,34,9l0,0a6.44,6.44,0,0,0-4.77-1.85A6,6,0,0,0,24.83,9L20,13.78,15.21,9A6.44,6.44,0,0,0,10.64,7.13Z"/>
+                                    </svg>
+                                    <span v-on:click="like" class='heart-clip'></span>
+                                </button>
+                            </div>
+                        </article>
+                    </div>
                 </div>
             </article>
         </section>
@@ -54,6 +56,7 @@ import WritingReponse from './WritingReponse.vue'
         data: function () {
             return {
                 showRepElement: false,
+                showComElement: false,
                 lastUpdateDate: 0, //user.lastRefreshDate
                 publicationList: [
                     { 
@@ -63,14 +66,24 @@ import WritingReponse from './WritingReponse.vue'
         },
         mounted: function() {
             //appeler tous les messages
-            this.publicationList = this.$http.get('/post');
-            fetch()
-                .then(response => response.publicationList);
+            this.$http.get('http://localhost:3000/api/post/').then(response => {
+                this.publicationList = response.data;
+                console.log(response.data)
+            })
+            //appeler tous les users
+            this.$http.get('http://localhost:3000/api/user/').then(response => {
+                this.publicationList = response.data;
+                console.log(response.data)
+            })
         },
         methods: {
             //activer la réponse au message
             togglewRepElement: function() {
                 this.showRepElement = !this.showRepElement
+            },
+            //voir les commentaires
+            togglewComElement: function() {
+                this.showComElement = !this.showComElement
             },
             //pusher les messages
             post: function() {
@@ -92,8 +105,7 @@ import WritingReponse from './WritingReponse.vue'
             like: function() {
                /*let like = this.$http.post('/like')
                this.sql.push({
-                })
-                Pourquoi ne pas l'integrer un post ? */
+                })*/
             }
         }
     }    

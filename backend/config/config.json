@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "process.env.DB_CONFIG_username",
-    "password": "process.env.DB_CONFIG_password",
+    "username": "root",
+    "password": "Admin",
     "database": "database_development",
     "host": "127.0.0.1",
     "dialect": "mysql"

@@ -8,7 +8,7 @@ const db = require('./models');
 
 
 /*Connection à la database*/
-const sequelize = new Sequelize(process.env.CONNECT_SEQUELIZE, {
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   operatorsAliases: 0,

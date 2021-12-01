@@ -24,7 +24,12 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.STRING,
     allowNull: false
   },
-  createDate: { 
+  role: { 
+    type: Sequelize.STRING,
+    defaultValue: "user",    
+    allowNull: false,
+  },
+  createdAt: { 
     type: Sequelize.DATE,
     allowNull: false,
   },
@@ -37,7 +42,7 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.STRING,
     allowNull: true,
   }, 
-  updateDate: { 
+  updatedAt: { 
     type: Sequelize.DATE,
     allowNull: true,
   },

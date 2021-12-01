@@ -9,7 +9,7 @@ exports.createPost = (req, res) => {
    // Vérification existance idUSERS
    if (!req.body.userId) {
     res.status(400).send({
-      message: "Ce contenu ne peut être vide!"
+      message: "Vous n'êtes pas connecté(e)!"
     });
     return;
   }
@@ -18,14 +18,13 @@ exports.createPost = (req, res) => {
   const post = {
     id: req.params.id,
     userId: req.body.userId,
-    createdAt: req.params.createdAt,
+    createAt: req.params.createdAt,
     
     imageURL: req.body.imageURL,
     message: req.body.message,
     moderatedDate: req.params.moderatedDate,
-    deleteDate: req.params.deleteDate,
     moderatedBy: req.params.moderatedBy,
-    parentId: req.params.parentId,
+    parentId: req.body.parentId,
     updatedAt: req.params.updatedAt
   };
 
@@ -46,7 +45,7 @@ exports.createPost = (req, res) => {
 /* Voir toutes les publications '/' */
 exports.getAllPosts = (req, res) => {
     Post.findAll({
-        attributes: ['id','userId', 'message', 'imageURL', 'createdAt']
+        attributes: ['id','userId', 'message', 'imageURL', 'createAt', 'parentId']
       })
         .then(data => {
           res.send(data);

@@ -40,31 +40,32 @@
         data:function(){
             return{
                 showModifierElement: false,
-                userInfo: [
-                    { 
-                        userId: 'user.id',
-                        avatar: 'user.avatar',
-                        userName: 'user.firstname + user.lastname',
-                        mail: 'user.mail',
-                        createDate: 'user.createDate',
-                        lastRefreshDate: 'user.lastRefreshDate', 
-                    },
-                ]
+                userInfo: [{ },]
             }
         },
-        mounted: {
-            appelProfil: function() {
-                const userId = localStorage.getItem('userId');
-				this.$http.get('http://localhost:3000/api/user/' + userId, {
-					headers: {
-						//Authorization: 'Bearer ' + localStorage.getItem('token')
-					}
-				})
-				.then(response => {response.userInfo, console.log(response.data.user)})
-			},
-        },
+        mounted: function() {
+            //appeler tous les messages
+            this.$http.get('http://localhost:3000/api/user/').then(response => {
+                this.userInfo = response.data;
+                console.log(response.data)
+            })
+		},
         methods: {
-            
+            user: function() {
+            let headers = {Authorization: 'token'}
+            let user = this.$http.get('/user', {headers: headers})
+                this.userInfo.push({
+                    userId: user.id,
+                    avatar: user.avatar,
+                    userName: user.firstname + user.lastname,
+                    mail: user.mail,
+                    createDate: user.createDate,
+                    lastRefreshDate: user.lastRefreshDate, 
+                })
+            },
+            togglewModifierElement: function() {
+                this.showModifierElement = !this.showModifierElement
+            },
         },
     }
 </script>

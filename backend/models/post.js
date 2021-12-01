@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  createDate: { 
+  createAt: { 
     type: Sequelize.DATE,
     allowNull: false,
   },
@@ -24,11 +24,19 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.STRING,
     allowNull: true,
   }, 
+  moderatedDate: { 
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+  moderatedBy: { 
+    type: Sequelize.INTEGER,
+    allowNull: true,
+  }, 
   parentId: { 
     type: Sequelize.INTEGER,
     allowNull: true,
   }, 
-  updateDate: { 
+  updatedAt: { 
     type: Sequelize.DATE,
     allowNull: true,
   }
