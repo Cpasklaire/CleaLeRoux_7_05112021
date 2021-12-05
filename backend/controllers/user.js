@@ -21,11 +21,10 @@ exports.signup = (req, res) => {
           password:  req.body.password,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
-          role: req.params.role,
           avatar: req.body.avatar,
           description: req.body.description,
-          createdAd: req.params.createdAt,
-          updatedAt: req.params.updatedAt,
+          createAd: req.params.createAt,
+          updateAt: req.params.updatedAt,
           lastRefreshDate: req.params.lastRefreshDate
          };
            User.create(user)
@@ -92,6 +91,7 @@ exports.getAllUsers = (req, res) => {
         });
       });
   };
+
 /* Voir son profil '/:id' */
 exports.getOneUser = (req, res) => {
     const id = req.params.id;
