@@ -45,7 +45,7 @@
         },
         mounted: function() {
             //appeler tous les messages
-            this.$http.get('http://localhost:3000/api/user/').then(response => {
+            this.$http.get('http://localhost:3000/api/auth/').then(response => {
                 this.userInfo = response.data;
                 console.log(response.data)
             })
@@ -53,7 +53,7 @@
         methods: {
             user: function() {
             let headers = {Authorization: 'token'}
-            let user = this.$http.get('/user', {headers: headers})
+            let user = this.$http.get('/auth', {headers: headers})
                 this.userInfo.push({
                     userId: user.id,
                     avatar: user.avatar,

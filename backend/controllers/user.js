@@ -78,6 +78,7 @@ exports.login = (req, res) => {
 /*GET*/
 /* Voir tous les users '/' */
 exports.getAllUsers = (req, res) => {
+  console.log("coucou"),
     User.findAll({
         attributes: ['id', 'lastName', 'firstName', 'email']
       })
