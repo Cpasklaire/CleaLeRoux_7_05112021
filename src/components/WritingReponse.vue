@@ -1,33 +1,53 @@
 <template>
   <section class="whiting">
     <div class="interraction">
-      <textarea placeholder="Exprimez vous"></textarea>
+      <textarea placeholder="Exprimez vous" v-model="text" id="text"></textarea>
       <label for="file">Une image ?</label>
-      <input @change="processFile($telechargement)" type="file" id="file" name="file" multiple accept=".png, .jpg, .jpeg, .gif">
+      <input @change="onFileChange" type="file" id="inputFile" name="file" multiple accept=".png, .jpg, .jpeg, .gif">
     </div>
-    <button>Envoyer</button>
+    <button v-on:click="creatPost" value="Submit">Envoyer</button>
+    <span>{{msgError}}</span>
   </section>
 </template>
 
 <script>
+import axios from "axios";
+
   export default {
     data() {
       return {
-        file1: null,
-        file2: null
       }
     },
     methods:{
-      processFile(telechargement) {
-        this.image = telechargement.target.files[0]
-      },
-      validation: function (){
-        if (this.text || this.image) {
-          return true
+      creatPost() {
+        /*compiler un ensemble de paires clé/valeur à envoyer à l’aide de l’API XMLHttpRequest*/
+        const fd = new FormData();
+        fd.append("inputFile", this.contentPost.imageUrl);
+        fd.append("text", this.contentPost.text);
+
+        if (fd.get("inputFile") == "null" && fd.get("text") == "null") {
+          this.messError = "Message vide";
+        } 
+        else {
+          axios
+            .post("http://localhost:3000/api/post/createPost", fd, {
+              headers: {
+                //Authorization: "Bearer " + window.localStorage.getItem("token")
+              }
+            })
+            .then(response => {
+              if (response) {
+                window.location.reload();
+              }
+            })
+            .catch(error => (this.messError = error));
         }
-      }
+      },
+    onFileChange(e) {
+      this.contentPost.postImage = e.target.files[0] || e.dataTransfer.files;
     }
   }
+}
 </script>
 
 <style lang="scss">

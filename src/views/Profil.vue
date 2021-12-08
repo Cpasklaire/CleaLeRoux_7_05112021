@@ -44,7 +44,7 @@
             }
         },
         mounted: function() {
-            //appeler tous les messages
+            //appeler l'user
             this.$http.get('http://localhost:3000/api/auth/').then(response => {
                 this.userInfo = response.data;
                 console.log(response.data)
