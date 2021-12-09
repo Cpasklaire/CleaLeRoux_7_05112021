@@ -71,7 +71,7 @@ import WritingReponse from './WritingReponse.vue'
                 console.log(response.data)
             })
             //appeler tous les users
-            this.$http.get('http://localhost:3000/api/user/').then(response => {
+            this.$http.get('http://localhost:3000/api/auth/').then(response => {
                 this.publicationList = response.data;
                 console.log(response.data)
             })
@@ -89,7 +89,7 @@ import WritingReponse from './WritingReponse.vue'
             post: function() {
             let headers = {Authorization: 'token'}
             let post = this.$http.get('/post', {headers: headers})
-            let user = this.$http.get('/user', {headers: headers})
+            let user = this.$http.get('/auth', {headers: headers})
                 this.publicationList.push({
                     id: post.id,
                     userId: user.id,
@@ -102,11 +102,18 @@ import WritingReponse from './WritingReponse.vue'
                 })
             },
             //liker un message
-            like: function() {
-               /*let like = this.$http.post('/like')
-               this.sql.push({
-                })*/
-            }
+            /*like: function() {
+                let headers = {Authorization: 'token'}
+                let post = this.$http.get('/post', {headers: headers})
+                let user = this.$http.get('/auth', {headers: headers})
+                let like = this.$http.post('/like', {headers: headers})
+                this.like.push({
+                    userId: user.id,
+                    postId: post.id,
+                    likeDate: like.likeDate,
+                    like: true,
+                })
+            }*/
         }
     }    
 </script>

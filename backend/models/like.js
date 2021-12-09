@@ -5,9 +5,8 @@ module.exports = (sequelize, Sequelize) => {
     allowNull: false,
   },
   like: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-      allowNull: false
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
   },
   likeDate: { 
     type: Sequelize.DATE,

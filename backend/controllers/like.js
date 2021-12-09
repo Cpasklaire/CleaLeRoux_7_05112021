@@ -25,23 +25,7 @@ exports.deleteLike = (req, res) => {
 
 
 /*GET*/
-/* Voir les likes */
-exports.getAllLikes = (req, res) => {
-    Like.findAll({
-        attributes: ['userId', 'postId', 'like', 'likeDate']
-      })
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Une erreure est intervenue."
-        });
-      });
-  };
-
-  /* Voir les likes d'un post */
+/* Voir les likes d'un post */
 exports.getOneLikePost = (req, res) => {
   const postId = req.params.postId;
   Like.findAll({
