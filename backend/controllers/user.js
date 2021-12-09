@@ -40,15 +40,15 @@ exports.signup = (req, res, next) => {
                     .catch(error => {
                         console.log(error)
 
-                        res.status(400).json({ error: '1Création du compte échoué' })
+                        res.status(400).json({ error: 'Création du compte échoué' })
                     });
             })
-            .catch(error => res.status(500).json({ error: '2Création du compte échoué' }));
+            .catch(error => res.status(500).json({ error: 'Création du compte échoué' }));
         } else {
             return res.status(404).json({ error: 'Vous étes déjà inscrit' })
         }
     })
-    .catch(error => res.status(500).json({ error: '3Création du compte échoué' }));
+    .catch(error => res.status(500).json({ error: 'Création du compte échoué' }));
 };
 
 //Se connecter
@@ -76,7 +76,6 @@ exports.login = (req, res, next) => {
                         {expiresIn: '24h'}
                     )
                 });
-                console.log(token)
             })
             .catch(error => res.status(500).json({ error: 'Connection échoué' }));
         } else {

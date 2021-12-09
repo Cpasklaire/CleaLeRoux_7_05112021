@@ -7,11 +7,11 @@ const fs = require('fs');
 exports.createPost = (req, res, next) => {   
     const text = req.body.text;
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     
     if (text == null || text == '' && imageURL == null) {
-        return res.status(400).json({ error: '2crivez ou mettez une image' });
+        return res.status(400).json({ error: 'Ecrivez ou mettez une image' });
     } 
 
     db.User.findOne({
@@ -21,7 +21,7 @@ exports.createPost = (req, res, next) => {
         if(userFound) {
             const post = db.Post.build({
                 text: req.body.text,
-                imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imagePost,
+                imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imageURL,
                 UserId: userFound.id
             })
             post.save()
@@ -38,12 +38,12 @@ exports.createPost = (req, res, next) => {
 // Voir tout les message
 exports.getAllPosts = (req, res, next) => {
     db.Post.findAll({
-        order: [['createdAt', "DESC"]] , //?
+        order: [['createdAt', "DESC"]] , //ordre date descendant
         include: [{
             model: db.User,
             attributes: [ 'lastName', 'firstName', 'avatar' ]
         },{
-            model: db.Comment
+            model: db.Commentaire
         }]
     })
     .then(postFound => {

@@ -1,21 +1,19 @@
 <template>  
     <div class="writing">
-        <form @submit.prevent="createPost" aria-label="Nouveau message">
+        <form @submit.prevent="createPost">
             <div class="">
-                <textarea v-model="content" class="newPost__content__text" name="message" id="message" placeholder="Quoi de neuf ?" aria-label="Rédiger un nouveau message"/>    
-                <img v-if="imagePreview" :src="imagePreview" id="preview" class="" alt="Prévisualisation de l'image ajoutée au message"/>     
+                <textarea v-model="text" class="" name="message" id="message" placeholder="Exprimez vous"/>    
+                <img v-if="imagePreview" :src="imagePreview" id="preview" class=""/>     
             </div>
-            <div class="newPost__option__file">
-                <button @click="uploadFile" type="button" class="newPost__option__file__btnInvisible"><i class="far fa-images fa-2x"></i> Choisir un fichier</button>
-                <input type="file" ref="fileUpload" @change="onFileSelected" accept="image/*" aria-label="Sélectionner un fichier">
+            <div class="">
+                <button @click="uploadFile" type="button" class=""><i class="far fa-images fa-2x"></i>Une image ?</button>
+                <input type="file" ref="fileUpload" @change="onFileSelected" accept="image/*">
             </div>       
-            <button type="submit" class="" aria-label="Publier le message">Publier <i class="far fa-paper-plane"></i></button>
+            <button type="submit" class="">Publier<i class="far fa-paper-plane"></i></button>
         </form>
-        <span>{{messError}}</span>
+        <!--<span>{{messError}}</span>-->
     </div>
 </template>
-
-
 
 <script>
     import axios from 'axios'
@@ -26,6 +24,9 @@
         },
         data() {
             return {
+                imagePreview:'',
+                image: '',
+                text: ''
             }
         }, 
         methods: {
@@ -55,9 +56,8 @@
             },
         }
     }
+
 </script>
-
-
 <style scoped lang="scss">
 
 </style>

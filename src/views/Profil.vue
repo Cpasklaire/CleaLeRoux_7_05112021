@@ -30,8 +30,8 @@
             <input type="password"/>
             <button @click="modifyProfile" type="submit">Valider</button>
         </form>
-		<span>{{messError}}</span>
-		<span>{{messReussite}}</span>
+		<!--<span>{{messError}}</span>-->
+		<!--<span>{{messReussite}}</span>-->
     </div>
 </template>
 
@@ -61,7 +61,7 @@
 				.then(response => {
 					this.user = response.data;
 				})
-				.catch(() => {this.messError = 'Une erreur c\'est produite'})
+				//.catch(() => {this.messError = 'Une erreur c\'est produite'})
 		},
 		methods: {
 			onFileSelected(event) {
@@ -79,8 +79,9 @@
 						'Content-Type': 'multipart/form-data'
 					}
 				})
-                .then(() => {this.messReussite = 'Vous pouvez vous connecter', window.location.reload();})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+                .then(() => {//this.messReussite = 'Vous pouvez vous connecter', 
+				window.location.reload();})
+                //.catch(() => {this.messError = 'Une erreur c\'est produite'})
 			},
 			deleteAccount(){
                 const userId = localStorage.getItem('userId');
@@ -91,10 +92,10 @@
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }
                 })
-				.then(() => {this.messReussite = 'Vous avez supprimer votre compte',                     
+				.then(() => {//this.messReussite = 'Vous avez supprimer votre compte',                     
 					localStorage.clear();
                     this.$router.push('/');})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+                //.catch(() => {this.messError = 'Une erreur c\'est produite'})
 
             }
 		}

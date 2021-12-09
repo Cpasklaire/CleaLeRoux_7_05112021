@@ -86,7 +86,5 @@
 
 
 <style scoped lang="scss">
-    .home {
 
-    }
 </style>
