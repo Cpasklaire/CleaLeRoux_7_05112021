@@ -1,63 +1,75 @@
-const db = require('../models');
-const post = require('../models/post');
-const Like = db.like;
+const jwt = require("jsonwebtoken");
+const db = require('../models/index');
 
-/*POST*/
-/* Faire un like '/' */
-exports.createLike = (req, res) => {
-    const likeObject = JSON.parse(req.body.like);
-    delete likeObject._id;
-    const like = new Like({
-        ...likeObject,
-    });
-    like.save()
-        .then(() => res.status(201).json({ message: 'Like créé'}))
-        .catch(error => res.status(400).json({ error }));
-};
-
-/*DELETE*/
-/* Supprimer un like '/:id' */
-exports.deleteLike = (req, res) => {
-  Like.deleteOne({ _id: req.params.id })
-      .then(() => res.status(200).json({ message: 'Like supprimé'}))           
-      .catch(error => res.status(400).json({ error }));
-};
-
-
-/*GET*/
-/* Voir les likes d'un post */
-exports.getOneLikePost = (req, res) => {
-  const postId = req.params.postId;
-  Like.findAll({
-      where: {postId : postId},
-      attributes: ['userId', 'postId', 'like', 'likeDate']
+// POST
+// Liker
+exports.likePost = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const userId = decodedToken.userId;
+    const liked = req.body.like
+    
+    db.Post.findOne({
+      
+        where: { id: req.params.postId },
     })
-    .then(data => {
-      res.send(data);
+    .then(postfound => {
+        if(!postfound) {
+            return res.status(404).json({ error: 'Aucun message trouvé :(' })
+        } else if (liked == false) {
+            db.Like.create({ 
+                postId: req.params.postId, 
+                userId: userId 
+            })
+            .then(response => {                
+                db.Post.update({ 
+                    likes: postfound.likes +1
+                },{
+                    where: { id: req.params.postId }
+                })
+                .then(() => res.status(201).json({ message: 'Message liker' }))
+                .catch(error => res.status(500).json({ error: 'Like échoué' })) 
+            })
+            .catch(error => res.status(400).json({ error: 'Like échoué' }))
+        } else if(liked == true) {
+            db.Like.destroy({ 
+                where: { 
+                    postId: req.params.postId, 
+                    userId: userId 
+                } 
+            })
+            .then(() => {
+                db.Post.update({ 
+                    likes: postfound.likes -1
+                },{
+                    where: { id: req.params.postId }
+                })
+                .then(() => res.status(201).json({ message: 'Message dé-liker' }))
+                .catch(error => res.status(500).json({ error: 'Dé-like échoué' })) 
+            })
+            .catch(error => res.status(400).json({ error: 'Dé-like échoué' }))
+        }
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Une erreure est intervenue."
-      });
-    });
-};
+    .catch(error => res.status(400).json({ error: 'Like ou dé-like échoué' }))  
+}
 
-  /* Voir les likes d'un user */
-  exports.getOneLikeUser = (req, res) => {
-    const userId = req.params.userId;
-    Like.findAll({
-        where: {userId : userId},
-        attributes: ['userId', 'postId', 'like', 'likeDate']
-      })
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Une erreure est intervenue."
-        });
-      });
-  };
-
+//GET
+// Voir les likes d'un message
+exports.getAllLike = (req, res, next) => {
+    db.Like.findAll({
+        where: { postId: req.params.postId},
+        include: {
+            model: db.User,
+            attributes: ['lastName', 'firstName']
+        },
+    })
+    .then(likePostFound => {
+        if(likePostFound) {
+            res.status(200).json(likePostFound);
+            console.log(likePostFound);
+        } else {
+            res.status(404).json({ error: 'Ce message n\'a pas été liker' });
+        }
+    })
+    .catch(error => res.status(500).json({ error: 'Recherche de like échoué' }))
+}

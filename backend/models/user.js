@@ -1,50 +1,48 @@
 module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define('user', {
-  id: { 
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    unique: true,
-    allowNull: false
-  },
-  lastName: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  firstName: { 
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  email: { 
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false
-  },
-  password: { 
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  createAt: { 
-    type: Sequelize.DATE,
-    allowNull: false,
-  },
-/*Champs optionnel*/
-  avatar: { 
-    type: Sequelize.STRING,
-    allowNull: true,
-  }, 
-  description: { 
-    type: Sequelize.STRING,
-    allowNull: true,
-  }, 
-  updateAt: { 
-    type: Sequelize.DATE,
-    allowNull: true,
-  },
-  lastRefreshDate: { 
-    type: Sequelize.DATE,
-    allowNull: true,
-  }
-});
-return User;
+  const User = sequelize.define('Users', {
+    //Informations obligatoires
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER
+    },
+    lastName: {
+      allowNull: false,
+      type: Sequelize.STRING
+    },
+    firstName: {
+      allowNull: false,
+      type: Sequelize.STRING
+    },
+    email: {
+      allowNull: false,
+      type: Sequelize.STRING
+    },
+    password: {
+      allowNull: false,
+      type: Sequelize.STRING
+    },
+    //Informations optionnel
+    avatar: {
+      type: Sequelize.STRING
+    },
+    description: {
+      type: Sequelize.STRING
+    },
+    //Date
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    lastRefreshDate: {
+      allowNull: false,
+      type: Sequelize.DATE
+    }
+  });
+  return User;
 };

@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Profil from '../views/Profil.vue'
-//import Connect from '../views/Connect.vue'
+import auth from '../middleware/auth'
 
 Vue.use(VueRouter)
 
@@ -13,15 +12,21 @@ const routes = [
     component: Home
   },
   {
-    path: '/profil',
-    name: 'Profil',  
-    component: Profil
+    path: '/wall',
+    name: 'Wall',
+    component: () => import('../views/Wall.vue'),
+    meta: {
+      middleware: auth
+    }
   },
-  //{
-  //  path: '/Connect',
-  //  name: 'Connect',  
-  //  component: Connect
-  //},
+  {
+    path: '/profil',
+    name: 'Profil',
+    component: () => import('../views/Profil.vue'),
+    meta: {
+      middleware: auth
+    }
+  }
 ]
 
 const router = new VueRouter({

@@ -1,136 +1,121 @@
-const fs = require('fs'); //application pour modifier système de fichiers
-const db = require('../models');
-const Post = db.post;
+const jwt = require("jsonwebtoken");
+const db = require('../models/index');
+const fs = require('fs');
 
-
-/*POST*/
-/* Créé une publication '/' */
-exports.createPost = (req, res) => {
-   // Vérification existance idUSERS
-   if (!req.body.userId) {
-    res.status(400).send({
-      message: "Vous n'êtes pas connecté(e)!"
-    });
-    return;
-  }
-
-  // Création du message
-  const post = {
-    id: req.params.id,
-    userId: req.body.userId,
-    createAt: req.params.createdAt,
+// POST
+//Créé un post
+exports.createPost = (req, res, next) => {   
+    const text = req.body.text;
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const userId = decodedToken.userId;
     
-    imageURL: req.body.imageURL,
-    message: req.body.message,
-    moderatedDate: req.params.moderatedDate,
-    moderatedBy: req.params.moderatedBy,
-    parentId: req.body.parentId,
-    updatedAt: req.params.updatedAt
-  };
+    if (text == null || text == '' && imageURL == null) {
+        return res.status(400).json({ error: '2crivez ou mettez une image' });
+    } 
 
-// Sauvegarde message base de donnée
-  Post.create(post)
-    .then(data => {
-      res.send(data);
+    db.User.findOne({
+        where: { id: userId }
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Une erreure est intervenue lors de la création du message."
-      });
-    });
-};  
-
-/*GET*/
-/* Voir toutes les publications '/' */
-exports.getAllPosts = (req, res) => {
-    Post.findAll({
-        attributes: ['id','userId', 'message', 'imageURL', 'createAt', 'parentId']
-      })
-        .then(data => {
-          res.send(data);
-        })
-        .catch(err => {
-          res.status(500).send({
-            message:
-              err.message || "Une erreure est intervenue."
-          });
-        });
-    };
-
-
-/* Voir une publication '/:id' */
-exports.getOnePost = (req, res) => {
-    const id = req.params.id;
-    Post.findOne({
-      where: {id: id},
-      attributes: ['userId', 'message', 'imageURL', 'createdAt']
-  })
-      .then(data => {
-        if (data) {
-          res.send(data);
+    .then(userFound => {
+        if(userFound) {
+            const post = db.Post.build({
+                text: req.body.text,
+                imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imagePost,
+                UserId: userFound.id
+            })
+            post.save()
+            .then(() => res.status(201).json({ message: 'Message créé !' }))
+            .catch(error => res.status(400).json({ error: 'Création du message échoué' }));
         } else {
-          res.status(404).send({
-            message: "Impossible de trouver le message = "+ id 
-          });
+            return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Impossible de récupérer le message = " + id + ", pour le moment."
-        });
-      });
-  };
-
-
-/*PUT*/
-/* Modifier une publication /:id' */
-exports.modifyPost = (req, res) => {
-  const id = req.params.id;
-  const userId = req.params.userId;
-
-  Post.update(req.body, {
-    where: { id: id, userId: userId }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Message mise à jour."
-        });
-      } else {
-        res.send({
-          message: `Impossible de mettre à jour le message=${id}. Veuillez réessayer plus tard!`
-        });
-      }
     })
-    .catch(err => {
-      res.status(500).send({
-        message: "Erreur lors de la mise a jour du message=" + id
-      });
-    });
+    .catch(error => res.status(500).json({ error: 'Création du message échoué' }));
 };
 
-/* Supprimer une publication '/:id' */
-exports.deletePost = (req, res) => {
-  const id = req.params.id;
-
-  Post.destroy({
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Message supprimé!"
-        });
-      } else {
-        res.send({
-          message: `Impossible de supprimer le message=${id}.`
-        });
-      }
+//GET
+// Voir tout les message
+exports.getAllPosts = (req, res, next) => {
+    db.Post.findAll({
+        order: [['createdAt', "DESC"]] , //?
+        include: [{
+            model: db.User,
+            attributes: [ 'lastName', 'firstName', 'avatar' ]
+        },{
+            model: db.Comment
+        }]
     })
-    .catch(err => {
-      res.status(500).send({
-        message: "Impossible de supprime le message=" + id + ". Veuillez réessayer plus tard"
-      });
+    .then(postFound => {
+        if(postFound) {
+            res.status(200).json(postFound);
+        } else {
+            res.status(404).json({ error: 'Aucun message publié :(' });
+        }
+    })
+    .catch(error => {
+        res.status(500).send({ error: 'Recherche des messages échoué' });
     });
-};
+}
+
+//PUT
+// Modifier un message
+exports.modifyPost = (req, res, next) => {
+    const postObject = req.file ?
+    {
+    text: req.body.text,
+    imageURL: `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`
+    } : { ...req.body };
+    db.Post.findOne({
+        where: {  id: req.params.postId },
+    })
+    .then(postFound => {
+        if(postFound) {
+            db.Post.update(postObject, {
+                where: { id: req.params.postId}
+            })
+            .then(post => res.status(200).json({ message: 'Message modifié' }))
+            .catch(error => res.status(400).json({ error: 'Modification du message échoué' }))
+        }
+        else {
+            res.status(404).json({ error: 'Aucun message trouvé :(' });
+        }
+    })
+    .catch(error => res.status(500).json({ error: 'Modification du message échoué' }));
+}
+
+//DELETE
+// Supprimer un message
+exports.deletePost = (req, res, next) => {
+    db.Post.findOne({
+        attributes: ['id'],
+        where: { id: req.params.postId }
+    })
+    .then(post => {
+        if(post) {
+            if(post.imageURL != null) {
+                const filename = post.imageURL.split('/images/postIMG/')[1];
+            
+                fs.unlink(`images/postIMG/${filename}`, () => {
+                    db.Post.destroy({ 
+                        where: { id: req.params.postId } 
+                    })
+                    .then(() => res.status(200).json({ message: 'Message supprimé' }))
+                    .catch(() => res.status(500).json({ error: 'Suppression du message échoué' }));
+                })
+            } else {
+                db.Post.destroy({ 
+                    where: { id: req.params.postId } 
+                })
+                .then(() => res.status(200).json({ message: 'Message supprimé' }))
+                .catch(() => res.status(500).json({ error: 'Suppression du message échoué' }));
+            }
+        } else {
+            return res.status(404).json({ error: 'Aucun message trouvé :('})
+        }
+    })
+    .catch(error => res.status(500).json({ error: 'Suppression du message échoué' }));
+}
+
+
+

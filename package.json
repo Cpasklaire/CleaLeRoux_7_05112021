@@ -12,6 +12,7 @@
     "bcrypt": "^5.0.1",
     "core-js": "^3.19.1",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mkdirp": "^1.0.4",
@@ -23,6 +24,7 @@
     "vue": "^2.6.11",
     "vue-axios": "^3.4.0",
     "vue-resource": "^1.5.3",
+    "vue-route-middleware": "^1.0.7",
     "vue-router": "^3.5.3",
     "webpack": "4.44.2"
   },

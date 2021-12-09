@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Like = sequelize.define('Likes', {
+  const Commentaire = sequelize.define('Commentaires', {
   //ID
   id: {
     allowNull: false,
@@ -9,19 +9,16 @@ module.exports = (sequelize, Sequelize) => {
   },
   postId: {
     type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Posts',
-      key: 'id'
-    }
+    allowNull: false
   },
   userId: {
     type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'id'
-    }
+    allowNull: false
+  },
+  //Texte
+  text: {
+    type: Sequelize.STRING,
+    allowNull: false
   },
   //Date
   createdAt: {
@@ -33,5 +30,5 @@ module.exports = (sequelize, Sequelize) => {
     type: Sequelize.DATE
   }
   });
-  return Like;
+    return Commentaire;
 };

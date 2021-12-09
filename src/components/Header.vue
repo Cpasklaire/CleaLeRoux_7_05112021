@@ -1,5 +1,5 @@
-<template>
-  <header>
+<template>  
+      <header>
     <!-- Header pour mobil -->
     <div class="top">
         <router-link to="/profil"><i class="fas fa-user-tie"></i></router-link>
@@ -11,6 +11,7 @@
                 <option v-on:click="showMessages('image')">Voir les images</option>
                 <option v-on:click="showMessages('text')">Voir les textes</option>
             </select>
+            <button @click="displayModale" class="nav__links__logoutLink">Déconnexion <i class="fas fa-sign-out-alt"></i></button>    
         </div>
     </div>    
     <button v-on:click="togglewWriteElement"><i class="fas fa-edit"></i></button>
@@ -19,18 +20,20 @@
 </template>
 
 <script>
-    import Writing from './Writing.vue'         
-    export default {name: 'Header',
+    import Writing from '../components/Writing.vue'
+
+    export default {
+        name: 'Header',
         components: {
-            Writing,            
+            Writing, 
         },
-    data() {
-        return {
-            showWriteElement: false,
-        }    
-    },
-    methods: {
-        showMessages: function(filter) {
+                data(){
+            return {
+                showWriteElement: false,
+            }
+        },
+        methods: {
+            showMessages: function(filter) {
             this.$emit('filterMessages', filter)
         },
         togglewWriteElement: function() {
@@ -39,49 +42,20 @@
         actualiser: function() {
             window.location.reload()
         },
-
+            logout() {
+                // Permet de se déconnecter
+                localStorage.removeItem('token');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('lastName');
+                localStorage.removeItem('firstName');
+                localStorage.removeItem('avatar');
+                
+                this.$router.push('http://localhost:8080/');
+            }
+        }
     }
-}
-
 </script>
 
-<style lang="scss">
-header 
-{
-    .top
-    {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 3%;
-    margin-right: 3%;
-    height: 55px;
-    .fa-user-tie
-    {
-        font-size: 50px;
-        color: #D1515A;
-    }
-    .collum
-    {
-    margin:0;
-    padding:0;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    }
-    }
-    .fa-edit
-    {
-        position: absolute;
-        bottom: 5%;
-        right: 5%;
-        background-color: #091F43;
-        padding: 3%;
-        border-radius: 100%;
-        box-shadow: rgb(129, 129, 129) 2px 2px 3px;
-        color: white;
-        font-size: 1.5em;
-    }
-}
+<style scoped lang="scss">
+
 </style>

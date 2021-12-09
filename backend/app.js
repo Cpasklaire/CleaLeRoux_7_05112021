@@ -23,9 +23,10 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 db.Sequelize = Sequelize;
 
-db.post = require('./models/post')(sequelize, Sequelize);
-db.user = require('./models/user')(sequelize, Sequelize);
-db.like = require('./models/like')(sequelize, Sequelize);
+db.post = require('./models/Post')(sequelize, Sequelize);
+db.user = require('./models/User')(sequelize, Sequelize);
+db.like = require('./models/Like')(sequelize, Sequelize);
+db.commentaire = require('./models/Commentaire')(sequelize, Sequelize);
 
 module.exports = db;
 
@@ -61,10 +62,13 @@ const postRoutes = require('./routes/post');
 app.use('/api/post', postRoutes);
 
 const userRoutes = require('./routes/user');
-app.use('/api/auth', userRoutes);
+app.use('/api/user', userRoutes);
 
 const likeRoutes = require('./routes/like');
 app.use('/api/like', likeRoutes);
+
+const commentaireRoutes = require('./routes/commentaire');
+app.use('/api/commentaire', commentaireRoutes);
 
 
 module.exports = app;

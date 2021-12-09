@@ -17,8 +17,13 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 
 db.Sequelize = Sequelize;
-db.post = require('./post')(sequelize, Sequelize);
-db.user = require('./user')(sequelize, Sequelize);
-db.like = require('./like')(sequelize, Sequelize);
+db.Posts = require('./post')(sequelize, Sequelize);
+db.Users = require('./user')(sequelize, Sequelize);
+db.Likes = require('./like')(sequelize, Sequelize);
+db.Commentaires = require('./commentaire')(sequelize, Sequelize);
 
 module.exports = db;
+
+
+
+

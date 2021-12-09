@@ -1,92 +1,63 @@
-<template>
-  <section class="whiting">
-    <div class="interraction">
-      <textarea placeholder="Exprimez vous" v-model="text" id="text"></textarea>
-      <label for="file">Une image ?</label>
-      <input @change="onFileChange" type="file" id="inputFile" name="file" multiple accept=".png, .jpg, .jpeg, .gif">
+<template>  
+    <div class="writing">
+        <form @submit.prevent="createPost" aria-label="Nouveau message">
+            <div class="">
+                <textarea v-model="content" class="newPost__content__text" name="message" id="message" placeholder="Quoi de neuf ?" aria-label="Rédiger un nouveau message"/>    
+                <img v-if="imagePreview" :src="imagePreview" id="preview" class="" alt="Prévisualisation de l'image ajoutée au message"/>     
+            </div>
+            <div class="newPost__option__file">
+                <button @click="uploadFile" type="button" class="newPost__option__file__btnInvisible"><i class="far fa-images fa-2x"></i> Choisir un fichier</button>
+                <input type="file" ref="fileUpload" @change="onFileSelected" accept="image/*" aria-label="Sélectionner un fichier">
+            </div>       
+            <button type="submit" class="" aria-label="Publier le message">Publier <i class="far fa-paper-plane"></i></button>
+        </form>
+        <span>{{messError}}</span>
     </div>
-    <button v-on:click="creatPost" value="Submit">Envoyer</button>
-    <span>{{msgError}}</span>
-  </section>
 </template>
 
+
+
 <script>
-import axios from "axios";
+    import axios from 'axios'
 
-  export default {
-    data() {
-      return {
-      }
-    },
-    methods:{
-      creatPost() {
-        /*compiler un ensemble de paires clé/valeur à envoyer à l’aide de l’API XMLHttpRequest*/
-        const fd = new FormData();
-        fd.append("inputFile", this.contentPost.imageUrl);
-        fd.append("text", this.contentPost.text);
+    export default {
+        name: 'writing',
+        components: {
+        },
+        data() {
+            return {
+            }
+        }, 
+        methods: {
+            // Permet de créer un nouveau message
+            uploadFile() {
+                this.$refs.fileUpload.click()
+            },
+            onFileSelected(event) {
+                this.imageURL = event.target.files[0];
+                this.imagePreview = URL.createObjectURL(this.imageURL);
+            },      
+            createPost() {
+                const formData = new FormData();
+                formData.append("text", this.text);
+                formData.append("image", this.imageURL);
 
-        if (fd.get("inputFile") == "null" && fd.get("text") == "null") {
-          this.messError = "Message vide";
-        } 
-        else {
-          axios
-            .post("http://localhost:3000/api/post/createPost", fd, {
-              headers: {
-                //Authorization: "Bearer " + window.localStorage.getItem("token")
-              }
-            })
-            .then(response => {
-              if (response) {
-                window.location.reload();
-              }
-            })
-            .catch(error => (this.messError = error));
+                axios.post('http://localhost:3000/api/post', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                })
+                .then(() => {
+                    window.location.reload()
+                })
+                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+            },
         }
-      },
-    onFileChange(e) {
-      this.contentPost.postImage = e.target.files[0] || e.dataTransfer.files;
     }
-  }
-}
 </script>
 
-<style lang="scss">
-section
-{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 2%;
 
-  flex-direction: column;
-  .interraction
-  {
-    border: 3px solid #091F43;
-    border-radius: 30px;
-    background-color: white;
-    padding: 2%;
-    textarea
-    {
-      width: 100%;
-      height: 200px;
-      border: none;
-    }
-    .mt-3
-    {
-      margin-left: 10%;
-    }
-  }
-  button
-  {
-    margin-top: 10%;
-    margin-left: 32%;
-    border: 3px solid #091F43;
-    border-radius: 30px;
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-top: 2%;
-    padding-bottom: 2%;
-    font-size: 1.5em;
-  }
-}
+<style scoped lang="scss">
+
 </style>
