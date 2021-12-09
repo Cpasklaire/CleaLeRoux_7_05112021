@@ -40,7 +40,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DATE
     },
     lastRefreshDate: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.DATE
     }
   });

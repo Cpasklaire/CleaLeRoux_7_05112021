@@ -8,9 +8,9 @@
         <form @submit.prevent="login" class="login">
             <h2 class="login-titre">Se connecter</h2>
             <label for="mail" class="login-email">Courriel</label>
-            <input type="email" v-model="email" id="loginemail" name="mail" placeholder="M.Kido@groupomania.com">
+            <input type="email" v-model="loginemail" id="loginemail" name="mail" placeholder="M.Kido@groupomania.com">
             <label for="password" class="login-mdp">Mot de passe</label>
-            <input type="current-password" v-model="password" id="loginmdp" name="password" placeholder="**********">
+            <input type="current-password" v-model="loginmdp" id="loginmdp" name="password" placeholder="**********">
             <button class="login-bouton">Connexion</button>
         </form>
 
@@ -24,14 +24,14 @@
             <label for="firstName" class="signup-nom">Nom</label>
             <input type="text" v-model="firstName" id="firstName" name="firstName" placeholder="Kido">
             <label for="mail" class="signup-email">Courriel</label>
-            <input type="email" v-model="email" id="signupemail" name="mail" placeholder="M.Kido@groupomania.com">
+            <input type="email" v-model="signupemail" id="signupemail" name="mail" placeholder="M.Kido@groupomania.com">
             <label for="password" class="signup-mdp">Mot de passe</label>
-            <input type="current-password" v-model="password" id="signupmdp" name="password" placeholder="**********">
+            <input type="current-password" v-model="signupmdp" id="signupmdp" name="password" placeholder="**********">
             <button class="signup-bouton">Inscription</button>
         </form>
 
-        <span>{{messError}}</span>
-        <span>{{messReussite}}</span>
+        <!--<span>{{messError}}</span>
+        <span>{{messReussite}}</span>-->
     </div>
 </template>
 
@@ -45,16 +45,18 @@
             return {
                 lastName: '',
                 firstName: '',
-                email: '',
-                password: '',
+                signupemail: '',
+                signupmdp: '',
+                loginemail: '',
+                loginmdp: ''
             }
         }, 
         methods: {
             //Se connecter
             login() {
                 axios.post('http://localhost:3000/api/user/login', {
-                    loginemail: this.email,
-                    loginmdp: this.password,
+                    email: this.loginemail,
+                    password: this.loginmdp,
                 })
                 .then(response => {
                     localStorage.setItem('token', response.data.token);
@@ -63,7 +65,7 @@
                     localStorage.setItem('firstName', response.data.firstName);
                     localStorage.setItem('avatar', response.data.avatar);
 
-                    this.$router.push('post');
+                    this.$router.push('wall');
                 })
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
@@ -72,8 +74,8 @@
                 axios.post('http://localhost:3000/api/user/signup', {
                     lastName: this.lastName,
                     firstName: this.firstName,
-                    signupemail: this.email,
-                    signupmdp: this.password,
+                    email: this.signupemail,
+                    password: this.signupmdp,
                 })
                 .then(() => {this.messReussite = 'Vous pouvez vous connecter', window.location.reload();})
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})

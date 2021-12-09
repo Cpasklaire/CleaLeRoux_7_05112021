@@ -37,18 +37,23 @@ exports.signup = (req, res, next) => {
                 });
                 user.save()
                     .then(() => res.status(201).json({ message: 'Votre compte créé' }))
-                    .catch(error => res.status(400).json({ error: 'Création du compte échoué' }));
+                    .catch(error => {
+                        console.log(error)
+
+                        res.status(400).json({ error: '1Création du compte échoué' })
+                    });
             })
-            .catch(error => res.status(500).json({ error: 'Création du compte échoué' }));
+            .catch(error => res.status(500).json({ error: '2Création du compte échoué' }));
         } else {
             return res.status(404).json({ error: 'Vous étes déjà inscrit' })
         }
     })
-    .catch(error => res.status(500).json({ error: 'Création du compte échoué' }));
+    .catch(error => res.status(500).json({ error: '3Création du compte échoué' }));
 };
 
 //Se connecter
-exports.login = (req, res, next) => {
+exports.login = (req, res, next) => { 
+    console.log('ici'),
     db.User.findOne({
         where: { email: req.body.email }
     })
@@ -67,10 +72,11 @@ exports.login = (req, res, next) => {
                     description: user.description,
                     token: jwt.sign(
                         {userId: user.id},
-                        process.env.JWT_SECRET_TOKEN,
+                        'RANDOM_TOKEN_SECRET',
                         {expiresIn: '24h'}
                     )
                 });
+                console.log(token)
             })
             .catch(error => res.status(500).json({ error: 'Connection échoué' }));
         } else {
