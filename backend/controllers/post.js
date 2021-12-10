@@ -9,24 +9,25 @@ exports.createPost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
+    console.log(1);
     
-    if (text == null || text == '' && imageURL == null) {
+    if (text == null || text == '' && imageURL == null) {console.log(2);
         return res.status(400).json({ error: 'Ecrivez ou mettez une image' });
     } 
-
+    console.log(3);
     db.User.findOne({
         where: { id: userId }
     })
     .then(userFound => {
-        if(userFound) {
+        if(userFound) {console.log(userFound);
             const post = db.Post.build({
                 text: req.body.text,
                 imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imageURL,
-                UserId: userFound.id
+                UserId: userFound.users.dataValues.id
             })
             post.save()
-            .then(() => res.status(201).json({ message: 'Message créé !' }))
-            .catch(error => res.status(400).json({ error: 'Création du message échoué' }));
+            .then(() => res.status(201).json({ message: 'Message créé !' }, ))
+            .catch(error => res.status(400).json({ error: 'Création du message échoué' }, console.log(error)));
         } else {
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }

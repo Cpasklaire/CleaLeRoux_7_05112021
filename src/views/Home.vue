@@ -1,8 +1,12 @@
 <template>
     <div class="home">
+    <div class="none">
+        <Header @filterMessages="filterMessage" />                
+        <Wall :filter="filter" />
+    </div>
         <div class="titre">
             <h1>GroupoSocial par</h1>
-            <img />
+            <img src="../assets/illutration/icon-left-font.png" alt="Logo de Groupomania"/>
         </div>
         <!-- Se connecter -->
         <form @submit.prevent="login" class="login">
@@ -30,17 +34,22 @@
             <button class="signup-bouton">Inscription</button>
         </form>
 
-        <!--<span>{{messError}}</span>
-        <span>{{messReussite}}</span>-->
+        <span>{{messError}}</span>
+        <span>{{messReussite}}</span>
     </div>
 </template>
 
 
 <script>
     import axios from 'axios'
+    import Header from '../components/Header.vue'    
+    import Wall from './Wall.vue'
 
     export default {
         name: 'Home',
+            components: {
+        Header,            
+        Wall,},
         data() {
             return {
                 lastName: '',
@@ -48,7 +57,11 @@
                 signupemail: '',
                 signupmdp: '',
                 loginemail: '',
-                loginmdp: ''
+                loginmdp: '',
+                messReussite:'',
+                messError: '',
+                filter: 'all',
+
             }
         }, 
         methods: {
@@ -80,11 +93,81 @@
                 .then(() => {this.messReussite = 'Vous pouvez vous connecter', window.location.reload();})
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
+            filterMessage: function(filter) {
+            this.filter = filter
+        },
         }
     }
 </script>
 
 
 <style scoped lang="scss">
-
+.home
+{        
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    .none
+    {
+        display: none;
+    }
+    .titre
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        h1
+        {
+            color: #134aa7;
+        }
+        img
+        {
+            width: 90%;
+            margin-bottom: 5%;
+        }
+    }
+    span 
+    {
+        font-size: 2em;
+        padding: 2%;
+        color: #134aa7;
+    }
+    form 
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        border: solid 3px #D1515A;
+        border-radius: 30px;
+        padding: 5%;
+        width: 60%;
+        h2 
+        {
+            color: #134aa7;
+            font-size: 2em;
+            margin-bottom: 5%;
+        }
+        button
+        {
+            border-radius: 30px;
+            box-shadow: 0px 3px 5px #091F43;
+            width: 50%;
+            font-size: 1.3em;
+            color: #D1515A;
+            background-color: #0061ff0f;
+            margin-top: 3%;
+        }
+        label
+        {
+            margin-top: 5%;
+        }
+        input
+        {
+            width: 90%;
+        }
+    }
+}
 </style>

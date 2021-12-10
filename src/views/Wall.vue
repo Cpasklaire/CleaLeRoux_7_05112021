@@ -2,26 +2,27 @@
     <div class="wall">
         <Header/>
         <div class="post" v-for="post in posts" :key="post.postId">
-            <div class="ecrivain">
-                <img :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
-                <span> {{post.User.lastName + post.User.firstName}} </span>
-            </div>
-            <div class="contenu">
-                <p>{{post.text}}</p>
-                <img :scr="post.imageURL" />
-            </div>
-            <span class="">Publié le {{ dateFormat(post.createdAt) }}</span>
-            <span class="">Modifié le {{ dateFormat(post.updatedAt) }}</span>
-            <div class="boutons">
-                <button v-on:click="likePost">coeur</button>
-                <button v-on:click="togglewRepElement">Répondre</button>
-                <button v-on:click="togglewComElement">Voir les commentaires</button>
-            </div>
-            <div class="ecrivain-boutons" v-if="userId == post.UserId">
-                <button v-on:click="modifyPost">Modifier</button>
-                <button v-on:click="deletePost">Supprimer</button>
-            </div>
-
+            <article v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'messages' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
+                <div class="ecrivain">
+                    <img :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
+                    <span> {{post.User.lastName + post.User.firstName}} </span>
+                </div>
+                <div class="contenu">
+                    <p>{{post.text}}</p>
+                    <img :scr="post.imageURL" />
+                </div>
+                <span class="">Publié le {{ dateFormat(post.createdAt) }}</span>
+                <span class="">Modifié le {{ dateFormat(post.updatedAt) }}</span>
+                <div class="boutons">
+                    <button v-on:click="likePost">coeur</button>
+                    <button v-on:click="togglewRepElement">Répondre</button>
+                    <button v-on:click="togglewComElement">Voir les commentaires</button>
+                </div>
+                <div class="ecrivain-boutons" v-if="userId == post.UserId">
+                    <button v-on:click="modifyPost">Modifier</button>
+                    <button v-on:click="deletePost">Supprimer</button>
+                </div>
+            </article>
             <div class="commentaire" v-if="togglewComElement">
                 <div v-for="commentaire in commentaires" :key="commentaire.commentaireId">
                     <div class="ecrivain">
@@ -31,7 +32,7 @@
                     <div class="contenu">
                         <p>{{commentaire.text}}</p>
                     </div>
-                    <span class="">Publié le {{ dateFormat(post.createdAt) }}</span>
+                    <span class="">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
                     <!--<span class="">Modifié le {{ dateFormat(post.updatedAt) }}</span>-->
                     <div class="ecrivain-boutons" v-if="userId == commentaire.UserId">
                         <!--<button v-on:click="modifyCommentaire">Modifier</button>-->
