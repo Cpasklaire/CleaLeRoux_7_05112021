@@ -50,20 +50,25 @@
             components: {
         Header,            
         Wall,},
+
         data() {
             return {
+                //connection
+                loginemail: '',
+                loginmdp: '',
+                //inscription
                 lastName: '',
                 firstName: '',
                 signupemail: '',
                 signupmdp: '',
-                loginemail: '',
-                loginmdp: '',
+                //filtre
+                filter: 'all',
+                //message                
                 messReussite:'',
                 messError: '',
-                filter: 'all',
-
             }
         }, 
+        
         methods: {
             //Se connecter
             login() {

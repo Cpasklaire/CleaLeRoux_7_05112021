@@ -1,41 +1,53 @@
 <template>  
     <div class="wall">
         <Header/>
+        <!--Publication -->
         <div class="post" v-for="post in posts" :key="post.postId">
             <article v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'messages' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
+                
                 <div class="ecrivain">
                     <img :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
                     <span> {{post.User.lastName + post.User.firstName}} </span>
                 </div>
+                
                 <div class="contenu">
                     <p>{{post.text}}</p>
                     <img :scr="post.imageURL" />
                 </div>
+                
                 <span class="">Publié le {{ dateFormat(post.createdAt) }}</span>
                 <span class="">Modifié le {{ dateFormat(post.updatedAt) }}</span>
+                
                 <div class="boutons">
                     <button v-on:click="likePost">coeur</button>
-                    <button v-on:click="togglewRepElement">Répondre</button>
-                    <button v-on:click="togglewComElement">Voir les commentaires</button>
+                    <button v-on:click="repondre">Répondre</button>
+                    <button v-on:click="voir">Voir les commentaires</button>
                 </div>
+                
                 <div class="ecrivain-boutons" v-if="userId == post.UserId">
-                    <button v-on:click="modifyPost">Modifier</button>
+                    <button v-on:click="modifPost">Modifier</button>
                     <button v-on:click="deletePost">Supprimer</button>
                 </div>
             </article>
-            <div class="commentaire" v-if="togglewComElement">
+
+            <WritingComm v-if="repondre"/>
+
+            <!--Commentaire-->
+            <div class="commentaire" v-if="voir">
                 <div v-for="commentaire in commentaires" :key="commentaire.commentaireId">
+                    
                     <div class="ecrivain">
                         <img :src="commentaire.User.avatar" :alt="'avatar de' + commentaire.User.lastName + commentaire.User.firstName" class="avatar"/>
                         <span> {{commentaire.User.lastName + commentaire.User.firstName}} </span>
                     </div>
+                    
                     <div class="contenu">
                         <p>{{commentaire.text}}</p>
                     </div>
+                    
                     <span class="">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
-                    <!--<span class="">Modifié le {{ dateFormat(post.updatedAt) }}</span>-->
+                    
                     <div class="ecrivain-boutons" v-if="userId == commentaire.UserId">
-                        <!--<button v-on:click="modifyCommentaire">Modifier</button>-->
                         <button v-on:click="deleteCommentaire">Supprimer</button>
                     </div>
                 </div>
@@ -51,44 +63,56 @@
     import moment from 'moment'
     
     import Header from '@/components/Header.vue'
+    import WritingComm from '@/components/WritingComm.vue'
 
     export default {
         name: 'Wall',
         components: {
             Header,
+            WritingComm,
         },
+
         data() {
             return {
+                //identification
                 userId: localStorage.getItem('userId'),
+                //affichage post
                 posts: [],
                 post: '',
                 imageURL: '',
                 text: '',
+                //affichage commentaire
                 commentaire: [],
+                //Like
                 like: false,
                 postLikes: [],
+                //bouton
+                boutonVoir: false,
             }
         }, 
-        mounted() {                
+
+        mounted() { 
+            //afficher les posts               
             axios.get('http://localhost:3000/api/post', {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(response => {this.posts = response.data;})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then(response => {this.posts = response.data;})
+            .catch(() => {this.messError = 'Une erreur c\'est produite'})
         },
+
         methods: {
-            // Permet d'afficher la date de publication au bon format
+            // format date
             dateFormat(date){
                 if (date) {
                     return moment(String(date)).format('DD/MM/YYYY')
                 }
             },
 
-            // Permet de modifier un message
-            modifyPost(id) {
+            // modifier post
+            modifPost(id) {
                 const postId = id;
 
                 axios.put('http://localhost:3000/api/post/' + postId,  {
@@ -101,7 +125,7 @@
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
 
-            // Permet de supprimer un message
+            // supprimer post
             deletePost(id) {
                 const postId = id;
                
@@ -115,22 +139,9 @@
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
             
-            // Permet de créer un nouveau commentaire
-            createCommentaire(id) {
-                const postId = id;
-
-                axios.post('http://localhost:3000/api/commentaire/' + postId, {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(() => {window.location.reload()})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
-            },
-
-            // Permet d'afficher les commentaires d'un message
-            VoirCommentaire(id) {
-                this.showComment = !this.showComment
+            // afficher les commentaires
+            voir(id) {
+                this.boutonVoir = !this.boutonVoir
 
                 const postId = id;
                 
@@ -144,7 +155,7 @@
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
 
-            // Permet de supprimer un commentaire
+            // supprimer un commentaire
             deleteCommentaire(id) {
                 const commentaireId = id;
 

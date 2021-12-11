@@ -2,36 +2,43 @@
     <div>
         <section class="profil" >
         <router-link to="/wall"><i class="fas fa-arrow-circle-left"></i></router-link>
+            <!--profil-->
             <div class="entete">
                 <i v-if="user.avatar == null" class="fa fa-user-astronaut"></i>
                 <img v-if="user.avatar == !null" :src="user.avatar" :alt="'avatar de' + user.firstname + user.lastname" class="avatar">
                 <h2>{{user.lastName}} {{user.firstName}}</h2>
             </div>
+            
             <div v-if="!showModifierElement">
                 <p v-if="user.description == null">Une petite description ?</p>
                 <p v-if="user.description == !null">{{user.description}}</p>
+                
                 <div class="infoUser">
                     <h3>Mes infos personnelles</h3>
                     <span>Courriel : {{ user.email }}</span><br>
                     <span>Mot de passe : **********</span><br>
                 </div>
+                
                 <div class="bouton">
                     <div class="boutonRow">
                         <button v-on:click="togglewModifierElement">Modifier</button>
-                        <button @click="deleteUser">Supprimer</button>
+                        <button v-on:click="deleteUser">Supprimer</button>
                     </div>
-    
                 </div>
+                
                 <div class="bas">
                     <div class="date">
                         <span>Création du compte : {{dateFormat(user.createdAt)}}</span><br>
                         <span>Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>  
                     </div>
-                    <button @click="logout" class="pc logout">Déconnexion</button>
-                    <button @click="logout" class="mobil logout"><i class="fas fa-sign-out-alt"></i></button>
+                    
+                    <button v-on:click="logout" class="pc logout">Déconnexion</button>
+                    <button v-on:click="logout" class="mobil logout"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </section>
+        
+        <!--formulaire-->
         <form v-if="showModifierElement">
             <label>Avatar</label>
             <img v-if="imagePreview" :src="imagePreview" class="preview"/>
@@ -42,7 +49,8 @@
             <input v-model="password" type="current-password" placeholder="**********"/>
             <button @click="modifProfil" type="submit">Valider</button>
         </form>
-		<span>{{messError}}</span>
+		
+        <span>{{messError}}</span>
 		<span>{{messReussite}}</span>
     </div>
 </template>
@@ -54,8 +62,8 @@
 	export default {
 		name: 'Profil',
 		components: {
-			
 		},
+
 		data(){
 			return {
                 //Voir l'user
@@ -72,21 +80,22 @@
                 showModifierElement: false
 			}
 		},
-		mounted() {
-				const userId = localStorage.getItem('userId');
 
-				axios.get('http://localhost:3000/api/user/' + userId, {
-					headers: {
-						Authorization: 'Bearer ' + localStorage.getItem('token')
-					}
-				})
-				.then(response => {
-					this.user = response.data;
-					console.log(response.data)
-				})
-				.catch(() => {this.messError = 'Une erreur c\'est produite'})
+		mounted() {
+            const userId = localStorage.getItem('userId');
+
+            axios.get('http://localhost:3000/api/user/' + userId, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then(response => {
+                this.user = response.data;
+                console.log(response.data)
+            })
+            .catch(() => {this.messError = 'Une erreur c\'est produite'})
 		},
-		user: function() {
+		user() {
             let headers = {Authorization: 'token'}
             let user = this.$http.get('/auth', {headers: headers})
                 this.user.push({
@@ -99,7 +108,9 @@
                     lastRefreshDate: user.lastRefreshDate, 
                 })
             },
+
 		methods: {
+            //modifier profil
             onFileSelected(event) {
                 this.avatar = event.target.files[0];
                 this.imagePreview = URL.createObjectURL(this.avatar);
@@ -122,6 +133,7 @@
 				window.location.reload();})
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
 			},
+            //suprimer user
 			deleteUser(){
                 const userId = localStorage.getItem('userId');
 
@@ -135,13 +147,9 @@
 					localStorage.clear();
                     this.$router.push('/');})
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
-
             },
-			togglewModifierElement(){
-				this.showModifierElement = !this.showModifierElement
-            },
-                        logout() {
-                // Permet de se déconnecter
+            //déconnection
+            logout() {
                 localStorage.removeItem('token');
                 localStorage.removeItem('userId');
                 localStorage.removeItem('lastName');
@@ -150,6 +158,11 @@
                 
                 this.$router.push('/');
             },
+            //bouton            
+			togglewModifierElement(){
+				this.showModifierElement = !this.showModifierElement
+            },
+            //format date
             dateFormat(date){
                 if (date) {
                     return moment(String(date)).format('DD/MM/YYYY')

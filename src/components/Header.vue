@@ -13,6 +13,7 @@
                 <option v-on:click="showMessages('text')">Voir les textes</option>
             </select>
     </div>    
+    
     <button v-on:click="togglewWriteElement"><i class="fas fa-edit"></i></button>
     <Writing v-if="showWriteElement" />
   </header>
@@ -26,21 +27,23 @@
         components: {
             Writing, 
         },
-                data(){
+        
+        data(){
             return {
                 showWriteElement: false,
             }
         },
+        
         methods: {
             showMessages: function(filter) {
-            this.$emit('filterMessages', filter)
-        },
-        togglewWriteElement: function() {
-            this.showWriteElement = !this.showWriteElement
-        },
-        actualiser: function() {
-            window.location.reload()
-        },
+                this.$emit('filterMessages', filter)
+            },
+            togglewWriteElement: function() {
+                this.showWriteElement = !this.showWriteElement
+            },
+            actualiser: function() {
+                window.location.reload()
+            },
         }
     }
 </script>

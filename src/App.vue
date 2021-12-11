@@ -12,28 +12,28 @@
         src: url(assets/modern/ModernSans-Light.otf);
     }
     /* Général */
-*
-{
-    font-family: 'modern', Arial, serif;
-    color: black;   
-    text-decoration: none;
-    background-color: transparent;
-    margin: 0;
-    border: none;
-}
-/* Responsive */
-@media (min-width: 992px)
-{
-    .mobil
+    *
     {
-        display: none;
+        font-family: 'modern', Arial, serif;
+        color: black;   
+        text-decoration: none;
+        background-color: transparent;
+        margin: 0;
+        border: none;
     }
-}
-@media (max-width: 992px)
-{
-    .pc
+    /* Responsive */
+    @media (min-width: 992px)
     {
-        display: none;
+        .mobil
+        {
+            display: none;
+        }
     }
-}
+    @media (max-width: 992px)
+    {
+        .pc
+        {
+            display: none;
+        }
+    }
 </style>

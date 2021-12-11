@@ -1,11 +1,10 @@
 <template>  
-    <div class="writing">
+    <div class="writingComm">
         <form>
-            <textarea v-model="text" class="" name="message" id="message" placeholder="Exprimez vous"/>    
-            <img v-if="imagePreview" :src="imagePreview" id="preview" class=""/>     
-            <input type="file" @change="onFileSelected" accept="image/*">       
-            <button v-on:click="createPost" type="submit">Publier</button>
+            <textarea v-model="text" class="" name="message" id="message" placeholder="Exprimez vous"/>        
+            <button v-on:click="createCommentaire" type="submit">Publier</button>
         </form>
+
         <span>{{messError}}</span>
     </div>
 </template>
@@ -14,33 +13,24 @@
     import axios from 'axios'
 
     export default {
-        name: 'writing',
+        name: 'writingComm',
         components: {
         },
-        
+
         data() {
             return {
-                text: '',                
-                imagePreview:'',
-                image: '',
+                text: '',
                 messError: ''
             }
         }, 
-        
-        methods: {
-            // Permet de créer un nouveau message
-            onFileSelected(event) {
-                this.imageURL = event.target.files[0];
-                this.imagePreview = URL.createObjectURL(this.imageURL);
-            },      
-            createPost() {
-                const formData = new FormData();
-                formData.append("text", this.text);
-                formData.append("image", this.imageURL);
 
-                axios.post('http://localhost:3000/api/post', formData, {
+        methods: {
+            // créer commentaire
+            createCommentaire(id) {
+                const postId = id;
+
+                axios.post('http://localhost:3000/api/commentaire/' + postId, {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }
                 })

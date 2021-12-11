@@ -23,7 +23,7 @@ exports.createPost = (req, res, next) => {
             const post = db.Post.build({
                 text: req.body.text,
                 imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imageURL,
-                UserId: userFound.users.dataValues.id
+                UserId: userFound.Users.dataValues.id
             })
             post.save()
             .then(() => res.status(201).json({ message: 'Message créé !' }, ))

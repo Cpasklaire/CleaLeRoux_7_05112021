@@ -5,7 +5,7 @@ const db = require('../models/index');
 // Liker
 exports.likePost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     const liked = req.body.like
     
