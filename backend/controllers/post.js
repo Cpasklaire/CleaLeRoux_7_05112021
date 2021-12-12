@@ -27,12 +27,18 @@ exports.createPost = (req, res, next) => {
             })
             post.save()
             .then(() => res.status(201).json({ message: 'Message créé !' }, ))
-            .catch(error => res.status(400).json({ error: 'Création du message échoué' }, console.log(error)));
+            .catch(error => {
+                console.log(error)
+                res.status(400).json({ error: 'Création du message échoué' })
+            });
         } else {
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
-    .catch(error => res.status(500).json({ error: 'Création du message échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Création du message échoué' })
+    });
 };
 
 //GET

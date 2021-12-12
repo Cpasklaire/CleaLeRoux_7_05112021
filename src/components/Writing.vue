@@ -76,14 +76,24 @@
             }
             button
             {
-                border-radius: 30px;
-                box-shadow: 0px 3px 5px #091F43;
-                width: 50%;
                 font-size: 1.5em;
-                color: #D1515A;
-                margin-top: 3%;
                 margin-left: 25%;
             }
         }
-    }
+    }    
+        @media (min-width: 992px)
+        {  
+            .writing
+            {
+                margin-top: 0%;
+                        form
+        {
+                img 
+                {
+                    width: 20%;
+                }
+            }
+        }
+        }
+    
 </style>

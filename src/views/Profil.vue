@@ -2,23 +2,28 @@
     <div>
         <section class="profil" >
         <router-link to="/wall"><i class="fas fa-arrow-circle-left"></i></router-link>
+        <button v-on:click="logout" class="pc logout">Déconnexion</button>
             <!--profil-->
             <div class="entete">
                 <i v-if="user.avatar == null" class="fa fa-user-astronaut"></i>
                 <img v-if="user.avatar == !null" :src="user.avatar" :alt="'avatar de' + user.firstname + user.lastname" class="avatar">
                 <h2>{{user.lastName}} {{user.firstName}}</h2>
             </div>
+
             
             <div v-if="!showModifierElement">
-                <p v-if="user.description == null">Une petite description ?</p>
-                <p v-if="user.description == !null">{{user.description}}</p>
-                
-                <div class="infoUser">
-                    <h3>Mes infos personnelles</h3>
-                    <span>Courriel : {{ user.email }}</span><br>
-                    <span>Mot de passe : **********</span><br>
+                <div class="descrinfo">
+                    <p v-if="user.description == null">Une petite description ?</p>
+                    <p v-if="user.description == !null">{{user.description}}</p>
+                    
+                    <div class="infoUser">
+                        <h3>Mes infos personnelles</h3>
+                        <span>Courriel : {{ user.email }}</span><br>
+                        <span>Mot de passe : **********</span><br>
+                        <span class="pc">Création du compte : {{dateFormat(user.createdAt)}}</span><br>
+                        <span class="pc">Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>  
+                    </div>
                 </div>
-                
                 <div class="bouton">
                     <div class="boutonRow">
                         <button v-on:click="togglewModifierElement">Modifier</button>
@@ -27,12 +32,10 @@
                 </div>
                 
                 <div class="bas">
-                    <div class="date">
+                    <div class="date mobil">
                         <span>Création du compte : {{dateFormat(user.createdAt)}}</span><br>
                         <span>Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>  
                     </div>
-                    
-                    <button v-on:click="logout" class="pc logout">Déconnexion</button>
                     <button v-on:click="logout" class="mobil logout"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
@@ -240,11 +243,8 @@
         align-items: center;
         button
         {
-            border-radius: 30px;
-            box-shadow: 0px 3px 5px #091F43;
             width: 40%;
             font-size: 1.5em;
-            color: #D1515A;
             margin-top: 5%;
         }
     }
@@ -301,12 +301,64 @@ form
     }
         button
     {
-        border-radius: 30px;
-        box-shadow: 0px 3px 5px #091F43;
-        width: 50%;
         font-size: 1.5em;
-        color: #D1515A;
-        margin-top: 3%;
+    }
+}    
+@media (min-width: 992px)
+{  
+    .profil
+    {
+        .fa-arrow-circle-left
+        {
+            left: 1%;
+        }
+        .logout
+        {
+            font-size: 1.5em;
+            position: absolute;
+            right: 1%;
+            top: 0.5%;
+            border-radius: 0;
+            box-shadow: none;
+            width: 10%;
+            color: #091F43;
+            margin-top: 0%;
+        }
+        .entete
+        {  
+            justify-content: flex-start;
+            h2
+            {
+                margin-left: 5%;
+            }
+        }
+        .descrinfo
+        {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            p 
+            {
+                width: 40%;              
+            }
+            .infoUser
+            {
+                border: solid 3px #D1515A;
+                border-radius: 20px;
+                padding: 3%;
+                width: 40%; 
+                height: 200px; 
+                span 
+                {
+                    line-height: 2em;
+                }
+            }
+        }            
+        .boutonRow
+        {
+            flex-direction: column;
+        }
     }
 }
+
 </style>

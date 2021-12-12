@@ -21,6 +21,15 @@
         margin: 0;
         border: none;
     }
+    button
+    {
+        border-radius: 30px;
+        box-shadow: 0px 3px 5px #091F43;
+        width: 50%;
+        font-size: 1.3em;
+        color: #D1515A;
+        margin-top: 3%;
+    }
     /* Responsive */
     @media (min-width: 992px)
     {
