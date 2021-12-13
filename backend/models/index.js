@@ -21,6 +21,7 @@ db.Post = require('./post')(sequelize, Sequelize);
 db.User = require('./user')(sequelize, Sequelize);
 db.Like = require('./like')(sequelize, Sequelize);
 db.Commentaire = require('./commentaire')(sequelize, Sequelize);
+db.Post.belongsTo(db.User, {foreignKey: 'userId', as: 'User'}); //
 
 module.exports = db;
 

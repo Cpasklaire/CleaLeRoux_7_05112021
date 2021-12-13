@@ -23,7 +23,7 @@ exports.createPost = (req, res, next) => {
             const post = db.Post.build({
                 text: req.body.text,
                 imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imageURL,
-                UserId: userFound.Users.dataValues.id
+                userId: req.body.userId
             })
             post.save()
             .then(() => res.status(201).json({ message: 'Message créé !' }, ))
@@ -37,7 +37,7 @@ exports.createPost = (req, res, next) => {
     })
     .catch(error => {
         console.log(error)
-        res.status(500).json({ error: 'Création du message échoué' })
+        res.status(500).json({ error: 'Recherche de l\'utilisateur échouée' })
     });
 };
 
@@ -48,10 +48,11 @@ exports.getAllPosts = (req, res, next) => {
         order: [['createdAt', "DESC"]] , //ordre date descendant
         include: [{
             model: db.User,
-            attributes: [ 'lastName', 'firstName', 'avatar' ]
-        },{
+            attributes: [ 'lastName', 'firstName', 'avatar' ],
+            as: 'User'
+        },/*{
             model: db.Commentaire
-        }]
+        }*/]
     })
     .then(postFound => {
         if(postFound) {
@@ -61,6 +62,7 @@ exports.getAllPosts = (req, res, next) => {
         }
     })
     .catch(error => {
+        console.log(error),
         res.status(500).send({ error: 'Recherche des messages échoué' });
     });
 }

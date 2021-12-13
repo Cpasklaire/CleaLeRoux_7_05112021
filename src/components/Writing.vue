@@ -1,10 +1,10 @@
 <template>  
     <div class="writing">
-        <form>
+        <form v-on:submit.prevent="createPost">
             <textarea v-model="text" class="" name="message" id="message" placeholder="Exprimez vous"/>    
             <img v-if="imagePreview" :src="imagePreview" id="preview" class=""/>     
             <input type="file" @change="onFileSelected" accept="image/*">       
-            <button v-on:click="createPost" type="submit">Publier</button>
+            <button type="submit">Publier</button>
         </form>
         <span>{{messError}}</span>
     </div>
@@ -23,7 +23,8 @@
                 text: '',                
                 imagePreview:'',
                 image: '',
-                messError: ''
+                messError: '',
+                userId: localStorage.getItem('userId'),
             }
         }, 
         
@@ -37,6 +38,7 @@
                 const formData = new FormData();
                 formData.append("text", this.text);
                 formData.append("image", this.imageURL);
+                formData.append("userId", localStorage.getItem('userId'))
 
                 axios.post('http://localhost:3000/api/post', formData, {
                     headers: {

@@ -88,6 +88,7 @@
                 postLikes: [],
                 //bouton
                 boutonVoir: false,
+                filter: 'all',
             }
         }, 
 
