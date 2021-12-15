@@ -1,7 +1,7 @@
-<template>  
+<template>
     <div class="writingComm">
         <form>
-            <textarea v-model="text" class="" name="message" id="message" placeholder="Exprimez vous"/>        
+            <textarea v-model="text" class="" name="message" id="message" placeholder="Exprimez vous"/>
             <button v-on:click="createCommentaire" type="submit">Publier</button>
         </form>
 
@@ -16,20 +16,21 @@
         name: 'writingComm',
         components: {
         },
-
+        props: ['postId'],
         data() {
             return {
                 text: '',
                 messError: ''
             }
-        }, 
+        },
 
         methods: {
             // créer commentaire
-            createCommentaire(id) {
-                const postId = id;
+            createCommentaire() {
+                axios.post('http://localhost:3000/api/commentaire/' + this.postId, {
 
-                axios.post('http://localhost:3000/api/commentaire/' + postId, {
+                    text: this.text
+                }, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }

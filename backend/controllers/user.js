@@ -15,13 +15,13 @@ exports.signup = (req, res, next) => {
     //Champs complet
     if(lastName == null || lastName == '' || firstName == null || firstName == ''|| email == null || email == '' ||  password == null || password == '') {
         return res.status(400).json({ error: 'Merci de remplire tous les champs' });
-    } 
+    }
     //Existence de l'user
     db.User.findOne({
         attributes: ['lastName'|| 'firstName' || 'email'],
-        where: { 
-            lastName: lastName, 
-            firstName: firstName, 
+        where: {
+            lastName: lastName,
+            firstName: firstName,
             email: email
         }
     })
@@ -39,20 +39,26 @@ exports.signup = (req, res, next) => {
                     .then(() => res.status(201).json({ message: 'Votre compte créé' }))
                     .catch(error => {
                         console.log(error)
-
                         res.status(400).json({ error: 'Création du compte échoué' })
                     });
             })
-            .catch(error => res.status(500).json({ error: 'Création du compte échoué' }));
+            .catch(error => {
+                console.log(error)
+                res.status(500).json({ error: 'Création du compte échoué' })
+            });
         } else {
+            console.log('User already exists')
             return res.status(404).json({ error: 'Vous étes déjà inscrit' })
         }
     })
-    .catch(error => res.status(500).json({ error: 'Création du compte échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Création du compte échoué' })
+    });
 };
 
 //Se connecter
-exports.login = (req, res, next) => { 
+exports.login = (req, res, next) => {
     console.log('ici'),
     db.User.findOne({
         where: { email: req.body.email }
@@ -104,7 +110,7 @@ exports.getUserProfile = (req, res, next) => {
 }
 
 //PUT
-// Modifier son profil
+// Se Modifier
 exports.modifyUserProfile = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
@@ -116,7 +122,11 @@ exports.modifyUserProfile = (req, res, next) => {
     ...JSON.parse(req.body.user),
     avatar: `${req.protocol}://${req.get('host')}/images/avatar/${req.file.filename}`
     } : { ...req.body };
-    
+
+
+    console.log(userObject)
+    return;
+
     db.User.findOne({
         where: { id: userId },
     })
@@ -145,12 +155,12 @@ exports.deleteAccount = (req, res, next) => {
     })
     .then(user => {
         if(user) {
-            db.User.destroy({ 
-                where: { id: id } 
+            db.User.destroy({
+                where: { id: id }
             })
             .then(() => res.status(200).json({ message: 'Compte supprimé' }))
             .catch(() => res.status(500).json({ error: 'Suppression du profil échoué' }));
-            
+
         } else {
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }

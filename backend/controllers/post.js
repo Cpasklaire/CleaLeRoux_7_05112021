@@ -4,16 +4,16 @@ const fs = require('fs');
 
 // POST
 //Créé un post
-exports.createPost = (req, res, next) => {   
+exports.createPost = (req, res, next) => {
     const text = req.body.text;
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     console.log(1);
-    
+
     if (text == null || text == '' && imageURL == null) {console.log(2);
         return res.status(400).json({ error: 'Ecrivez ou mettez une image' });
-    } 
+    }
     console.log(3);
     db.User.findOne({
         where: { id: userId }
@@ -32,6 +32,7 @@ exports.createPost = (req, res, next) => {
                 res.status(400).json({ error: 'Création du message échoué' })
             });
         } else {
+            console.log('User not found')
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
@@ -104,17 +105,17 @@ exports.deletePost = (req, res, next) => {
         if(post) {
             if(post.imageURL != null) {
                 const filename = post.imageURL.split('/images/postIMG/')[1];
-            
+
                 fs.unlink(`images/postIMG/${filename}`, () => {
-                    db.Post.destroy({ 
-                        where: { id: req.params.postId } 
+                    db.Post.destroy({
+                        where: { id: req.params.postId }
                     })
                     .then(() => res.status(200).json({ message: 'Message supprimé' }))
                     .catch(() => res.status(500).json({ error: 'Suppression du message échoué' }));
                 })
             } else {
-                db.Post.destroy({ 
-                    where: { id: req.params.postId } 
+                db.Post.destroy({
+                    where: { id: req.params.postId }
                 })
                 .then(() => res.status(200).json({ message: 'Message supprimé' }))
                 .catch(() => res.status(500).json({ error: 'Suppression du message échoué' }));

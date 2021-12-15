@@ -3,19 +3,19 @@ const db = require('../models/index');
 
 // POST
 // Créer un commentaire
-exports.createCommentaire = (req, res, next) => {    
+exports.createCommentaire = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
-    
+
     db.Post.findOne({
         where: { id: req.params.postId }
     })
     .then(postFound => {
         if(postFound) {
-            const commentaire = db.Commentaires.build({
+            const commentaire = db.Commentaire.build({
                 text: req.body.text,
-                postId: postFound.id,
+                postId: req.params.postId,
                 userId: userId
             })
             commentaire.save()
@@ -25,7 +25,10 @@ exports.createCommentaire = (req, res, next) => {
             return res.status(404).json({ error: 'Aucun message publié :('})
         }
     })
-    .catch(error => res.status(500).json({ error: 'Création du Commentaire échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Création du Commentaire échoué' })
+    });
 }
 
 //GET
@@ -61,12 +64,12 @@ exports.deleteCommentaire = (req, res, next) => {
     })
     .then(commentaireFound => {
         if(commentaireFound) {
-            db.Commentaire.destroy({ 
-                where: { id: req.params.commentaireId } 
+            db.Commentaire.destroy({
+                where: { id: req.params.commentaireId }
             })
             .then(() => res.status(200).json({ message: 'Commentaire supprimé' }))
             .catch(() => res.status(500).json({ error: 'Suppression du commentaire échoué' }));
-            
+
         } else {
             return res.status(404).json({ error: 'Aucun commentaire publié :('})
         }
