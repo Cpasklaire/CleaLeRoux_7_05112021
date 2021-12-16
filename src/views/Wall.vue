@@ -28,7 +28,7 @@
                         <i class="fas fa-bacon calque"></i>
                     </button>
                     <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
-                    <button v-on:click="voir">Voir les commentaires</button>
+                    <button v-on:click="voir('replyForm-' + post.id)">Voir les commentaires</button>
                 </div>
 
                 <div class="ecrivain-boutons" v-if="userId == post.UserId || statut == admin">
@@ -38,27 +38,7 @@
             </article>
 
             <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
-
-            <!--Commentaire-->
-            <div class="commentaire" v-if="voir">
-                <div v-for="commentaire in commentaires" :key="commentaire.commentaireId">
-
-                    <div class="ecrivain">
-                        <img :src="commentaire.User.avatar" :alt="'avatar de' + commentaire.User.lastName + commentaire.User.firstName" class="avatar"/>
-                        <span> {{commentaire.User.lastName + commentaire.User.firstName}} </span>
-                    </div>
-
-                    <div class="contenu">
-                        <p>{{commentaire.text}}</p>
-                    </div>
-
-                    <span class="">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
-
-                    <div class="ecrivain-boutons" v-if="userId == commentaire.UserId || statut == admin">
-                        <button v-on:click="deleteCommentaire">Supprimer</button>
-                    </div>
-                </div>
-            </div>
+            <Commentaire :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
         </div>
     </div>
 </template>
@@ -71,12 +51,14 @@
 
     import Header from '@/components/Header.vue'
     import WritingComm from '@/components/WritingComm.vue'
+    import Commentaire from '@/components/Commentaire.vue'
 
     export default {
         name: 'Wall',
         components: {
             Header,
             WritingComm,
+            Commentaire,
         },
 
         data() {

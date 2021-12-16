@@ -52,7 +52,8 @@
             <input type="checkbox" id="statut">
             <label for="statut">Vous êtes RH ?</label>
             <label>Mot de passe</label>
-            <input v-model="password" type="current-password" placeholder="**********"/>
+            <input v-model="password" type="current-password" placeholder="**********" required/>
+            <span>Si vous ne souhaitez pas changer de mot de passe confirmer votre mot de passe actuelle</span>
             <button @click="modifProfil" type="submit">Valider</button>
         </form>
 		

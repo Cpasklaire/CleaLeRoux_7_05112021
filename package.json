@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "backstart": "concurrently \"cd backend && nodemon server\" ",
+    "frontstart": "vue-cli-service serve"
   },
   "dependencies": {
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
+    "concurrently": "^6.4.0",
     "core-js": "^3.19.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
