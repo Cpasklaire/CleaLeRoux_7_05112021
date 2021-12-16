@@ -2,7 +2,7 @@
     <div class="home">
         <div class="none">
             <Header @filterMessages="filterMessage" />                
-            <Wall :filter="filter" />
+            <Wall :filter="filter" /> 
         </div>
         <div class="titre">
             <h1>GroupoSocial par</h1>
@@ -68,8 +68,15 @@
                 //message                
                 messReussite:'',
                 messError: '',
+                //token: localStorage.getItem('token'),
             }
-        }, 
+        },
+
+        mounted() {
+            if (localStorage.getItem('token') !== null){
+            this.$router.push('wall');
+            }
+        },
         
         methods: {
             //Se connecter

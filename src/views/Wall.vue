@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="boutons">
-                    <button class="like" v-on:click="likePost">
+                    <button class="like" v-on:click="likePost('likeForm-' + post.id)">
                         <i class="fas fa-heart coeurrempli"></i>
                         <i class="far fa-heart coeurvide"></i>
                         <i class="fas fa-bacon calque"></i>
@@ -81,7 +81,8 @@
                 boutonVoir: false,
                 filter: 'all',
                 replyFormId: '',
-                commentSectionId: ''
+                commentSectionId: '',
+                likeFormId: '',
             }
         },
 
@@ -169,9 +170,9 @@
             },
 
             //like
-            likePost() {
-                const postId = this.post.id;
-                const userId = this.userId;
+            likePost(formId) {
+                this.likeFormId = formId;
+                const postId = formId.replace('likeForm-', '');
 
                 axios.get('http://localhost:3000/api/post/' + postId + '/like', {
                     headers: {
@@ -182,7 +183,7 @@
                 .then(response => {this.postLikes = response.data;
                     if(this.postLikes.length == 0) {
                         this.like = false
-                        axios.post('http://localhost:3000/api/post/' + postId + '/like', {
+                        axios.post('http://localhost:3000/api/post/' + this.postId + '/like', {
                             like: this.like,
                         },{
                             headers: {
@@ -193,10 +194,10 @@
                         .then(() => {window.location.reload()})
                         .catch(() => {this.messError = 'Une erreur c\'est produite'})
                     } else {
-                        if(this.postLikes.find(x => x.userId == userId)) {
+                        if(this.postLikes.find(localStorage.getItem('userId') == this.userId)) {
                             this.like = true
 
-                            axios.post('http://localhost:3000/api/post/' + postId + '/like', {
+                            axios.post('http://localhost:3000/api/post/' + this.postId + '/like', {
                                 like: this.like,
                             },{
                                 headers: {
@@ -209,7 +210,7 @@
                         } else {
                             this.like = false
 
-                            axios.post('http://localhost:3000/api/post/' + postId + '/like', {
+                            axios.post('http://localhost:3000/api/post/' + this.postId + '/like', {
                                 like: this.like,
                             },{
                                 headers: {
