@@ -1,9 +1,5 @@
 <template>
     <div class="home">
-        <div class="none">
-            <Header @filterMessages="filterMessage" />                
-            <Wall :filter="filter" /> 
-        </div>
         <div class="titre">
             <h1>GroupoSocial par</h1>
             <img src="../assets/illutration/icon-left-font.png" alt="Logo de Groupomania"/>
@@ -44,14 +40,10 @@
 
 <script>
     import axios from 'axios'
-    import Header from '../components/Header.vue'    
-    import Wall from './Wall.vue'
 
     export default {
         name: 'Home',
-            components: {
-        Header,            
-        Wall,},
+            components: {},
 
         data() {
             return {
@@ -63,8 +55,6 @@
                 firstName: '',
                 signupemail: '',
                 signupmdp: '',
-                //filtre
-                filter: 'all',
                 //message                
                 messReussite:'',
                 messError: '',
@@ -123,10 +113,6 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    .none
-    {
-        display: none;
-    }
     .titre
     {
         display: flex;

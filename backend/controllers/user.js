@@ -12,6 +12,7 @@ exports.signup = (req, res, next) => {
     let firstName = req.body.firstName;
     let email = req.body.email;
     let password = req.body.password;
+    console.log(1);
     //Champs complet
     if(lastName == null || lastName == '' || firstName == null || firstName == ''|| email == null || email == '' ||  password == null || password == '') {
         return res.status(400).json({ error: 'Merci de remplire tous les champs' });
@@ -27,6 +28,7 @@ exports.signup = (req, res, next) => {
     })
     .then(userExist => {
         if(!userExist) {
+            console.log(2);
             bcrypt.hash(req.body.password, 10)
             .then(hash => {
                 const user = db.User.build({
