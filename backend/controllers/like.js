@@ -8,64 +8,68 @@ exports.likePost = (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     const liked = req.body.like
-    
+
     db.Post.findOne({
-      
         where: { id: req.params.postId },
     })
     .then(postfound => {
         if(!postfound) {
             return res.status(404).json({ error: 'Aucun message trouvé :(' })
         } else if (liked == false) {
-            db.Like.create({ 
-                postId: req.params.postId, 
-                userId: userId 
+            db.Like.create({
+                postId: req.params.postId,
+                userId: userId
             })
-            .then(response => {                
-                db.Post.update({ 
+            .then(response => {
+                db.Post.update({
                     likes: postfound.likes +1
                 },{
                     where: { id: req.params.postId }
                 })
                 .then(() => res.status(201).json({ message: 'Message liker' }))
                 .catch(error => {
+                    console.log(' ERROR updating a post to add a like')
                     console.log(error)
                     res.status(500).json({ error: 'Like échoué' })
-                }) 
+                })
             })
             .catch(error => {
+                console.log(' ERROR creating a like entry')
                 console.log(error)
                 res.status(400).json({ error: 'Like échoué' })
             })
         } else if(liked == true) {
-            db.Like.destroy({ 
-                where: { 
-                    postId: req.params.postId, 
-                    userId: userId 
-                } 
+            db.Like.destroy({
+                where: {
+                    postId: req.params.postId,
+                    userId: userId
+                }
             })
             .then(() => {
-                db.Post.update({ 
+                db.Post.update({
                     likes: postfound.likes -1
                 },{
                     where: { id: req.params.postId }
                 })
                 .then(() => res.status(201).json({ message: 'Message dé-liker' }))
                 .catch(error => {
+                    console.log(' ERROR updating a post to remove a like')
                     console.log(error)
                     res.status(500).json({ error: 'Dé-like échoué' })
-                }) 
+                })
             })
             .catch(error => {
+                console.log('ERROR adding a like entry 2')
                 console.log(error)
                 res.status(400).json({ error: 'Dé-like échoué' })
             })
         }
     })
     .catch(error => {
+        console.log(' ERROR loading the post to like / dislike')
         consol.log(error)
         res.status(400).json({ error: 'Like ou dé-like échoué' })
-    })  
+    })
 }
 
 //GET
@@ -75,7 +79,8 @@ exports.getAllLike = (req, res, next) => {
         where: { postId: req.params.postId},
         include: {
             model: db.User,
-            attributes: ['lastName', 'firstName']
+            attributes: ['lastName', 'firstName'],
+            as: 'User'
         },
     })
     .then(likePostFound => {

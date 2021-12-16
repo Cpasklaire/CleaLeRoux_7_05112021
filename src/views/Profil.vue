@@ -129,9 +129,15 @@
 				const userId = localStorage.getItem('userId');
 
 				const formData = new FormData();
-				// formData.append("avatar", this.avatar);
-                formData.append("description", this.user.description);
-                // formData.append("password", this.password);
+                if (this.avatar) {
+                    formData.append("avatar", this.avatar);
+                }
+				if (this.user.description) {
+                    formData.append("description", this.user.description);
+                }
+                if (this.password) {
+                    formData.append("password", this.password);
+                }
 
 				axios.put('http://localhost:3000/api/user/' + userId, formData, {
 					headers: {

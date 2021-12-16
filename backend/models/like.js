@@ -12,7 +12,8 @@ module.exports = (sequelize, Sequelize) => {
     allowNull: false,
     references: {
       model: 'Posts',
-      key: 'id'
+      key: 'id',
+      as: 'Post'
     }
   },
   userId: {
@@ -20,7 +21,8 @@ module.exports = (sequelize, Sequelize) => {
     allowNull: false,
     references: {
       model: 'Users',
-      key: 'id'
+      key: 'id',
+      as: 'User'
     }
   },
   //Date

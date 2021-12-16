@@ -1,9 +1,9 @@
 <template>
     <div class="wall">
-        <Header/>
+        <Header @selectFilter="applyFilter"/>
         <!--Publication -->
         <div class="post" v-for="post in posts" :key="post.postId">
-            <article v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'messages' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
+            <article v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
 
                 <div class="ecrivain">
                     <img v-if="post.User.avatar == !null" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
@@ -13,7 +13,7 @@
 
                 <div class="contenu">
                     <p>{{post.text}}</p>
-                    <img :scr="post.imageURL" />
+                    <img :src="post.imageURL" style="max-width: 100%" />
                 </div>
 
                 <div class="date">
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="boutons">
-                    <button class="like" v-on:click="likePost('likeForm-' + post.id)">
+                    <button class="like" v-on:click="likePost(post.id)">
                         <i class="fas fa-heart coeurrempli"></i>
                         <i class="far fa-heart coeurvide"></i>
                         <i class="fas fa-bacon calque"></i>
@@ -31,9 +31,9 @@
                     <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
                 </div>
 
-                <div class="ecrivain-boutons" v-if="userId == post.UserId || statut == 'admin'">
+                <div class="ecrivain-boutons" v-if="userId == post.userId || statut == 'admin'">
                     <button v-on:click="modifPost">Modifier</button>
-                    <button v-on:click="deletePost">Supprimer</button>
+                    <button v-on:click="deletePost(post.id)">Supprimer</button>
                 </div>
             </article>
 
@@ -135,7 +135,7 @@
                     }
                 })
                 .then(() => {window.location.reload()})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+                .catch(() => {this.messError = 'Une erreur s\'est produite'})
             },
 
             // afficher les commentaires
@@ -169,10 +169,14 @@
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
 
+            applyFilter(filter) {
+                this.filter = filter
+            },
+
             //like
-            likePost(formId) {
-                this.likeFormId = formId;
-                const postId = formId.replace('likeForm-', '');
+            likePost(postId) {
+                // this.likeFormId = formId;
+                // const postId = formId.replace('likeForm-', '');
 
                 axios.get('http://localhost:3000/api/post/' + postId + '/like', {
                     headers: {
@@ -183,7 +187,7 @@
                 .then(response => {this.postLikes = response.data;
                     if(this.postLikes.length == 0) {
                         this.like = false
-                        axios.post('http://localhost:3000/api/post/' + this.postId + '/like', {
+                        axios.post('http://localhost:3000/api/post/' + postId + '/like', {
                             like: this.like,
                         },{
                             headers: {

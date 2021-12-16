@@ -138,8 +138,8 @@ exports.modifyUserProfile = (req, res, next) => {
     } : { ...req.body };
 
 
-    console.log(userObject)
-    return;
+    // console.log(userObject)
+    // return;
 
     db.User.findOne({
         where: { id: userId },

@@ -80,6 +80,11 @@ exports.modifyPost = (req, res, next) => {
     })
     .then(postFound => {
         if(postFound) {
+            // TODO
+            // est-ce que ce post est a moi ?
+            // sinon 403
+            // postFound.userId == userId || je suis admin
+            // et meme chose dans la suppression ...
             db.Post.update(postObject, {
                 where: { id: req.params.postId}
             })

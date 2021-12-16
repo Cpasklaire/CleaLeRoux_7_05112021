@@ -1,4 +1,4 @@
-<template>  
+<template>
     <header>
         <!-- Header pour mobil -->
         <div class="mobil">
@@ -6,17 +6,17 @@
                 <div class="nav">
                     <router-link to="/profil"><i class="fas fa-user-tie"></i></router-link>
                     <img v-on:click="actualiser" src="../assets/illutration/icon-left-font.png" alt="Logo de Groupomania"/>
-                </div>   
-                <select>
-                    <option v-on:click="showMessages('all')">Voir tous les messages</option>
-                    <option v-on:click="showMessages('new')">Voir les messages non lu</option>
-                    <option v-on:click="showMessages('image')">Voir les images</option>
-                    <option v-on:click="showMessages('text')">Voir les textes</option>
+                </div>
+                <select v-model="filter" v-on:change="selectFilter">
+                    <option value="all">Voir tous les messages</option>
+                    <option value="new">Voir les messages non lu</option>
+                    <option value="image">Voir les images</option>
+                    <option value="text">Voir les textes</option>
                 </select>
-            </div>    
-        
+            </div>
+
             <button v-on:click="togglewWriteElement"><i class="fas fa-edit"></i></button>
-            
+
         </div>
 
         <!-- Header pour pc -->
@@ -31,7 +31,7 @@
             </select>
             <img v-on:click="actualiser" src="../assets/illutration/icon-left-font.png" alt="Logo de Groupomania"/>
         </div>
-        
+
         <Writing v-if="showWriteElement" />
   </header>
 </template>
@@ -42,15 +42,16 @@
     export default {
         name: 'Header',
         components: {
-            Writing, 
+            Writing,
         },
-        
+
         data(){
             return {
                 showWriteElement: false,
+                filter: 'all'
             }
         },
-        
+
         methods: {
             showMessages: function(filter) {
                 this.$emit('filterMessages', filter)
@@ -61,12 +62,15 @@
             actualiser: function() {
                 window.location.reload()
             },
+            selectFilter: function() {
+                this.$emit('selectFilter', this.filter)
+            }
         }
     }
 </script>
 
 <style scoped lang="scss">
-header 
+header
 {
     .top
     {
@@ -112,8 +116,8 @@ header
         box-shadow: none;
     }
     @media (min-width: 992px)
-    {         
-        position: fixed;           
+    {
+        position: fixed;
         border-radius: 30px;
         box-shadow: 0px 6px 5px #091F43;
         width: 100%;
