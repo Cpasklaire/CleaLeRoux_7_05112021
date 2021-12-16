@@ -43,7 +43,7 @@
 
 </script>
 <style scoped lang="scss">
-    .writing
+    .writingComm
     {
         margin: 3%;
         margin-top: 5%;

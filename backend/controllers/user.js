@@ -59,7 +59,6 @@ exports.signup = (req, res, next) => {
 
 //Se connecter
 exports.login = (req, res, next) => {
-    console.log('ici'),
     db.User.findOne({
         where: { email: req.body.email }
     })
@@ -83,12 +82,18 @@ exports.login = (req, res, next) => {
                     )
                 });
             })
-            .catch(error => res.status(500).json({ error: 'Connection échoué' }));
+            .catch(error => {
+                console.log(error)
+                res.status(500).json({ error: 'Connection échoué' })
+            });
         } else {
             return res.status(404).json({ error: 'Vous n\'avez pas encore créé de compte' })
         }
     })
-    .catch(error => res.status(500).json({ error: 'Connection échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Connection échoué' })
+    });
 }
 
 //GET
@@ -106,7 +111,10 @@ exports.getUserProfile = (req, res, next) => {
             res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
-    .catch(error => res.status(404).json({ error: 'Utilisateur non trouvé' }));
+    .catch(error => {
+        console.log(error)
+        res.status(404).json({ error: 'Utilisateur non trouvé' })
+    });
 }
 
 //PUT
@@ -136,13 +144,19 @@ exports.modifyUserProfile = (req, res, next) => {
                 where: { id: userId}
             })
             .then(user => res.status(200).json({ message: 'Profil mis à jour' }))
-            .catch(error => res.status(400).json({ error: 'Modification du profil échoué' }))
+            .catch(error => {
+                console.log(error)
+                res.status(400).json({ error: 'Modification du profil échoué' })
+            })
         }
         else {
             res.status(404).json({ error: 'Utilisateur non trouvé' });
         }
     })
-    .catch(error => res.status(500).json({ error: 'Modification du profil échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Modification du profil échoué' })
+    });
 }
 
 // DELETE
@@ -165,6 +179,9 @@ exports.deleteAccount = (req, res, next) => {
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
-    .catch(error => res.status(500).json({ error: 'Suppression du profil échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Suppression du profil échoué' })
+    });
 }
 

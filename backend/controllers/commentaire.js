@@ -20,7 +20,10 @@ exports.createCommentaire = (req, res, next) => {
             })
             commentaire.save()
                 .then(() => res.status(201).json({ message: 'Commentaire créé !' }))
-                .catch(error => res.status(400).json({ error: 'Création du Commentaire échoué' }));
+                .catch(error => {
+                    console.log(error)
+                    res.status(400).json({ error: 'Création du Commentaire échoué' })
+                });
         } else {
             return res.status(404).json({ error: 'Aucun message publié :('})
         }
@@ -51,6 +54,7 @@ exports.getAllCommentaires = (req, res, next) => {
         }
     })
     .catch(error => {
+        console.log(error)
         res.status(500).send({ error: 'Recherche du commentaire échoué' });
     });
 }
@@ -68,11 +72,17 @@ exports.deleteCommentaire = (req, res, next) => {
                 where: { id: req.params.commentaireId }
             })
             .then(() => res.status(200).json({ message: 'Commentaire supprimé' }))
-            .catch(() => res.status(500).json({ error: 'Suppression du commentaire échoué' }));
+            .catch(error => {
+                console.log(error)
+                res.status(500).json({ error: 'Suppression du commentaire échoué' })
+            });
 
         } else {
             return res.status(404).json({ error: 'Aucun commentaire publié :('})
         }
     })
-    .catch(error => res.status(500).json({ error: 'Suppression du commentaire échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Suppression du commentaire échoué' })
+    });
 }

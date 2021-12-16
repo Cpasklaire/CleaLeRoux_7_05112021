@@ -6,8 +6,9 @@
             <article v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'messages' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
 
                 <div class="ecrivain">
-                    <img :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
-                    <span> {{post.User.lastName + post.User.firstName}} </span>
+                    <img v-if="post.User.avatar == !null" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
+                    <i v-if="post.User.avatar == null || post.User.avatar == ''" class="fa fa-user-astronaut"></i>
+                    <span> {{post.User.lastName}} {{post.User.firstName}} </span>
                 </div>
 
                 <div class="contenu">
@@ -15,16 +16,22 @@
                     <img :scr="post.imageURL" />
                 </div>
 
-                <span class="">Publié le {{ dateFormat(post.createdAt) }}</span>
-                <span class="">Modifié le {{ dateFormat(post.updatedAt) }}</span>
+                <div class="date">
+                    <span>Publié le {{ dateFormat(post.createdAt) }}</span>
+                    <span v-if="post.createdAt == !post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
+                </div>
 
                 <div class="boutons">
-                    <button v-on:click="likePost">coeur</button>
+                    <button class="like" v-on:click="likePost">
+                        <i class="fas fa-heart coeurrempli"></i>
+                        <i class="far fa-heart coeurvide"></i>
+                        <i class="fas fa-bacon calque"></i>
+                    </button>
                     <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
                     <button v-on:click="voir">Voir les commentaires</button>
                 </div>
 
-                <div class="ecrivain-boutons" v-if="userId == post.UserId">
+                <div class="ecrivain-boutons" v-if="userId == post.UserId || statut == admin">
                     <button v-on:click="modifPost">Modifier</button>
                     <button v-on:click="deletePost">Supprimer</button>
                 </div>
@@ -47,7 +54,7 @@
 
                     <span class="">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
 
-                    <div class="ecrivain-boutons" v-if="userId == commentaire.UserId">
+                    <div class="ecrivain-boutons" v-if="userId == commentaire.UserId || statut == admin">
                         <button v-on:click="deleteCommentaire">Supprimer</button>
                     </div>
                 </div>
@@ -76,6 +83,7 @@
             return {
                 //identification
                 userId: localStorage.getItem('userId'),
+                statut: localStorage.getItem('statut'),
                 //affichage post
                 posts: [],
                 post: '',
@@ -237,5 +245,117 @@
 
 
 <style scoped lang="scss">
+.post 
+{
+    border: solid 3px #D1515A;
+    border-radius: 20px;
+    margin: 3%;
+    padding: 3%;
+    .ecrivain
+    {
+        display: flex;
+        align-items: center;
+        .fa-user-astronaut
+        {
+            font-size: 45px;
+            padding: 10px;
+            border-radius: 100%;
+            border: solid 3px #D1515A;
+            height: 35px;
+            width: 35px;
+            color: #091F43;
+            overflow: hidden;
+        }
+        span
+        {
+            margin-left: 3%;
+            color: #D1515A;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+    }
+    .contenu
+    {
+        background: #091f4312;
+        border-radius: 20px;
+        padding: 3%;
+        margin-top: 3%;
+    }
+    .date 
+    {            
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        span
+        {
+            font-size: 0.7em;
+        }
+    }
+    .boutons 
+    {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .like
+        {
+            box-shadow: none;
+            width: 10px;
+            margin-bottom: 50px;
+            font-size: 1.7em;
+            margin-right: 50px;
+        }
+        button
+        {
+            font-size: 1em;
+            width: 110px;
+            height: 50px;
 
+            .coeurrempli
+            {
+                color: transparent;
+                background: #D1515A;
+                -webkit-background-clip: text;
+                position: absolute;
+                font-size: 1.7em;
+                z-index: 1;
+            }
+            .calque
+            {
+                position: absolute;
+                font-size: 1.7em;
+                z-index: 2;
+                color: white;
+                background-color: white;
+                transition: transform 1s;
+                transform-origin: center top;
+            }
+            .coeurvide
+            {
+                color: black;
+                background-color: transparent;
+                position: absolute;
+                font-size: 1.7em;
+                z-index: 3;
+                &:hover + .calque
+                {
+                transform: scaleY(0);
+                }
+                &:hover
+                {
+                    opacity: 0;  
+                }
+            }
+        }
+    }
+    .ecrivain-boutons
+    {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        button
+        {
+            width: 110px;
+        }
+    }
+}
 </style>

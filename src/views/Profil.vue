@@ -5,7 +5,7 @@
         <button v-on:click="logout" class="pc logout">Déconnexion</button>
             <!--profil-->
             <div class="entete">
-                <i v-if="user.avatar == null" class="fa fa-user-astronaut"></i>
+                <i v-if="user.avatar == null || user.avatar == ''" class="fa fa-user-astronaut"></i>
                 <img v-if="user.avatar == !null" :src="user.avatar" :alt="'avatar de' + user.firstname + user.lastname" class="avatar">
                 <h2>{{user.lastName}} {{user.firstName}}</h2>
             </div>
@@ -20,6 +20,7 @@
                         <h3>Mes infos personnelles</h3>
                         <span>Courriel : {{ user.email }}</span><br>
                         <span>Mot de passe : **********</span><br>
+                        <span>Statut : {{ user.statut }}</span><br>
                         <span class="pc">Création du compte : {{dateFormat(user.createdAt)}}</span><br>
                         <span class="pc">Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>  
                     </div>
@@ -48,6 +49,8 @@
             <input type="file" @change="onFileSelected" accept="image/*">  
             <label>Description</label>
             <textarea v-model="description" type="text" class="description" placeholder="Taper votre description ici"/>
+            <input type="checkbox" id="statut">
+            <label for="statut">Vous êtes RH ?</label>
             <label>Mot de passe</label>
             <input v-model="password" type="current-password" placeholder="**********"/>
             <button @click="modifProfil" type="submit">Valider</button>

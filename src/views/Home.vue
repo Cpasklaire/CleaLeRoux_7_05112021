@@ -84,6 +84,7 @@
                     localStorage.setItem('lastName', response.data.lastName);
                     localStorage.setItem('firstName', response.data.firstName);
                     localStorage.setItem('avatar', response.data.avatar);
+                    localStorage.setItem('statut', response.data.statut);
 
                     this.$router.push('wall');
                 })

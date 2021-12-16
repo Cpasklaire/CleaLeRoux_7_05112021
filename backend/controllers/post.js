@@ -9,9 +9,8 @@ exports.createPost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
-    console.log(1);
 
-    if (text == null || text == '' && imageURL == null) {console.log(2);
+    if (text == null || text == '' && imageURL == null) {
         return res.status(400).json({ error: 'Ecrivez ou mettez une image' });
     }
     console.log(3);
@@ -19,7 +18,7 @@ exports.createPost = (req, res, next) => {
         where: { id: userId }
     })
     .then(userFound => {
-        if(userFound) {console.log(userFound);
+        if(userFound) {
             const post = db.Post.build({
                 text: req.body.text,
                 imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imageURL,
@@ -85,13 +84,19 @@ exports.modifyPost = (req, res, next) => {
                 where: { id: req.params.postId}
             })
             .then(post => res.status(200).json({ message: 'Message modifié' }))
-            .catch(error => res.status(400).json({ error: 'Modification du message échoué' }))
+            .catch(error => {
+                console.log(error)
+                res.status(400).json({ error: 'Modification du message échoué' })
+            })
         }
         else {
             res.status(404).json({ error: 'Aucun message trouvé :(' });
         }
     })
-    .catch(error => res.status(500).json({ error: 'Modification du message échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Modification du message échoué' })
+    });
 }
 
 //DELETE
@@ -124,7 +129,10 @@ exports.deletePost = (req, res, next) => {
             return res.status(404).json({ error: 'Aucun message trouvé :('})
         }
     })
-    .catch(error => res.status(500).json({ error: 'Suppression du message échoué' }));
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Suppression du message échoué' })
+    });
 }
 
 

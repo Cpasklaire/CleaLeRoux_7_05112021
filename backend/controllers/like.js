@@ -28,9 +28,15 @@ exports.likePost = (req, res, next) => {
                     where: { id: req.params.postId }
                 })
                 .then(() => res.status(201).json({ message: 'Message liker' }))
-                .catch(error => res.status(500).json({ error: 'Like échoué' })) 
+                .catch(error => {
+                    console.log(error)
+                    res.status(500).json({ error: 'Like échoué' })
+                }) 
             })
-            .catch(error => res.status(400).json({ error: 'Like échoué' }))
+            .catch(error => {
+                console.log(error)
+                res.status(400).json({ error: 'Like échoué' })
+            })
         } else if(liked == true) {
             db.Like.destroy({ 
                 where: { 
@@ -45,12 +51,21 @@ exports.likePost = (req, res, next) => {
                     where: { id: req.params.postId }
                 })
                 .then(() => res.status(201).json({ message: 'Message dé-liker' }))
-                .catch(error => res.status(500).json({ error: 'Dé-like échoué' })) 
+                .catch(error => {
+                    console.log(error)
+                    res.status(500).json({ error: 'Dé-like échoué' })
+                }) 
             })
-            .catch(error => res.status(400).json({ error: 'Dé-like échoué' }))
+            .catch(error => {
+                console.log(error)
+                res.status(400).json({ error: 'Dé-like échoué' })
+            })
         }
     })
-    .catch(error => res.status(400).json({ error: 'Like ou dé-like échoué' }))  
+    .catch(error => {
+        consol.log(error)
+        res.status(400).json({ error: 'Like ou dé-like échoué' })
+    })  
 }
 
 //GET
@@ -71,5 +86,8 @@ exports.getAllLike = (req, res, next) => {
             res.status(404).json({ error: 'Ce message n\'a pas été liker' });
         }
     })
-    .catch(error => res.status(500).json({ error: 'Recherche de like échoué' }))
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: 'Recherche de like échoué' })
+    })
 }

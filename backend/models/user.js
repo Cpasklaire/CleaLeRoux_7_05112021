@@ -23,6 +23,10 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       type: Sequelize.STRING
     },
+    statut: {
+      allowNull: false,
+      type: Sequelize.STRING
+    },
     //Informations optionnel
     avatar: {
       type: Sequelize.STRING
