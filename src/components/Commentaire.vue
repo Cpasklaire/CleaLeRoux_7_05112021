@@ -13,7 +13,7 @@
 
             <span class="">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
 
-            <div class="ecrivain-boutons" v-if="userId == commentaire.UserId || statut == admin">
+            <div class="ecrivain-boutons" v-if="userId == commentaire.UserId || statut == 'admin'">
                 <button v-on:click="deleteCommentaire">Supprimer</button>
             </div>
         </div>
@@ -30,28 +30,27 @@
         name: 'Commentaire',
         components: {
         },
-        props: ['postId'],
+        props: ['postId', 'commentaires'],
         data() {
             return {
                 //identification
                 userId: localStorage.getItem('userId'),
                 statut: localStorage.getItem('statut'),
                 //affichage commentaire
-                commentaire: [],
-
-                replyFormId: ''
+                // commentaire: [],
+                // replyFormId: ''
             }
         },
 
-        mounted() {                
-                axios.get('http://localhost:3000/api/commentaire/' + this.postId, {
+        mounted() {
+                /* axios.get('http://localhost:3000/api/commentaire/' + this.postId, {
                     headers: {
                         'Content-Type' : 'application/json',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }
                 })
                 .then(response => {this.commentaires = response.data;})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+                .catch(() => {this.messError = 'Une erreur c\'est produite'}) */
         },
 
         methods: {
@@ -82,7 +81,7 @@
 
 
 <style scoped lang="scss">
-.post 
+.post
 {
     border: solid 3px #D1515A;
     border-radius: 20px;
@@ -118,8 +117,8 @@
         padding: 3%;
         margin-top: 3%;
     }
-    .date 
-    {            
+    .date
+    {
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -128,7 +127,7 @@
             font-size: 0.7em;
         }
     }
-    .boutons 
+    .boutons
     {
         display: flex;
         align-items: center;
@@ -179,7 +178,7 @@
                 }
                 &:hover
                 {
-                    opacity: 0;  
+                    opacity: 0;
                 }
             }
         }

@@ -69,10 +69,14 @@ exports.login = (req, res, next) => {
                 if(!valid) {
                     return res.status(401).json({ error: 'Mot de passe incorrect' });
                 }
+                // TODO : utiliser ...user
+                // let res = ...user
+                // puis user.token =
                 res.status(200).json({
                     userId: user.id,
                     lastName: user.lastName,
                     firstName: user.firstName,
+                    statut: user.statut,
                     avatar: user.avatar,
                     description: user.description,
                     token: jwt.sign(
@@ -101,7 +105,7 @@ exports.login = (req, res, next) => {
 exports.getUserProfile = (req, res, next) => {
     const id = req.params.id;
     db.User.findOne({
-        attributes: [ 'id', 'lastName', 'firstName', 'email', 'description', 'avatar', 'createdAt', 'lastRefreshDate' ],
+        attributes: [ 'id', 'lastName', 'firstName', 'email', 'description', 'avatar', 'statut', 'createdAt', 'lastRefreshDate' ],
         where: { id: id }
     })
     .then(user => {

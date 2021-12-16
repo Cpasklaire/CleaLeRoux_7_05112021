@@ -38,11 +38,12 @@ exports.createCommentaire = (req, res, next) => {
 // Voir les commentaires
 exports.getAllCommentaires = (req, res, next) => {
     db.Commentaire.findAll({
-        order: [['updatedAt', "ASC"], ['createdAt', "ASC"]],
+        order: [['updatedAt', "ASC"]],
         where: { postId: req.params.postId },
         include: [{
             model: db.User,
-            attributes: [ 'lastName', 'firstName', 'avatar' ]
+            attributes: [ 'lastName', 'firstName', 'avatar' ],
+            as: "User"
         }]
     })
     .then(commentaireFound => {

@@ -10,19 +10,20 @@
                 <h2>{{user.lastName}} {{user.firstName}}</h2>
             </div>
 
-            
+
             <div v-if="!showModifierElement">
                 <div class="descrinfo">
-                    <p v-if="user.description == null">Une petite description ?</p>
-                    <p v-if="user.description == !null">{{user.description}}</p>
-                    
+                    <!--<p v-if="user.description == null">Une petite description ?</p>
+                    <p v-if="user.description != null">{{user.description}}</p>-->
+
                     <div class="infoUser">
                         <h3>Mes infos personnelles</h3>
                         <span>Courriel : {{ user.email }}</span><br>
                         <span>Mot de passe : **********</span><br>
                         <span>Statut : {{ user.statut }}</span><br>
+                        <span>Description : {{ user.description }}</span><br>
                         <span class="pc">Création du compte : {{dateFormat(user.createdAt)}}</span><br>
-                        <span class="pc">Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>  
+                        <span class="pc">Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>
                     </div>
                 </div>
                 <div class="bouton">
@@ -31,32 +32,32 @@
                         <button v-on:click="deleteUser">Supprimer</button>
                     </div>
                 </div>
-                
+
                 <div class="bas">
                     <div class="date mobil">
                         <span>Création du compte : {{dateFormat(user.createdAt)}}</span><br>
-                        <span>Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>  
+                        <span>Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>
                     </div>
                     <button v-on:click="logout" class="mobil logout"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </section>
-        
+
         <!--formulaire-->
         <form v-if="showModifierElement">
             <label>Avatar</label>
             <img v-if="imagePreview" :src="imagePreview" class="preview"/>
-            <input type="file" @change="onFileSelected" accept="image/*">  
+            <input type="file" @change="onFileSelected" accept="image/*">
             <label>Description</label>
-            <textarea v-model="description" type="text" class="description" placeholder="Taper votre description ici"/>
-            <input type="checkbox" id="statut">
-            <label for="statut">Vous êtes RH ?</label>
+            <textarea v-model="user.description" type="text" class="description" placeholder="Taper votre description ici" />
+            <!--<input type="checkbox" id="statut">-->
+            <!--<label for="statut">Vous êtes RH ?</label>-->
             <label>Mot de passe</label>
             <input v-model="password" type="current-password" placeholder="**********" required/>
             <span>Si vous ne souhaitez pas changer de mot de passe confirmer votre mot de passe actuelle</span>
-            <button @click="modifProfil" type="submit">Valider</button>
+            <button @click="modifProfil" type="button">Valider</button>
         </form>
-		
+
         <span>{{messError}}</span>
 		<span>{{messReussite}}</span>
     </div>
@@ -74,13 +75,13 @@
 		data(){
 			return {
                 //Voir l'user
-                user: "",        
+                user: "",
                 //Messages automatique
                 messReussite: '',
                 messError: '',
                 //Modification user
                 password:'',
-                description:'',
+                // description:'',
                 avatar: '',
                 imagePreview:'',
                 //Bouton
@@ -97,24 +98,26 @@
                 }
             })
             .then(response => {
+                console.log(response.data)
                 this.user = response.data;
                 console.log(response.data)
             })
             .catch(() => {this.messError = 'Une erreur c\'est produite'})
 		},
-		user() {
+		/* user() {
             let headers = {Authorization: 'token'}
             let user = this.$http.get('/auth', {headers: headers})
                 this.user.push({
                     userId: user.id,
                     avatar: user.avatar,
+                    statut: user.statut
                     firstname: user.firstname,
 					lastname: user.lastname,
                     mail: user.mail,
                     createdAt: user.createdAt,
-                    lastRefreshDate: user.lastRefreshDate, 
+                    lastRefreshDate: user.lastRefreshDate,
                 })
-            },
+            },*/
 
 		methods: {
             //modifier profil
@@ -126,9 +129,9 @@
 				const userId = localStorage.getItem('userId');
 
 				const formData = new FormData();
-				formData.append("avatar", this.avatar);
-                formData.append("description", this.description);
-                formData.append("password", this.password);
+				// formData.append("avatar", this.avatar);
+                formData.append("description", this.user.description);
+                // formData.append("password", this.password);
 
 				axios.put('http://localhost:3000/api/user/' + userId, formData, {
 					headers: {
@@ -136,9 +139,11 @@
 						'Content-Type': 'multipart/form-data'
 					}
 				})
-                .then(() => {this.messReussite = 'Profile modifié', 
-				window.location.reload();})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+                .then(() => {
+                    this.messReussite = 'Profile modifié';
+                    // window.location.reload();
+                })
+                .catch(() => {this.messError = 'Une erreur s\'est produite'})
 			},
             //suprimer user
 			deleteUser(){
@@ -150,7 +155,7 @@
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }
                 })
-				.then(() => {this.messReussite = 'Vous avez supprimer votre compte',                     
+				.then(() => {this.messReussite = 'Vous avez supprimer votre compte',
 					localStorage.clear();
                     this.$router.push('/');})
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
@@ -162,10 +167,10 @@
                 localStorage.removeItem('lastName');
                 localStorage.removeItem('firstName');
                 localStorage.removeItem('avatar');
-                
+                localStorage.removeItem('statut');
                 this.$router.push('/');
             },
-            //bouton            
+            //bouton
 			togglewModifierElement(){
 				this.showModifierElement = !this.showModifierElement
             },
@@ -190,9 +195,9 @@
         position: absolute;
         right: 3%;
         top: 0.5%;
-    }    
+    }
     .entete
-    {    
+    {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -221,9 +226,9 @@
             color: #D1515A;
             font-size: 2em;
         }
-    
+
     }
-    p 
+    p
     {
         border: solid 3px #D1515A;
         border-radius: 20px;
@@ -253,7 +258,7 @@
         }
     }
     .bas
-    {    
+    {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -267,21 +272,21 @@
             height: 50px;
             font-size: 1.5em;
             color: #D1515A;
-            
+
         }
         span
         {
         font-size: 1em;
         }
     }
-}    
+}
 form
 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    label 
+    label
     {
         font-size: 1.5em;
         color: #D1515A;
@@ -307,9 +312,9 @@ form
     {
         font-size: 1.5em;
     }
-}    
+}
 @media (min-width: 992px)
-{  
+{
     .profil
     {
         .fa-arrow-circle-left
@@ -329,7 +334,7 @@ form
             margin-top: 0%;
         }
         .entete
-        {  
+        {
             justify-content: flex-start;
             h2
             {
@@ -341,23 +346,23 @@ form
             display: flex;
             justify-content: space-around;
             align-items: center;
-            p 
+            p
             {
-                width: 40%;              
+                width: 40%;
             }
             .infoUser
             {
                 border: solid 3px #D1515A;
                 border-radius: 20px;
                 padding: 3%;
-                width: 40%; 
-                height: 200px; 
-                span 
+                width: 40%;
+                height: 200px;
+                span
                 {
                     line-height: 2em;
                 }
             }
-        }            
+        }
         .boutonRow
         {
             flex-direction: column;

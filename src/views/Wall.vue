@@ -28,17 +28,18 @@
                         <i class="fas fa-bacon calque"></i>
                     </button>
                     <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
-                    <button v-on:click="voir('replyForm-' + post.id)">Voir les commentaires</button>
+                    <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
                 </div>
 
-                <div class="ecrivain-boutons" v-if="userId == post.UserId || statut == admin">
+                <div class="ecrivain-boutons" v-if="userId == post.UserId || statut == 'admin'">
                     <button v-on:click="modifPost">Modifier</button>
                     <button v-on:click="deletePost">Supprimer</button>
                 </div>
             </article>
 
             <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
-            <Commentaire :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
+            <Commentaire :postId="post.id" :commentaires="commentaires" />
+            <!-- v-if="1 || commentSectionId == 'commentSection-' + post.id" -->
         </div>
     </div>
 </template>
@@ -72,14 +73,15 @@
                 imageURL: '',
                 text: '',
                 //affichage commentaire
-                commentaire: [],
+                commentaires: [],
                 //Like
                 like: false,
                 postLikes: [],
                 //bouton
                 boutonVoir: false,
                 filter: 'all',
-                replyFormId: ''
+                replyFormId: '',
+                commentSectionId: ''
             }
         },
 
@@ -136,10 +138,11 @@
             },
 
             // afficher les commentaires
-            voir(id) {
+            voir(sectionId) {
+                this.commentSectionId = sectionId;
                 this.boutonVoir = !this.boutonVoir
 
-                const postId = id;
+                const postId = sectionId.replace('commentSection-', '');
 
                 axios.get('http://localhost:3000/api/commentaire/' + postId, {
                     headers: {
@@ -227,7 +230,7 @@
 
 
 <style scoped lang="scss">
-.post 
+.post
 {
     border: solid 3px #D1515A;
     border-radius: 20px;
@@ -263,8 +266,8 @@
         padding: 3%;
         margin-top: 3%;
     }
-    .date 
-    {            
+    .date
+    {
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -273,7 +276,7 @@
             font-size: 0.7em;
         }
     }
-    .boutons 
+    .boutons
     {
         display: flex;
         align-items: center;
@@ -324,7 +327,7 @@
                 }
                 &:hover
                 {
-                    opacity: 0;  
+                    opacity: 0;
                 }
             }
         }
