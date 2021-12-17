@@ -12,9 +12,17 @@
                         <span> {{post.User.lastName}} {{post.User.firstName}} </span>
                     </div>
 
-                    <div class="contenu">
+                    <div v-if="!voirModifPost" class="contenu">
                         <p>{{post.text}}</p>
                         <img :src="post.imageURL" style="max-width: 100%" />
+                    </div>
+                    <div>
+                    <form :postId="post.id" v-if="modifId == 'modifSection-' + post.id" v-on:submit.prevent="modifPost">
+                        <textarea v-model="post.text" class="" name="message" id="message"/>    
+                        <img v-if="imagePreview" :src="imagePreview" id="preview" class=""/>     
+                        <input type="file" @change="onFileSelected" accept="image/*">       
+                        <button type="submit">Publier</button>
+                    </form>
                     </div>
 
                     <div class="date">
@@ -28,12 +36,13 @@
                             <i class="far fa-heart coeurvide"></i>
                             <i class="fas fa-bacon calque"></i>
                         </button>
+                        <span v-if="post.likes > 0" class="likeCompteur">{{ post.likes }}</span>
                         <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
                         <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
                     </div>
 
                     <div class="ecrivain-boutons">
-                        <button v-if="userId == post.userId" v-on:click="modifPost">Modifier</button>
+                        <button v-if="userId == post.userId" v-on:click="modifPostBouton('modifSection-' + post.id)">Modifier</button>
                         <button v-if="userId == post.userId || statut == 'admin'" v-on:click="deletePost(post.id)">Supprimer</button>
                     </div>
                 </article>
@@ -85,6 +94,9 @@
                 replyFormId: '',
                 commentSectionId: '',
                 likeFormId: '',
+                voirModifPost: false,
+                modifId: '',
+                
             }
         },
 
@@ -112,9 +124,14 @@
                 }
             },
 
+            //bouton
+			modifPostBouton(){
+				this.voirModifPost = !this.voirModifPost
+            },
             // modifier post
-            modifPost(id) {
-                const postId = id;
+            modifPost(modifId) {
+                this.modifSectionId = modifId;
+                const postId = modifId.replace('modifSection-', '');
 
                 axios.put('http://localhost:3000/api/post/' + postId,  {
                     headers: {

@@ -6,6 +6,7 @@ const fs = require('fs');
 //Créé un post
 exports.createPost = (req, res, next) => {
     const text = req.body.text;
+    const imageURL = req.body.imageURL;
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
@@ -21,7 +22,7 @@ exports.createPost = (req, res, next) => {
         if(userFound) {
             const post = db.Post.build({
                 text: req.body.text,
-                imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`: req.body.imageURL,
+                imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}`: req.body.imageURL,
                 userId: req.body.userId
             })
             post.save()
@@ -73,7 +74,7 @@ exports.modifyPost = (req, res, next) => {
     const postObject = req.file ?
     {
     text: req.body.text,
-    imageURL: `${req.protocol}://${req.get('host')}/images/postIMG/${req.file.filename}`
+    imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
     db.Post.findOne({
         where: {  id: req.params.postId },
@@ -114,9 +115,9 @@ exports.deletePost = (req, res, next) => {
     .then(post => {
         if(post) {
             if(post.imageURL != null) {
-                const filename = post.imageURL.split('/images/postIMG/')[1];
+                const filename = post.imageURL.split('/images/')[1];
 
-                fs.unlink(`images/postIMG/${filename}`, () => {
+                fs.unlink(`images/${filename}`, () => {
                     db.Post.destroy({
                         where: { id: req.params.postId }
                     })

@@ -38,7 +38,7 @@
                 const formData = new FormData();
                 formData.append("text", this.text);
                 formData.append("image", this.imageURL);
-                formData.append("userId", localStorage.getItem('userId'))
+                formData.append("userId", localStorage.getItem('userId'));
 
                 axios.post('http://localhost:3000/api/post', formData, {
                     headers: {

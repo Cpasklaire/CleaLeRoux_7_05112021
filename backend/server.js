@@ -48,9 +48,7 @@ server.on('listening', () => {
 
 /*création des dossiers images*/
 const mkdirp = require('mkdirp');
-mkdirp('./images/avatar').then(made =>
-console.log(`création du dossier images des avatars`));
-mkdirp('./images/postIMG').then(made =>
-console.log(`création du dossier images des messages`));
+mkdirp('./images').then(made =>
+console.log(`création du dossier images`));
 
 server.listen(port); //ce démarre avec 'node server' ou 'nodemon server' 

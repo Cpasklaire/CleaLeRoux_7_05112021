@@ -28,7 +28,12 @@
                 <div class="bouton">
                     <div class="boutonRow">
                         <button v-on:click="togglewModifierElement">Modifier</button>
-                        <button v-on:click="deleteUser">Supprimer</button>
+                        <button v-on:click="boutonSupprimer">Supprimer</button>
+                            <div v-if="voirSupprimer">
+                                Êtes vous certain de vouloir supprimer votre compte ? 
+                                <button v-on:click="deleteUser">Oui !</button>
+                                <button v-on:click="nonDeleteUser">En faite non</button>
+                            </div>
                     </div>
                 </div>
 
@@ -81,7 +86,8 @@
                 avatar: '',
                 imagePreview:'',
                 //Bouton
-                showModifierElement: false
+                showModifierElement: false,
+                voirSupprimer: false,
 			}
 		},
 
@@ -133,6 +139,14 @@
                 })
                 .catch(() => {this.messError = 'Une erreur s\'est produite'})
 			},
+
+            //bouton
+			boutonSupprimer(){
+				this.voirSupprimer = !this.voirSupprimer
+            },
+            nonDeleteUser(){
+                this.voirSupprimer = !this.voirSupprimer
+            },
             //suprimer user
 			deleteUser(){
                 const userId = localStorage.getItem('userId');

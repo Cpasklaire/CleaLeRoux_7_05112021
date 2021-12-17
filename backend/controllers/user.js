@@ -129,12 +129,11 @@ exports.modifyUserProfile = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
-    req.body.user = userId
     //Avatar
     const userObject = req.file ?
     {
     ...JSON.parse(req.body.user),
-    avatar: `${req.protocol}://${req.get('host')}/images/avatar/${req.file.filename}`
+    avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
 
 
@@ -145,9 +144,9 @@ exports.modifyUserProfile = (req, res, next) => {
         where: { id: userId },
     })
     .then(userFound => {
-        if(userFound) {
+        if(userFound) {          
             db.User.update(userObject, {
-                where: { id: userId}
+                where: { id: userId},
             })
             .then(user => res.status(200).json({ message: 'Profil mis à jour' }))
             .catch(error => {
