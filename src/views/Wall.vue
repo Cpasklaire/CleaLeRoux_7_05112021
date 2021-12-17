@@ -2,44 +2,46 @@
     <div class="wall">
         <Header @selectFilter="applyFilter"/>
         <!--Publication -->
-        <div class="post" v-for="post in posts" :key="post.postId">
-            <article v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
+        <div v-for="post in posts" :key="post.postId">
+            <div  v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
+                <article class="post">
 
-                <div class="ecrivain">
-                    <img v-if="post.User.avatar == !null" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
-                    <i v-if="post.User.avatar == null || post.User.avatar == ''" class="fa fa-user-astronaut"></i>
-                    <span> {{post.User.lastName}} {{post.User.firstName}} </span>
-                </div>
+                    <div class="ecrivain">
+                        <img v-if="post.User.avatar == !null" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
+                        <i v-if="post.User.avatar == null || post.User.avatar == ''" class="fa fa-user-astronaut"></i>
+                        <span> {{post.User.lastName}} {{post.User.firstName}} </span>
+                    </div>
 
-                <div class="contenu">
-                    <p>{{post.text}}</p>
-                    <img :src="post.imageURL" style="max-width: 100%" />
-                </div>
+                    <div class="contenu">
+                        <p>{{post.text}}</p>
+                        <img :src="post.imageURL" style="max-width: 100%" />
+                    </div>
 
-                <div class="date">
-                    <span>Publié le {{ dateFormat(post.createdAt) }}</span>
-                    <span v-if="post.createdAt == !post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
-                </div>
+                    <div class="date">
+                        <span>Publié le {{ dateFormat(post.createdAt) }}</span>
+                        <span v-if="post.createdAt == !post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
+                    </div>
 
-                <div class="boutons">
-                    <button class="like" v-on:click="likePost(post.id)">
-                        <i class="fas fa-heart coeurrempli"></i>
-                        <i class="far fa-heart coeurvide"></i>
-                        <i class="fas fa-bacon calque"></i>
-                    </button>
-                    <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
-                    <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
-                </div>
+                    <div class="boutons">
+                        <button class="like" v-on:click="likePost(post.id)">
+                            <i class="fas fa-heart coeurrempli"></i>
+                            <i class="far fa-heart coeurvide"></i>
+                            <i class="fas fa-bacon calque"></i>
+                        </button>
+                        <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
+                        <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
+                    </div>
 
-                <div class="ecrivain-boutons" v-if="userId == post.userId || statut == 'admin'">
-                    <button v-on:click="modifPost">Modifier</button>
-                    <button v-on:click="deletePost(post.id)">Supprimer</button>
-                </div>
-            </article>
+                    <div class="ecrivain-boutons">
+                        <button v-if="userId == post.userId" v-on:click="modifPost">Modifier</button>
+                        <button v-if="userId == post.userId || statut == 'admin'" v-on:click="deletePost(post.id)">Supprimer</button>
+                    </div>
+                </article>
 
-            <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
-            <Commentaire :postId="post.id" :commentaires="commentaires" />
-            <!-- v-if="1 || commentSectionId == 'commentSection-' + post.id" -->
+                <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
+                <Commentaire :postId="post.id" :commentaires="commentaires" />
+                <!-- v-if="1 || commentSectionId == 'commentSection-' + post.id" -->
+            </div>
         </div>
     </div>
 </template>
@@ -155,19 +157,7 @@
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
 
-            // supprimer un commentaire
-            deleteCommentaire(id) {
-                const commentaireId = id;
 
-                axios.delete('http://localhost:3000/api/comment/' + commentaireId, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(() => {window.location.reload()})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
-            },
 
             applyFilter(filter) {
                 this.filter = filter

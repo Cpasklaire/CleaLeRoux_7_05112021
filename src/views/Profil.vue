@@ -13,15 +13,14 @@
 
             <div v-if="!showModifierElement">
                 <div class="descrinfo">
-                    <!--<p v-if="user.description == null">Une petite description ?</p>
-                    <p v-if="user.description != null">{{user.description}}</p>-->
+                    <p v-if="user.description == null">Vous n'avez pas encore de description</p>
+                    <p v-if="user.description != null">{{user.description}}</p>
 
                     <div class="infoUser">
                         <h3>Mes infos personnelles</h3>
                         <span>Courriel : {{ user.email }}</span><br>
                         <span>Mot de passe : **********</span><br>
                         <span>Statut : {{ user.statut }}</span><br>
-                        <span>Description : {{ user.description }}</span><br>
                         <span class="pc">Création du compte : {{dateFormat(user.createdAt)}}</span><br>
                         <span class="pc">Derniére connection : {{dateFormat(user.lastRefreshDate)}}</span>
                     </div>
@@ -50,11 +49,8 @@
             <input type="file" @change="onFileSelected" accept="image/*">
             <label>Description</label>
             <textarea v-model="user.description" type="text" class="description" placeholder="Taper votre description ici" />
-            <!--<input type="checkbox" id="statut">-->
-            <!--<label for="statut">Vous êtes RH ?</label>-->
             <label>Mot de passe</label>
-            <input v-model="password" type="current-password" placeholder="**********" required/>
-            <span>Si vous ne souhaitez pas changer de mot de passe confirmer votre mot de passe actuelle</span>
+            <input v-model="password" type="current-password" placeholder="**********"/>
             <button @click="modifProfil" type="button">Valider</button>
         </form>
 
@@ -104,20 +100,6 @@
             })
             .catch(() => {this.messError = 'Une erreur c\'est produite'})
 		},
-		/* user() {
-            let headers = {Authorization: 'token'}
-            let user = this.$http.get('/auth', {headers: headers})
-                this.user.push({
-                    userId: user.id,
-                    avatar: user.avatar,
-                    statut: user.statut
-                    firstname: user.firstname,
-					lastname: user.lastname,
-                    mail: user.mail,
-                    createdAt: user.createdAt,
-                    lastRefreshDate: user.lastRefreshDate,
-                })
-            },*/
 
 		methods: {
             //modifier profil

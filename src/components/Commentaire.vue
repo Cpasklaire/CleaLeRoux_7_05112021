@@ -1,20 +1,22 @@
 <template>
-    <div class="commentaire">
+    <div>
         <div v-for="commentaire in commentaires" :key="commentaire.commentaireId">
+            <div class="commentaire">
+                <div class="ecrivain">
+                    <img v-if="commentaire.User.avatar == !null" :src="commentaire.User.avatar" :alt="'avatar de' + commentaire.User.lastName + commentaire.User.firstName" class="avatar"/>
+                    <i v-if="commentaire.User.avatar == null || commentaire.User.avatar == ''" class="fa fa-user-astronaut"></i>
+                    <span> {{commentaire.User.lastName}} {{commentaire.User.firstName}} </span>
+                </div>
 
-            <div class="ecrivain">
-                <img :src="commentaire.User.avatar" :alt="'avatar de' + commentaire.User.lastName + commentaire.User.firstName" class="avatar"/>
-                <span> {{commentaire.User.lastName + commentaire.User.firstName}} </span>
-            </div>
+                <div class="contenu">
+                    <p>{{commentaire.text}}</p>
+                </div>
 
-            <div class="contenu">
-                <p>{{commentaire.text}}</p>
-            </div>
+                <span class="date">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
 
-            <span class="">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
-
-            <div class="ecrivain-boutons" v-if="userId == commentaire.UserId || statut == 'admin'">
-                <button v-on:click="deleteCommentaire">Supprimer</button>
+                <div class="ecrivain-boutons" v-if="userId == commentaire.userId || statut == 'admin'">
+                    <button v-on:click="deleteCommentaire">Supprimer</button>
+                </div>
             </div>
         </div>
     </div>
@@ -36,21 +38,7 @@
                 //identification
                 userId: localStorage.getItem('userId'),
                 statut: localStorage.getItem('statut'),
-                //affichage commentaire
-                // commentaire: [],
-                // replyFormId: ''
             }
-        },
-
-        mounted() {
-                /* axios.get('http://localhost:3000/api/commentaire/' + this.postId, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(response => {this.commentaires = response.data;})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'}) */
         },
 
         methods: {
@@ -81,9 +69,9 @@
 
 
 <style scoped lang="scss">
-.post
+.commentaire
 {
-    border: solid 3px #D1515A;
+    border: solid 3px #091F43;
     border-radius: 20px;
     margin: 3%;
     padding: 3%;
@@ -122,76 +110,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        span
-        {
-            font-size: 0.7em;
-        }
-    }
-    .boutons
-    {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .like
-        {
-            box-shadow: none;
-            width: 10px;
-            margin-bottom: 50px;
-            font-size: 1.7em;
-            margin-right: 50px;
-        }
-        button
-        {
-            font-size: 1em;
-            width: 110px;
-            height: 50px;
-
-            .coeurrempli
-            {
-                color: transparent;
-                background: #D1515A;
-                -webkit-background-clip: text;
-                position: absolute;
-                font-size: 1.7em;
-                z-index: 1;
-            }
-            .calque
-            {
-                position: absolute;
-                font-size: 1.7em;
-                z-index: 2;
-                color: white;
-                background-color: white;
-                transition: transform 1s;
-                transform-origin: center top;
-            }
-            .coeurvide
-            {
-                color: black;
-                background-color: transparent;
-                position: absolute;
-                font-size: 1.7em;
-                z-index: 3;
-                &:hover + .calque
-                {
-                transform: scaleY(0);
-                }
-                &:hover
-                {
-                    opacity: 0;
-                }
-            }
-        }
-    }
-    .ecrivain-boutons
-    {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        button
-        {
-            width: 110px;
-        }
+        font-size: 0.7em;
     }
 }
 </style>
