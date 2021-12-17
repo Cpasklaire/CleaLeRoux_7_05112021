@@ -32,6 +32,7 @@
                 <button class="signup-bouton">Inscription</button>
             </form>
         </div>
+
         <span>{{messError}}</span>
         <span>{{messReussite}}</span>
     </div>
@@ -58,7 +59,6 @@
                 //message                
                 messReussite:'',
                 messError: '',
-                //token: localStorage.getItem('token'),
             }
         },
 
@@ -95,12 +95,9 @@
                     email: this.signupemail,
                     password: this.signupmdp,
                 })
-                .then(() => {this.messReussite = 'Vous pouvez vous connecter', window.location.reload();})
+                .then(() => {this.messReussite = 'Vous pouvez vous connecter'})
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
-            filterMessage: function(filter) {
-            this.filter = filter
-        },
         }
     }
 </script>

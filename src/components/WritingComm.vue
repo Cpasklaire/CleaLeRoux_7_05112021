@@ -16,7 +16,9 @@
         name: 'writingComm',
         components: {
         },
+        
         props: ['postId'],
+        
         data() {
             return {
                 text: '',
@@ -28,7 +30,6 @@
             // créer commentaire
             createCommentaire() {
                 axios.post('http://localhost:3000/api/commentaire/' + this.postId, {
-
                     text: this.text
                 }, {
                     headers: {

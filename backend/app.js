@@ -48,9 +48,6 @@ app.use((req, res, next) => {
   next();
 });
 
-/*parle en json*/
-
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

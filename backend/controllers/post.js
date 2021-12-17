@@ -14,7 +14,6 @@ exports.createPost = (req, res, next) => {
     if (text == null || text == '' && imageURL == null) {
         return res.status(400).json({ error: 'Ecrivez ou mettez une image' });
     }
-    console.log(3);
     db.User.findOne({
         where: { id: userId }
     })
@@ -32,7 +31,7 @@ exports.createPost = (req, res, next) => {
                 res.status(400).json({ error: 'Création du message échoué' })
             });
         } else {
-            console.log('User not found')
+            console.log(error)
             return res.status(404).json({ error: 'Utilisateur non trouvé' })
         }
     })
@@ -51,9 +50,7 @@ exports.getAllPosts = (req, res, next) => {
             model: db.User,
             attributes: [ 'lastName', 'firstName', 'avatar' ],
             as: 'User'
-        },/*{
-            model: db.Commentaire
-        }*/]
+        }]
     })
     .then(postFound => {
         if(postFound) {
@@ -80,23 +77,23 @@ exports.modifyPost = (req, res, next) => {
         where: {  id: req.params.postId },
     })
     .then(postFound => {
-        if(postFound) {
-            // TODO
-            // est-ce que ce post est a moi ?
-            // sinon 403
-            // postFound.userId == userId || je suis admin
-            // et meme chose dans la suppression ...
-            db.Post.update(postObject, {
-                where: { id: req.params.postId}
-            })
-            .then(post => res.status(200).json({ message: 'Message modifié' }))
-            .catch(error => {
-                console.log(error)
-                res.status(400).json({ error: 'Modification du message échoué' })
-            })
+        if(postFound.userId == userId){
+            if(postFound) {
+                db.Post.update(postObject, {
+                    where: { id: req.params.postId}
+                })
+                .then(post => res.status(200).json({ message: 'Message modifié' }))
+                .catch(error => {
+                    console.log(error)
+                    res.status(400).json({ error: 'Modification du message échoué' })
+                })
+            }
+            else {
+                res.status(404).json({ error: 'Aucun message trouvé :(' });
+            }
         }
         else {
-            res.status(404).json({ error: 'Aucun message trouvé :(' });
+            res.status(403).json({ error: 'Vous n\'avez pas le droit de modifier ce message' });
         }
     })
     .catch(error => {
@@ -113,26 +110,31 @@ exports.deletePost = (req, res, next) => {
         where: { id: req.params.postId }
     })
     .then(post => {
-        if(post) {
-            if(post.imageURL != null) {
-                const filename = post.imageURL.split('/images/')[1];
+        if(req.body.userId == post.userId || req.body.statut == 'admin'){
+            if(post) {
+                if(post.imageURL != null) {
+                    const filename = post.imageURL.split('/images/')[1];
 
-                fs.unlink(`images/${filename}`, () => {
+                    fs.unlink(`images/${filename}`, () => {
+                        db.Post.destroy({
+                            where: { id: req.params.postId }
+                        })
+                        .then(() => res.status(200).json({ message: 'Message supprimé' }))
+                        .catch(() => res.status(500).json({ error: 'Suppression du message échoué' }));
+                    })
+                } else {
                     db.Post.destroy({
                         where: { id: req.params.postId }
                     })
                     .then(() => res.status(200).json({ message: 'Message supprimé' }))
                     .catch(() => res.status(500).json({ error: 'Suppression du message échoué' }));
-                })
+                }
             } else {
-                db.Post.destroy({
-                    where: { id: req.params.postId }
-                })
-                .then(() => res.status(200).json({ message: 'Message supprimé' }))
-                .catch(() => res.status(500).json({ error: 'Suppression du message échoué' }));
+                return res.status(404).json({ error: 'Aucun message trouvé :('})
             }
-        } else {
-            return res.status(404).json({ error: 'Aucun message trouvé :('})
+        }
+        else {
+            res.status(403).json({ error: 'Vous n\'avez pas le droit de supprimer ce message' });
         }
     })
     .catch(error => {

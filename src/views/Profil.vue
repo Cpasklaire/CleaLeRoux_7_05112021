@@ -26,15 +26,16 @@
                     </div>
                 </div>
                 <div class="bouton">
-                    <div class="boutonRow">
+                    <div class="boutonRow" v-if="!voirSupprimer">
                         <button v-on:click="togglewModifierElement">Modifier</button>
                         <button v-on:click="boutonSupprimer">Supprimer</button>
-                            <div v-if="voirSupprimer">
-                                Êtes vous certain de vouloir supprimer votre compte ? 
-                                <button v-on:click="deleteUser">Oui !</button>
-                                <button v-on:click="nonDeleteUser">En faite non</button>
-                            </div>
+                    </div>        
+                    <div v-if="voirSupprimer">
+                        <span>Êtes vous certain de vouloir supprimer votre compte ? </span><br>
+                        <button v-on:click="deleteUser">Oui !</button>
+                        <button v-on:click="nonDeleteUser">En faite non</button>
                     </div>
+                    
                 </div>
 
                 <div class="bas">
@@ -140,13 +141,6 @@
                 .catch(() => {this.messError = 'Une erreur s\'est produite'})
 			},
 
-            //bouton
-			boutonSupprimer(){
-				this.voirSupprimer = !this.voirSupprimer
-            },
-            nonDeleteUser(){
-                this.voirSupprimer = !this.voirSupprimer
-            },
             //suprimer user
 			deleteUser(){
                 const userId = localStorage.getItem('userId');
@@ -162,6 +156,7 @@
                     this.$router.push('/');})
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
+
             //déconnection
             logout() {
                 localStorage.removeItem('token');
@@ -175,7 +170,14 @@
             //bouton
 			togglewModifierElement(){
 				this.showModifierElement = !this.showModifierElement
+            },			
+            boutonSupprimer(){
+				this.voirSupprimer = !this.voirSupprimer
             },
+            nonDeleteUser(){
+                this.voirSupprimer = !this.voirSupprimer
+            },
+            
             //format date
             dateFormat(date){
                 if (date) {

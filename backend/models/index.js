@@ -17,10 +17,12 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 
 db.Sequelize = Sequelize;
+//Models
 db.Post = require('./post')(sequelize, Sequelize);
 db.User = require('./user')(sequelize, Sequelize);
 db.Like = require('./like')(sequelize, Sequelize);
 db.Commentaire = require('./commentaire')(sequelize, Sequelize);
+//Liens
 db.Post.belongsTo(db.User, {foreignKey: 'userId', as: 'User'});
 db.Commentaire.belongsTo(db.User, {foreignKey: 'userId', as: 'User'});
 db.Like.belongsTo(db.Post, {foreignKey: 'postId', as: 'Post'})

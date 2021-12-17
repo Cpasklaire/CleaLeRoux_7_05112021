@@ -32,7 +32,9 @@
         name: 'Commentaire',
         components: {
         },
+        
         props: ['postId', 'commentaires'],
+        
         data() {
             return {
                 //identification
@@ -42,14 +44,6 @@
         },
 
         methods: {
-
-            // format date
-            dateFormat(date){
-                if (date) {
-                    return moment(String(date)).format('DD/MM/YYYY')
-                }
-            },
-
             // supprimer un commentaire
             deleteCommentaire() {
 
@@ -63,6 +57,12 @@
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
 
+            // format date
+            dateFormat(date){
+                if (date) {
+                    return moment(String(date)).format('DD/MM/YYYY')
+                }
+            },
         }
     }
 </script>

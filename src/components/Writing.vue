@@ -17,7 +17,7 @@
         name: 'writing',
         components: {
         },
-        
+
         data() {
             return {
                 text: '',                
@@ -29,7 +29,7 @@
         }, 
         
         methods: {
-            // Permet de créer un nouveau message
+            // créer un message
             onFileSelected(event) {
                 this.imageURL = event.target.files[0];
                 this.imagePreview = URL.createObjectURL(this.imageURL);

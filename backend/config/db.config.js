@@ -1,4 +1,5 @@
 //connexion à la base de données
+
 module.exports = {
     DB: 'groupomania',
     USER: 'root',

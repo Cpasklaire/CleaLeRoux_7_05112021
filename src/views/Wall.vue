@@ -36,6 +36,7 @@
                             <i class="far fa-heart coeurvide"></i>
                             <i class="fas fa-bacon calque"></i>
                         </button>
+                        <!--<i v-if="userId == like.userId" class="fas fa-heart coeurrempli"></i>-->
                         <span v-if="post.likes > 0" class="likeCompteur">{{ post.likes }}</span>
                         <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
                         <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
@@ -49,7 +50,7 @@
 
                 <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
                 <Commentaire :postId="post.id" :commentaires="commentaires" />
-                <!-- v-if="1 || commentSectionId == 'commentSection-' + post.id" -->
+                  
             </div>
         </div>
     </div>
@@ -101,7 +102,6 @@
         },
 
         mounted() {
-            //afficher les posts
             axios.get('http://localhost:3000/api/post', {
                 headers: {
                     'Content-Type' : 'application/json',
@@ -113,27 +113,16 @@
         },
 
         methods: {
-            repondre(replyFormId) {
-                this.replyFormId = replyFormId
-            },
-
-            // format date
-            dateFormat(date){
-                if (date) {
-                    return moment(String(date)).format('DD/MM/YYYY')
-                }
-            },
-
-            //bouton
-			modifPostBouton(){
-				this.voirModifPost = !this.voirModifPost
-            },
             // modifier post
             modifPost(modifId) {
                 this.modifSectionId = modifId;
                 const postId = modifId.replace('modifSection-', '');
 
-                axios.put('http://localhost:3000/api/post/' + postId,  {
+                const formData = new FormData();
+                formData.append("statut", this.statut);
+                formData.append("userId", this.userId);
+
+                axios.put('http://localhost:3000/api/post/' + postId, formData, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token'),
                         'Content-Type': 'multipart/form-data'
@@ -174,17 +163,8 @@
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
 
-
-
-            applyFilter(filter) {
-                this.filter = filter
-            },
-
             //like
             likePost(postId) {
-                // this.likeFormId = formId;
-                // const postId = formId.replace('likeForm-', '');
-
                 axios.get('http://localhost:3000/api/post/' + postId + '/like', {
                     headers: {
                         'Content-Type' : 'application/json',
@@ -236,6 +216,26 @@
                 })
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
+
+            // format date
+            dateFormat(date){
+                if (date) {
+                    return moment(String(date)).format('DD/MM/YYYY')
+                }
+            },
+
+            //bouton
+			modifPostBouton(){
+				this.voirModifPost = !this.voirModifPost
+            },            
+            repondre(replyFormId) {
+                this.replyFormId = replyFormId
+            },
+            applyFilter(filter) {
+                this.filter = filter
+            },
+
+
         }
     }
 </script>

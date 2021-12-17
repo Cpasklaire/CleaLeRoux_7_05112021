@@ -20,7 +20,7 @@ exports.likePost = (req, res, next) => {
                 postId: req.params.postId,
                 userId: userId
             })
-            .then(response => {
+            .then(() => {
                 db.Post.update({
                     likes: postfound.likes +1
                 },{
@@ -28,13 +28,11 @@ exports.likePost = (req, res, next) => {
                 })
                 .then(() => res.status(201).json({ message: 'Message liker' }))
                 .catch(error => {
-                    console.log(' ERROR updating a post to add a like')
                     console.log(error)
                     res.status(500).json({ error: 'Like échoué' })
                 })
             })
             .catch(error => {
-                console.log(' ERROR creating a like entry')
                 console.log(error)
                 res.status(400).json({ error: 'Like échoué' })
             })
@@ -53,20 +51,17 @@ exports.likePost = (req, res, next) => {
                 })
                 .then(() => res.status(201).json({ message: 'Message dé-liker' }))
                 .catch(error => {
-                    console.log(' ERROR updating a post to remove a like')
                     console.log(error)
                     res.status(500).json({ error: 'Dé-like échoué' })
                 })
             })
             .catch(error => {
-                console.log('ERROR adding a like entry 2')
                 console.log(error)
                 res.status(400).json({ error: 'Dé-like échoué' })
             })
         }
     })
     .catch(error => {
-        console.log(' ERROR loading the post to like / dislike')
         consol.log(error)
         res.status(400).json({ error: 'Like ou dé-like échoué' })
     })
@@ -86,7 +81,6 @@ exports.getAllLike = (req, res, next) => {
     .then(likePostFound => {
         if(likePostFound) {
             res.status(200).json(likePostFound);
-            console.log(likePostFound);
         } else {
             res.status(404).json({ error: 'Ce message n\'a pas été liker' });
         }

@@ -12,7 +12,6 @@ exports.signup = (req, res, next) => {
     let firstName = req.body.firstName;
     let email = req.body.email;
     let password = req.body.password;
-    console.log(1);
     //Champs complet
     if(lastName == null || lastName == '' || firstName == null || firstName == ''|| email == null || email == '' ||  password == null || password == '') {
         return res.status(400).json({ error: 'Merci de remplire tous les champs' });
@@ -28,7 +27,6 @@ exports.signup = (req, res, next) => {
     })
     .then(userExist => {
         if(!userExist) {
-            console.log(2);
             bcrypt.hash(req.body.password, 10)
             .then(hash => {
                 const user = db.User.build({
@@ -49,7 +47,7 @@ exports.signup = (req, res, next) => {
                 res.status(500).json({ error: 'Création du compte échoué' })
             });
         } else {
-            console.log('User already exists')
+            console.log(error)
             return res.status(404).json({ error: 'Vous étes déjà inscrit' })
         }
     })
@@ -135,10 +133,7 @@ exports.modifyUserProfile = (req, res, next) => {
     ...JSON.parse(req.body.user),
     avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-
-
     console.log(userObject)
-    // return;
 
     db.User.findOne({
         where: { id: userId },

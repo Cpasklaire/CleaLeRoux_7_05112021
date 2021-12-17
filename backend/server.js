@@ -1,3 +1,5 @@
+//require('dotenv').config()
+
 /*créer un serveur Node*/
 const http = require('http'); //package HTTP natif de Node
 const app = require('./app');

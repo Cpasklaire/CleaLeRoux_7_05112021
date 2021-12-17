@@ -53,18 +53,22 @@
         },
 
         methods: {
+            //filtres
             showMessages: function(filter) {
                 this.$emit('filterMessages', filter)
             },
+            selectFilter: function() {
+                this.$emit('selectFilter', this.filter)
+            },
+            //écrire
             togglewWriteElement: function() {
                 this.showWriteElement = !this.showWriteElement
             },
+            //logo
             actualiser: function() {
                 window.location.reload()
             },
-            selectFilter: function() {
-                this.$emit('selectFilter', this.filter)
-            }
+
         }
     }
 </script>
