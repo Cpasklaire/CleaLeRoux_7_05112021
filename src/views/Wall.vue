@@ -46,11 +46,9 @@
                         <button v-if="userId == post.userId" v-on:click="modifPostBouton('modifSection-' + post.id)">Modifier</button>
                         <button v-if="userId == post.userId || statut == 'admin'" v-on:click="deletePost(post.id)">Supprimer</button>
                     </div>
+                    <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
+                    <Commentaire :postId="post.id" :commentaires="commentaires" />
                 </article>
-
-                <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
-                <Commentaire :postId="post.id" :commentaires="commentaires" />
-                  
             </div>
         </div>
     </div>
@@ -248,6 +246,9 @@
     border-radius: 20px;
     margin: 3%;
     padding: 3%;
+    animation-timing-function: ease-in;    
+    animation-name: apparition;
+    animation-duration: 1s;
     .ecrivain
     {
         display: flex;
@@ -355,4 +356,47 @@
         }
     }
 }
+@keyframes apparition
+{
+    from
+    {
+        opacity: 0;
+        margin-top: 10%;
+    }
+    to
+    {
+        opacity: 100%;
+        margin-top: 0%;
+    }
+}
+    @media (min-width: 992px)
+    {
+        .post
+        {
+            .ecrivain
+            {
+                .fa-user-astronaut
+                {
+                    font-size: 60px;
+                    height: 50px;
+                    width: 50px;
+                }
+            }
+            .boutons
+            {
+                button
+                {
+                  width: 30%;  
+                  font-size: 1.7em;
+                }
+            }
+            .ecrivain-boutons
+            {
+                button
+                {
+                    width: 30%;
+                }
+            }
+        }
+    }
 </style>

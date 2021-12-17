@@ -7,6 +7,7 @@ const fs = require('fs');
 exports.createPost = (req, res, next) => {
     const text = req.body.text;
     const imageURL = req.body.imageURL;
+    //recupéré userId
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
@@ -68,6 +69,11 @@ exports.getAllPosts = (req, res, next) => {
 //PUT
 // Modifier un message
 exports.modifyPost = (req, res, next) => {
+        //recupéré userId
+        const token = req.headers.authorization.split(' ')[1];
+        const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+        const userId = decodedToken.userId;
+        
     const postObject = req.file ?
     {
     text: req.body.text,
