@@ -20,16 +20,6 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   }
 });
 
-
-db.Sequelize = Sequelize;
-
-db.post = require('./models/Post')(sequelize, Sequelize);
-db.user = require('./models/User')(sequelize, Sequelize);
-db.like = require('./models/Like')(sequelize, Sequelize);
-db.commentaire = require('./models/Commentaire')(sequelize, Sequelize);
-
-module.exports = db;
-
 const dbConnection = async () => {
     try {
         await sequelize.authenticate()
