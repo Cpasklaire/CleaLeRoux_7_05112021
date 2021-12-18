@@ -11,8 +11,9 @@ exports.createPost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
+    console.log(req.body.imageURL);
 
-    if (text == null || text == '' && imageURL == null) {
+    if (text == '' && imageURL == null) {
         return res.status(400).json({ error: 'Ecrivez ou mettez une image' });
     }
     db.User.findOne({

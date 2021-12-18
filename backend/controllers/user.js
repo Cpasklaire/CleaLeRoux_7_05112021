@@ -127,23 +127,26 @@ exports.modifyUserProfile = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
-    //Avatar
+    req.body.user = userId
+    //Avatar    
+
     const userObject = req.file ?
     {
     ...JSON.parse(req.body.user),
     avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-    console.log(userObject)
+console.log(userObject);
+    console.log('avatarpeutetre')
 
     db.User.findOne({
         where: { id: userId },
     })
-    .then(userFound => {
+    .then(userFound => {    
         if(userFound) {          
             db.User.update(userObject, {
                 where: { id: userId},
             })
-            .then(user => res.status(200).json({ message: 'Profil mis à jour' }))
+            .then(() => res.status(200).json({ message: 'Profil mis à jour' }))
             .catch(error => {
                 console.log(error)
                 res.status(400).json({ error: 'Modification du profil échoué' })

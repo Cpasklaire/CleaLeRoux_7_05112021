@@ -22,7 +22,7 @@
             return {
                 text: '',                
                 imagePreview:'',
-                image: '',
+                imageURL: '',
                 messError: '',
                 userId: localStorage.getItem('userId'),
             }

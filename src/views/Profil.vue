@@ -105,7 +105,7 @@
                 this.user = response.data;
                 console.log(response.data)
             })
-            .catch(() => {this.messError = 'Une erreur c\'est produite'})
+            .catch(() => {this.messError = 'Une erreur c\'est produite'})  
 		},
 
 		methods: {
@@ -119,7 +119,7 @@
 
 				const formData = new FormData();
                 if (this.avatar) {
-                    formData.append("avatar", this.avatar);
+                    formData.append("image", this.avatar);
                 }
 				if (this.user.description) {
                     formData.append("description", this.user.description);
@@ -135,8 +135,9 @@
 					}
 				})
                 .then(() => {
-                    this.messReussite = 'Profile modifié';
-                    // window.location.reload();
+                    this.messReussite = 'Profile modifié';                      
+                    window.location.reload();
+
                 })
                 .catch(() => {this.messError = 'Une erreur s\'est produite'})
 			},
