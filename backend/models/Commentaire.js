@@ -9,11 +9,21 @@ module.exports = (sequelize, Sequelize) => {
   },
   postId: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: 'Posts',
+      key: 'id',
+      as: 'Post' 
+    }
   },
   userId: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'id',
+      as: 'User' 
+    }
   },
   //Texte
   text: {

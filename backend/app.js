@@ -3,9 +3,6 @@ const express = require('express');
 const app = express(); /*application Express*/
 const dbConfig = require('../Backend/config/db.config');
 const Sequelize = require('sequelize');
-const db = require('./models');
-
-
 
 /*Connection à la database*/
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {

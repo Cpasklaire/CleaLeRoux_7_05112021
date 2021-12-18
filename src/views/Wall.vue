@@ -47,7 +47,7 @@
                         <button v-if="userId == post.userId || statut == 'admin'" v-on:click="deletePost(post.id)">Supprimer</button>
                     </div>
                     <WritingComm :postId="post.id" v-if="replyFormId == 'replyForm-' + post.id"/>
-                    <Commentaire :postId="post.id" :commentaires="commentaires" />
+                    <Commentaire :postId="post.id" :commentaires="commentaires" v-if="commentSectionId == 'commentSection-' + post.id"/>
                 </article>
             </div>
         </div>
@@ -148,6 +148,7 @@
             voir(sectionId) {
                 this.commentSectionId = sectionId;
                 this.boutonVoir = !this.boutonVoir
+                
 
                 const postId = sectionId.replace('commentSection-', '');
 

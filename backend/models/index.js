@@ -25,6 +25,7 @@ db.Commentaire = require('./commentaire')(sequelize, Sequelize);
 //Liens
 db.Post.belongsTo(db.User, {foreignKey: 'userId', as: 'User'});
 db.Commentaire.belongsTo(db.User, {foreignKey: 'userId', as: 'User'});
+db.Commentaire.belongsTo(db.Post, {foreignKey: 'postId', as: 'Post'});
 db.Like.belongsTo(db.Post, {foreignKey: 'postId', as: 'Post'})
 db.Like.belongsTo(db.User, {foreignKey: 'userId', as: 'User'})
 
