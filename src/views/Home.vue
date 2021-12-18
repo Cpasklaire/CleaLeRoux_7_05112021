@@ -12,7 +12,7 @@
                 <label for="mail" class="login-email">Courriel</label>
                 <input type="email" v-model="loginemail" id="loginemail" name="mail" placeholder="M.Kido@groupomania.com">
                 <label for="password" class="login-mdp">Mot de passe</label>
-                <input type="current-password" v-model="loginmdp" id="loginmdp" name="password" placeholder="**********">
+                <input type="password" autocomplete="current-password" v-model="loginmdp" id="loginmdp" name="password" placeholder="**********">
                 <button class="login-bouton">Connexion</button>
             </form>
 
@@ -28,7 +28,7 @@
                 <label for="mail" class="signup-email">Courriel</label>
                 <input type="email" v-model="signupemail" id="signupemail" name="mail" placeholder="M.Kido@groupomania.com">
                 <label for="password" class="signup-mdp">Mot de passe</label>
-                <input type="current-password" v-model="signupmdp" id="signupmdp" name="password" placeholder="**********">
+                <input type="password" autocomplete="current-password" v-model="signupmdp" id="signupmdp" name="password" placeholder="**********">
                 <button class="signup-bouton">Inscription</button>
             </form>
         </div>

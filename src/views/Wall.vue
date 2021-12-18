@@ -7,7 +7,7 @@
                 <article class="post">
 
                     <div class="ecrivain">
-                        <img v-if="post.User.avatar == !null" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
+                        <img v-if="post.User.avatar" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
                         <i v-if="post.User.avatar == null || post.User.avatar == ''" class="fa fa-user-astronaut"></i>
                         <span> {{post.User.lastName}} {{post.User.firstName}} </span>
                     </div>
@@ -262,6 +262,14 @@
             height: 35px;
             width: 35px;
             color: #091F43;
+            overflow: hidden;
+        }
+        img
+        {
+            border-radius: 100%;
+            border: solid 3px #D1515A;
+            height: 35px;
+            width: 35px;
             overflow: hidden;
         }
         span

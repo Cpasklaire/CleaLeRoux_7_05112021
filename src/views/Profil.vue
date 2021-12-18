@@ -1,12 +1,13 @@
 <template>
     <div>
         <section class="profil" >
-        <router-link to="/wall"><i class="fas fa-arrow-circle-left"></i></router-link>
+        <router-link to="/wall" v-if="!showModifierElement"><i class="fas fa-arrow-circle-left"></i></router-link>
+        <button v-on:click="togglewModifierElement" v-if="showModifierElement" class="boutonRetour"><i class="fas fa-arrow-circle-left"></i></button>
         <button v-on:click="logout" class="pc logout">Déconnexion</button>
             <!--profil-->
             <div class="entete">
                 <i v-if="user.avatar == null || user.avatar == ''" class="fa fa-user-astronaut"></i>
-                <img v-if="user.avatar == !null" :src="user.avatar" :alt="'avatar de' + user.firstname + user.lastname" class="avatar">
+                <img v-if="user.avatar" :src="user.avatar" :alt="'avatar de' + user.firstname + user.lastname" class="avatar">
                 <h2>{{user.lastName}} {{user.firstName}}</h2>
             </div>
 
@@ -52,12 +53,12 @@
         <form v-if="showModifierElement">
             <label>Avatar</label>
             <img v-if="imagePreview" :src="imagePreview" class="preview"/>
-            <input type="file" @change="onFileSelected" accept="image/*">
+            <input type="file" v-on:change="onFileSelected" accept="image/*">
             <label>Description</label>
             <textarea v-model="user.description" type="text" class="description" placeholder="Taper votre description ici" />
             <label>Mot de passe</label>
-            <input v-model="password" type="current-password" placeholder="**********"/>
-            <button @click="modifProfil" type="button">Valider</button>
+            <input v-model="password" type="password" autocomplete="current-password" placeholder="**********"/>
+            <button v-on:click="modifProfil" type="button">Valider</button>
         </form>
 
         <span>{{messError}}</span>
@@ -101,7 +102,6 @@
                 }
             })
             .then(response => {
-                console.log(response.data)
                 this.user = response.data;
                 console.log(response.data)
             })
@@ -135,7 +135,9 @@
 					}
 				})
                 .then(() => {
-                    this.messReussite = 'Profile modifié';                      
+                    this.messReussite = 'Profile modifié';
+                    localStorage.removeItem('avatar');  
+                    localStorage.setItem('avatar', this.avatar);                    
                     window.location.reload();
 
                 })
@@ -193,6 +195,10 @@
 .profil
 {
     margin: 3%;
+    .boutonRetour
+    {
+        box-shadow: none;
+    }
     .fa-arrow-circle-left
     {
         color: #091F43;
