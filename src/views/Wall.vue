@@ -164,6 +164,7 @@
 
             //like
             likePost(postId) {
+                //rechercher les likes avec le postID
                 axios.get('http://localhost:3000/api/post/' + postId + '/like', {
                     headers: {
                         'Content-Type' : 'application/json',
@@ -171,6 +172,7 @@
                     }
                 })
                 .then(response => {this.postLikes = response.data;
+                    //si le post n'a pas de like créé la ligne
                     if(this.postLikes.length == 0) {
                         this.like = false
                         axios.post('http://localhost:3000/api/post/' + postId + '/like', {
@@ -184,6 +186,7 @@
                         .then(() => {window.location.reload()})
                         .catch(() => {this.messError = 'Une erreur c\'est produite'})
                     } else {
+                        //si le post n'a pas de like de l'user, liker
                         if(this.postLikes.find(localStorage.getItem('userId') == this.userId)) {
                             this.like = true
 
@@ -198,6 +201,7 @@
                             .then(() => {window.location.reload()})
                             .catch(() => {this.messError = 'Une erreur c\'est produite'})
                         } else {
+                            //si le post a un like de l'user, déliker
                             this.like = false
 
                             axios.post('http://localhost:3000/api/post/' + this.postId + '/like', {
