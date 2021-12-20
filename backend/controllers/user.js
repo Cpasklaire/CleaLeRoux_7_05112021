@@ -79,6 +79,7 @@ exports.login = (req, res, next) => {
                     statut: user.statut,
                     avatar: user.avatar,
                     description: user.description,
+                    lastRefreshDate: new Date(),
                     token: jwt.sign(
                         {userId: user.id},
                         'RANDOM_TOKEN_SECRET',

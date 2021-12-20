@@ -297,6 +297,13 @@
             font-size: 1.5em;
         }
     }
+    form 
+    {
+        textarea
+        {
+            width: 100%;
+        }
+    }
     .contenu
     {
         background: #091f4312;

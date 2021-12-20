@@ -1,5 +1,7 @@
 Bienvenue sur Grouposocial le réseau social de Groupomania
 
+Vous avez besoin pour lire cette appli de Vue.js, Node.js et Mysql
+
 ## Installer le projet
 Clonnez le github
 Dans la racide du projet lancer

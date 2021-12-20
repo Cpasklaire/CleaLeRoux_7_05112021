@@ -3,8 +3,6 @@
         <div v-for="commentaire in commentaires" :key="commentaire.commentaireId">
             <div class="commentaire">
                 <div class="ecrivain">
-                    <img v-if="commentaire.User.avatar == !null" :src="commentaire.User.avatar" :alt="'avatar de' + commentaire.User.lastName + commentaire.User.firstName" class="avatar"/>
-                    <i v-if="commentaire.User.avatar == null || commentaire.User.avatar == ''" class="fa fa-user-astronaut"></i>
                     <span> {{commentaire.User.lastName}} {{commentaire.User.firstName}} </span>
                 </div>
 
@@ -79,17 +77,6 @@
     {
         display: flex;
         align-items: center;
-        .fa-user-astronaut
-        {
-            font-size: 45px;
-            padding: 10px;
-            border-radius: 100%;
-            border: solid 3px #D1515A;
-            height: 35px;
-            width: 35px;
-            color: #091F43;
-            overflow: hidden;
-        }
         span
         {
             margin-left: 3%;

@@ -34,7 +34,7 @@
         </div>
 
         <span>{{messError}}</span>
-        <span>{{messReussite}}</span>
+        <span class="reussite">{{messReussite}}</span>
     </div>
 </template>
 
@@ -163,6 +163,10 @@
         {
             width: 90%;
         }
+    }
+    .reussite
+    {
+        font-size: 1.4em;
     }
 
     @media (min-width: 992px)
