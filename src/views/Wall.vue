@@ -3,7 +3,7 @@
         <Header @selectFilter="applyFilter"/>
         <!--Publication -->
         <div v-for="post in posts" :key="post.postId">
-            <div  v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && post.createdAt <= lastUpdateDate)">
+            <div  v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && post.createdAt <= user.lastRefreshDate)">
                 <article class="post">
 
                     <div class="ecrivain">
