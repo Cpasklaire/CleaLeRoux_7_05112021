@@ -27,16 +27,16 @@
 
                     <div class="date">
                         <span>Publié le {{ dateFormat(post.createdAt) }}</span>
-                        <span v-if="post.createdAt != post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
+                        <span v-if="post.createdAt !== post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
                     </div>
 
                     <div class="boutons">
-                        <button class="like" v-on:click="likePost(post.id)" v-if="userId && post.id != like.userId && like.postId" >
+                        <button class="like" v-on:click="likePost(post.id)" v-if="like=true" >
                             <i class="fas fa-heart coeurrempli"></i>
                             <i class="far fa-heart coeurvide"></i>
                             <i class="fas fa-bacon calque"></i>
                         </button>
-                        <i v-if="userId && post.id == like.userId && like.postId" class="fas fa-heart coeurrempli"></i>
+                        <i v-if="like=false" class="fas fa-heart coeurrempli"></i>
                         <span v-if="post.likes > 0" class="likeCompteur">{{ post.likes }}</span>
                         <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
                         <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
@@ -113,7 +113,7 @@
 
         methods: {
             // modifier post
-                        onFileSelected(event) {
+            onFileSelected(event) {
                 this.imageURL = event.target.files[0];
                 this.imagePreview = URL.createObjectURL(this.imageURL);
             }, 

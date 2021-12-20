@@ -16,49 +16,57 @@ exports.likePost = (req, res, next) => {
     .then(postfound => {
         if(!postfound) {
             return res.status(404).json({ error: 'Aucun message trouvé :(' })
-        } else if (liked == false) {console.log('coucou');
-            db.Like.create({
-                postId: req.params.postId,
-                userId: userId
-            })
-            .then(() => {
-                db.Post.update({
-                    likes: postfound.likes +1
-                },{
-                    where: { id: req.params.postId }
-                })
-                .then(() => res.status(201).json({ message: 'Message liker' }))
-                .catch(error => {
-                    console.log(error)
-                    res.status(500).json({ error: 'Like échoué' })
-                })
-            })
-            .catch(error => {
-                console.log(error)
-                res.status(400).json({ error: 'Like échoué' })
-            })
-        } else if(liked == true) {
-            db.Like.destroy({
-                where: {
+        } 
+        else {
+            db.Like.findOne({
+                attributes: ['userId'],
+                where: { 
                     postId: req.params.postId,
                     userId: userId
+                },
+            })
+            .then(userExist => {
+                if(!userExist) {
+                    db.Like.create({
+                        postId: req.params.postId,
+                        userId: userId
+                    })
+                    .then(() => {
+                        db.Post.update({
+                            likes: postfound.likes +1
+                        },{
+                            where: { id: req.params.postId }
+                        })
+                        .then(() => res.status(201).json({ message: 'Message liker' }))
+                        .catch(error => {
+                            console.log(error)
+                            res.status(500).json({ error: '1Like échoué' })
+                        })
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        res.status(400).json({ error: '2Like échoué' })
+                    })
+                } else {
+                    db.Like.destroy({
+                        where: {
+                            postId: req.params.postId,
+                            userId: userId
+                        }
+                    })
+                    .then(() => {
+                        db.Post.update({
+                            likes: postfound.likes -1
+                        },{
+                            where: { id: req.params.postId }
+                        })
+                        .then(() => res.status(201).json({ message: 'Message dé-liker' }))
+                        .catch(error => {
+                            console.log(error)
+                            res.status(500).json({ error: 'Dé-like échoué' })
+                        })
+                    })
                 }
-            })
-            .then(() => {
-                db.Post.update({
-                    likes: postfound.likes -1
-                },{
-                    where: { id: req.params.postId }
-                })
-                .then(() => res.status(201).json({ message: 'Message dé-liker' }))
-                .catch(error => {
-                    console.log(error)
-                    res.status(500).json({ error: 'Dé-like échoué' })
-                })
-            })
-            .catch(error => {
-                console.log(error)
-                res.status(400).json({ error: 'Dé-like échoué' })
             })
         }
     })
