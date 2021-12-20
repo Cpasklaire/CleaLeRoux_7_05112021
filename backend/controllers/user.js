@@ -1,8 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-//require('dotenv').config();
-
 const db = require('../models/index');
 
 // POST
@@ -79,11 +77,11 @@ exports.login = (req, res, next) => {
                     statut: user.statut,
                     avatar: user.avatar,
                     description: user.description,
-                    lastRefreshDate: new Date(),
+                    //lastRefreshDate: new Date(),
                     token: jwt.sign(
                         {userId: user.id},
                         'RANDOM_TOKEN_SECRET',
-                        {expiresIn: '1h'}
+                        {expiresIn: '24h'}
                     )
                 });
             })
@@ -129,13 +127,12 @@ exports.modifyUserProfile = async (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     req.body.user = userId
-    // console.log(typeof req.body)
-    // console.log(req.body)
+
     let userObject = {
         ...req.body
     };
 
-    // Password (with hash)
+    // Password
     if (userObject.password) {
         console.log("password change for user " + userId)
         userObject.password = await bcrypt.hash(userObject.password, 10)

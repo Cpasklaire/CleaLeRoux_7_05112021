@@ -11,7 +11,6 @@
                 <h2>{{user.lastName}} {{user.firstName}}</h2>
             </div>
 
-
             <div v-if="!showModifierElement">
                 <div class="descrinfo">
                     <p v-if="user.description == null">Vous n'avez pas encore de description</p>

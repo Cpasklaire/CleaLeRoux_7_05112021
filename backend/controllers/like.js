@@ -13,12 +13,12 @@ exports.likePost = (req, res, next) => {
     db.Post.findOne({
         where: { id: req.params.postId },
     })
-    .then(postfound => {
+    .then(postfound => { //Existence du post
         if(!postfound) {
             return res.status(404).json({ error: 'Aucun message trouvé :(' })
         } 
         else {
-            db.Like.findOne({
+            db.Like.findOne({ //User a déjà like ? 
                 attributes: ['userId'],
                 where: { 
                     postId: req.params.postId,
@@ -26,8 +26,8 @@ exports.likePost = (req, res, next) => {
                 },
             })
             .then(userExist => {
-                if(!userExist) {
-                    db.Like.create({
+                if(!userExist) { //pas encore liker
+                    db.Like.create({ 
                         postId: req.params.postId,
                         userId: userId
                     })
@@ -47,7 +47,7 @@ exports.likePost = (req, res, next) => {
                         console.log(error)
                         res.status(400).json({ error: '2Like échoué' })
                     })
-                } else {
+                } else { //déja liker
                     db.Like.destroy({
                         where: {
                             postId: req.params.postId,

@@ -83,8 +83,6 @@ exports.getAllPosts = (req, res, next) => {
 //PUT
 // Modifier un message
 exports.modifyPost = (req, res, next) => {
-    console.log("EDITION DU MESSAGE")
-    console.log(req.body)
     //recupéré userId
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');

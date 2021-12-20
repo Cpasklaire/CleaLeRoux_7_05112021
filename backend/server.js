@@ -1,7 +1,6 @@
 /*créer un serveur Node*/
 const http = require('http'); //package HTTP natif de Node
 const app = require('./app');
-//require('dotenv').config();
 
 //normalizePort : renvoie un port valide
 const normalizePort = val => { 
@@ -11,7 +10,7 @@ const normalizePort = val => {
   return false;
 };
 
-const port = normalizePort(process.env.PORT || '3000'); //.env ? 
+const port = normalizePort(process.env.PORT || '3000');
 //app.set('port', port);
 
 //errorHandler : recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur 
