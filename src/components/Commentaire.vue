@@ -44,8 +44,9 @@
         methods: {
             // supprimer un commentaire
             deleteCommentaire() {
+                const commentaireId = this.commentaire.id;
 
-                axios.delete('http://localhost:3000/api/comment/' + this.commentaireId, {
+                axios.delete('http://localhost:3000/api/comment/' + commentaireId, {
                     headers: {
                         'Content-Type' : 'application/json',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')

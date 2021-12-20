@@ -97,7 +97,7 @@
             }
         },
 
-        mounted() {
+        mounted(){
             axios.get('http://localhost:3000/api/post', {
                 headers: {
                     'Content-Type' : 'application/json',
@@ -106,6 +106,19 @@
             })
             .then(response => {this.posts = response.data;})
             .catch(() => {this.messError = 'Une erreur c\'est produite'})
+
+            const userId = localStorage.getItem('userId');
+
+            axios.get('http://localhost:3000/api/user/' + userId, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            .then(response => {
+                this.user = response.data;
+            })
+            .catch(() => {this.messError = 'Une erreur c\'est produite'})  
+
         },
 
         methods: {
@@ -229,6 +242,7 @@
     animation-timing-function: ease-in;    
     animation-name: apparition;
     animation-duration: 1s;
+    
     .ecrivain
     {
         display: flex;
