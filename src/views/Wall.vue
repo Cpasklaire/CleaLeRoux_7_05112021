@@ -81,12 +81,10 @@
                 posts: [],
                 post: '',
                 imageURL: '',
-                // text: '',
                 //affichage commentaire
                 commentaires: [],
                 imagePreview:'',
                 //Like
-                like: false,
                 postLikes: [],
                 //bouton
                 boutonVoir: false,
@@ -94,7 +92,6 @@
                 replyFormId: '',
                 commentSectionId: '',
                 likeFormId: '',
-                // voirModifPost: '',
                 modifId: '',
                 
             }
@@ -179,7 +176,6 @@
                     }
                 })
                 .then(response => {this.postLikes = response.data;
-                        this.like = false
                         axios.post('http://localhost:3000/api/post/' + postId + '/like', {
                             like: this.like,
                         },{
