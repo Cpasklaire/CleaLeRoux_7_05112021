@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueRouteMiddleware from 'vue-route-middleware'
 import Home from '../views/Home.vue'
 import auth from '../middleware/auth'
 
@@ -31,9 +32,9 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
-// ??
+
+router.beforeEach(VueRouteMiddleware())
 
 export default router

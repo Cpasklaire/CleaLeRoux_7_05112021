@@ -69,16 +69,21 @@ exports.getAllPosts = (req, res, next) => {
 //PUT
 // Modifier un message
 exports.modifyPost = (req, res, next) => {
-        //recupéré userId
-        const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-        const userId = decodedToken.userId;
-        
-    const postObject = req.file ?
+    console.log("EDITION DU MESSAGE")
+    console.log(req.body)
+    //recupéré userId
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const userId = decodedToken.userId;        
+    let postObject = {
+        ...req.body
+    }    
+    if (req.file)
     {
-    text: req.body.text,
-    imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
+        postObject.imageURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    }
+    console.log(postObject)
+
     db.Post.findOne({
         where: {  id: req.params.postId },
     })

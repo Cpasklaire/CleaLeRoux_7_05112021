@@ -12,12 +12,12 @@
                         <span> {{post.User.lastName}} {{post.User.firstName}} </span>
                     </div>
 
-                    <div v-if="!voirModifPost" class="contenu">
+                    <div v-if="modifId != 'modifSection-' + post.id" class="contenu">
                         <p>{{post.text}}</p>
                         <img :src="post.imageURL" style="max-width: 100%" />
                     </div>
                     <div>
-                    <form :postId="post.id" v-if="modifId == 'modifSection-' + post.id" v-on:submit.prevent="modifPost">
+                    <form :postId="post.id" v-if="modifId == 'modifSection-' + post.id" v-on:submit.prevent="modifPost(post)">
                         <textarea v-model="post.text" class="" name="message" id="message"/>    
                         <img v-if="imagePreview" :src="imagePreview" id="preview" class=""/>     
                         <input type="file" @change="onFileSelected" accept="image/*">       
@@ -81,9 +81,10 @@
                 posts: [],
                 post: '',
                 imageURL: '',
-                text: '',
+                // text: '',
                 //affichage commentaire
                 commentaires: [],
+                imagePreview:'',
                 //Like
                 like: false,
                 postLikes: [],
@@ -93,7 +94,7 @@
                 replyFormId: '',
                 commentSectionId: '',
                 likeFormId: '',
-                voirModifPost: false,
+                // voirModifPost: '',
                 modifId: '',
                 
             }
@@ -112,22 +113,28 @@
 
         methods: {
             // modifier post
-            modifPost(modifId) {
-                this.modifSectionId = modifId;
-                const postId = modifId.replace('modifSection-', '');
-
-                const formData = new FormData();
-                formData.append("statut", this.statut);
+                        onFileSelected(event) {
+                this.imageURL = event.target.files[0];
+                this.imagePreview = URL.createObjectURL(this.imageURL);
+            }, 
+            
+            modifPost(post) {    
+                const formData = new FormData();                
                 formData.append("userId", this.userId);
+                formData.append("text", post.text);
+                formData.append("image", this.imageURL);
 
-                axios.put('http://localhost:3000/api/post/' + postId, formData, {
+
+                axios.put('http://localhost:3000/api/post/' + post.id, formData, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token'),
                         'Content-Type': 'multipart/form-data'
                     }
                 })
-                .then(() => {window.location.reload()})
-                .catch(() => {this.messError = 'Une erreur c\'est produite'})
+                .then(() => {
+                    window.location.reload()}
+                )
+                .catch(() => {this.messError = 'Une erreur s\'est produite'})
             },
 
             // supprimer post
@@ -228,8 +235,13 @@
             },
 
             //bouton
-			modifPostBouton(){
-				this.voirModifPost = !this.voirModifPost
+			modifPostBouton(postModifSection){
+				// this.voirModifPost = !this.voirModifPost
+                if (this.modifId == postModifSection) {
+                    this.modifId = ''
+                } else {
+                    this.modifId = postModifSection
+                }
             },            
             repondre(replyFormId) {
                 this.replyFormId = replyFormId

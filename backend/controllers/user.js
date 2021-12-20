@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-require('dotenv').config();
+//require('dotenv').config();
 
 const db = require('../models/index');
 
@@ -82,7 +82,7 @@ exports.login = (req, res, next) => {
                     token: jwt.sign(
                         {userId: user.id},
                         'RANDOM_TOKEN_SECRET',
-                        {expiresIn: '24h'}
+                        {expiresIn: '1h'}
                     )
                 });
             })
@@ -123,20 +123,30 @@ exports.getUserProfile = (req, res, next) => {
 
 //PUT
 // Se Modifier
-exports.modifyUserProfile = (req, res, next) => {
+exports.modifyUserProfile = async (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     req.body.user = userId
-    //Avatar    
+    // console.log(typeof req.body)
+    // console.log(req.body)
+    let userObject = {
+        ...req.body
+    };
 
-    const userObject = req.file ?
-    {
-    ...JSON.parse(req.body.user),
-    avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
-console.log(userObject);
-    console.log('avatarpeutetre')
+    // Password (with hash)
+    if (userObject.password) {
+        console.log("password change for user " + userId)
+        userObject.password = await bcrypt.hash(userObject.password, 10)
+    }
+    
+    //Avatar        
+    if (req.file) {
+        console.log("avatar change for user " + userId)
+        userObject.avatar = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    }
+    console.log(userObject);
+    
 
     db.User.findOne({
         where: { id: userId },

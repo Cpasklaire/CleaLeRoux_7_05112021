@@ -16,7 +16,7 @@ exports.likePost = (req, res, next) => {
     .then(postfound => {
         if(!postfound) {
             return res.status(404).json({ error: 'Aucun message trouvé :(' })
-        } else if (liked == false) {
+        } else if (liked == false) {console.log('coucou');
             db.Like.create({
                 postId: req.params.postId,
                 userId: userId

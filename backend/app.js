@@ -4,6 +4,7 @@ const app = express(); /*application Express*/
 const helmet = require('helmet');
 const dbConfig = require('../Backend/config/db.config');
 const Sequelize = require('sequelize');
+require('dotenv').config();
 
 /*Connection à la database*/
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
