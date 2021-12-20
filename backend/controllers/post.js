@@ -45,15 +45,29 @@ exports.createPost = (req, res, next) => {
 //GET
 // Voir tout les message
 exports.getAllPosts = (req, res, next) => {
-    db.Post.findAll({
+    //recupéré userId
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const userId = decodedToken.userId;
+    db.Post.findAll({        
         order: [['createdAt', "DESC"]] , //ordre date descendant
-        include: [{
-            model: db.User,
-            attributes: [ 'lastName', 'firstName', 'avatar' ],
-            as: 'User'
-        }]
+        include: [
+            {
+                model: db.User,
+                attributes: [ 'lastName', 'firstName', 'avatar' ],
+                as: 'User'
+            },
+            /*{ 
+                model:db.Like, 
+                as:'Likes', 
+                where: { 
+                    userId: userId                    
+                }                
+            }*/
+        ]
     })
     .then(postFound => {
+        console.log(postFound)
         if(postFound) {
             res.status(200).json(postFound);
         } else {

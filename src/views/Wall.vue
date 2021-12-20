@@ -27,16 +27,16 @@
 
                     <div class="date">
                         <span>Publié le {{ dateFormat(post.createdAt) }}</span>
-                        <span v-if="post.createdAt == !post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
+                        <span v-if="post.createdAt != post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
                     </div>
 
                     <div class="boutons">
-                        <button class="like" v-on:click="likePost(post.id)">
+                        <button class="like" v-on:click="likePost(post.id)" v-if="userId && post.id != like.userId && like.postId" >
                             <i class="fas fa-heart coeurrempli"></i>
                             <i class="far fa-heart coeurvide"></i>
                             <i class="fas fa-bacon calque"></i>
                         </button>
-                        <!--<i v-if="userId == like.userId" class="fas fa-heart coeurrempli"></i>-->
+                        <i v-if="userId && post.id == like.userId && like.postId" class="fas fa-heart coeurrempli"></i>
                         <span v-if="post.likes > 0" class="likeCompteur">{{ post.likes }}</span>
                         <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
                         <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
@@ -179,8 +179,6 @@
                     }
                 })
                 .then(response => {this.postLikes = response.data;
-                    //si le post n'a pas de like créé la ligne
-                    if(this.postLikes.length == 0) {
                         this.like = false
                         axios.post('http://localhost:3000/api/post/' + postId + '/like', {
                             like: this.like,
@@ -192,37 +190,6 @@
                         })
                         .then(() => {window.location.reload()})
                         .catch(() => {this.messError = 'Une erreur c\'est produite'})
-                    } else {
-                        //si le post n'a pas de like de l'user, liker
-                        if(this.postLikes.find(localStorage.getItem('userId') == this.userId)) {
-                            this.like = true
-
-                            axios.post('http://localhost:3000/api/post/' + this.postId + '/like', {
-                                like: this.like,
-                            },{
-                                headers: {
-                                    'Content-Type' : 'application/json',
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                }
-                            })
-                            .then(() => {window.location.reload()})
-                            .catch(() => {this.messError = 'Une erreur c\'est produite'})
-                        } else {
-                            //si le post a un like de l'user, déliker
-                            this.like = false
-
-                            axios.post('http://localhost:3000/api/post/' + this.postId + '/like', {
-                                like: this.like,
-                            },{
-                                headers: {
-                                    'Content-Type' : 'application/json',
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                }
-                            })
-                            .then(() => {window.location.reload()})
-                            .catch(() => {this.messError = 'Une erreur c\'est produite'})
-                        }
-                    }
                 })
                 .catch(() => {this.messError = 'Une erreur c\'est produite'})
             },
