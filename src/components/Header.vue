@@ -23,11 +23,11 @@
         <div class="pc">
             <router-link to="/profil" class="profil">Mon profil</router-link>
             <button v-on:click="togglewWriteElement">Ecrire un message</button>
-            <select>
-                <option v-on:click="showMessages('all')">Voir tous les messages</option>
-                <option v-on:click="showMessages('new')">Voir les messages non lu</option>
-                <option v-on:click="showMessages('image')">Voir les images</option>
-                <option v-on:click="showMessages('text')">Voir les textes</option>
+            <select v-model="filter" v-on:change="selectFilter">
+                <option value="all">Voir tous les messages</option>
+                <option value="new">Voir les messages non lu</option>
+                <option value="image">Voir les images</option>
+                <option value="text">Voir les textes</option>
             </select>
             <img v-on:click="actualiser" src="../assets/illutration/icon-left-font.png" alt="Logo de Groupomania"/>
         </div>
@@ -54,9 +54,6 @@
 
         methods: {
             //filtres
-            showMessages: function(filter) {
-                this.$emit('filterMessages', filter)
-            },
             selectFilter: function() {
                 this.$emit('selectFilter', this.filter)
             },

@@ -3,8 +3,8 @@
         <Header @selectFilter="applyFilter"/>
         <!--Publication -->
         <div v-for="post in posts" :key="post.postId">
-            <div  v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && post.createdAt <= user.lastRefreshDate)">
-                <article class="post">
+            <div  v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && (post.createdAt >= user.lastRefreshDate))">
+                <article class="post" v-if="filter == 'new' && style='background-color:blue'">
 
                     <div class="ecrivain">
                         <img v-if="post.User.avatar" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>

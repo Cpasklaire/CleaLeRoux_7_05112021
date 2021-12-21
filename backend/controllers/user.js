@@ -56,13 +56,16 @@ exports.signup = (req, res, next) => {
 };
 
 //Se connecter
-exports.login = (req, res, next) => {
+exports.login = (req, res, next) => {console.log('ici')
+
     db.User.findOne({
         where: { email: req.body.email }
     })
+    
     .then(user => {
         if(user) {
             bcrypt.compare(req.body.password, user.password)
+            
             .then(valid => {
                 if(!valid) {
                     return res.status(401).json({ error: 'Mot de passe incorrect' });
@@ -77,18 +80,28 @@ exports.login = (req, res, next) => {
                     statut: user.statut,
                     avatar: user.avatar,
                     description: user.description,
-                    //lastRefreshDate: new Date(),
                     token: jwt.sign(
                         {userId: user.id},
                         'RANDOM_TOKEN_SECRET',
                         {expiresIn: '24h'}
                     )
                 });
+                // Update las refresh
+                try {
+                    db.User.update({
+                        lastRefreshDate: db.Sequelize.literal('CURRENT_TIMESTAMP')
+                    }, {
+                        where: { id: user.id},
+                    })
+                } catch (error) {        
+                    console.log(error)
+                }            
             })
             .catch(error => {
                 console.log(error)
                 res.status(500).json({ error: 'Connection échoué' })
             });
+        
         } else {
             return res.status(404).json({ error: 'Vous n\'avez pas encore créé de compte' })
         }
@@ -97,6 +110,9 @@ exports.login = (req, res, next) => {
         console.log(error)
         res.status(500).json({ error: 'Connection échoué' })
     });
+
+
+
 }
 
 //GET
