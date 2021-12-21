@@ -64,6 +64,7 @@ exports.getAllCommentaires = (req, res, next) => {
 //DELETE
 // Supprimer un commentaire
 exports.deleteCommentaire = (req, res, next) => {
+    console.log('ici')
     db.Commentaire.findOne({
         attributes: ['id'],
         where: { id: req.params.commentaireId }

@@ -4,9 +4,9 @@
         <!--Publication -->
         <div v-for="post in posts" :key="post.postId">
             <div  v-if="filter == 'all' || (filter == 'image' && post.imageURL) || (filter == 'text' && !post.imageURL) || (filter == 'new' && (post.createdAt >= user.lastRefreshDate))">
-                <article class="post" v-if="filter == 'new' && style='background-color:blue'">
+                <article class="post" :class="post.createdAt >= user.lastRefreshDate ? 'nouveau':'' ">
 
-                    <div class="ecrivain">
+                    <div class="ecrivain" >                        
                         <img v-if="post.User.avatar" :src="post.User.avatar" :alt="'avatar de' + post.User.lastName + post.User.firstName" class="avatar"/>
                         <i v-if="post.User.avatar == null || post.User.avatar == ''" class="fa fa-user-astronaut"></i>
                         <span> {{post.User.lastName}} {{post.User.firstName}} </span>
@@ -36,7 +36,6 @@
                             <i class="far fa-heart coeurvide"></i>
                             <i class="fas fa-bacon calque"></i>
                         </button>
-                        <i v-if="like=false" class="fas fa-heart coeurrempli"></i>
                         <span v-if="post.likes > 0" class="likeCompteur">{{ post.likes }}</span>
                         <button v-on:click="repondre('replyForm-' + post.id)">Répondre</button>
                         <button v-on:click="voir('commentSection-' + post.id)">Voir les commentaires</button>
@@ -77,7 +76,7 @@
                 //identification
                 userId: localStorage.getItem('userId'),
                 statut: localStorage.getItem('statut'),
-                //affichage post
+                user: {},
                 posts: [],
                 post: '',
                 imageURL: '',
@@ -233,6 +232,9 @@
 
 
 <style scoped lang="scss">
+.post.nouveau {
+    border-color: blue;
+}
 .post
 {
     border: solid 3px #D1515A;

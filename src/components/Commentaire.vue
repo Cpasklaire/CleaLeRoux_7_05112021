@@ -13,7 +13,7 @@
                 <span class="date">Publié le {{ dateFormat(commentaire.createdAt) }}</span>
 
                 <div class="ecrivain-boutons" v-if="userId == commentaire.userId || statut == 'admin'">
-                    <button v-on:click="deleteCommentaire">Supprimer</button>
+                    <button v-on:click="deleteCommentaire(commentaire.id)">Supprimer</button>
                 </div>
             </div>
         </div>
@@ -43,14 +43,8 @@
 
         methods: {
             // supprimer un commentaire
-            deleteCommentaire() {
-                const comm = this.commentaires;
-                console.log(comm)
-                console.log(comm.id)
-                const commId = comm.id;
-                console.log(commId);
-
-                axios.delete('http://localhost:3000/api/comment/' + commId, {
+            deleteCommentaire(commentId) {                
+                axios.delete('http://localhost:3000/api/commentaire/' + commentId, {
                     headers: {
                         'Content-Type' : 'application/json',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
