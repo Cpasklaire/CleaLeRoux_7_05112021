@@ -233,7 +233,7 @@
 
 <style scoped lang="scss">
 .post.nouveau {
-    border-color: blue;
+    border: dashed 3px #091F43;
 }
 .post
 {
